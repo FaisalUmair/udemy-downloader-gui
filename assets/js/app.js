@@ -3,7 +3,8 @@ const session = remote.session;
 const needle = require('needle');
 const dialogs = require('dialogs')(opts={});
 const fs = require('fs');
-var mkdirp = require('mkdirp')
+var mkdirp = require('mkdirp');
+const homedir  = require('os').homedir();
 
 $('form').submit((e)=>{
 e.preventDefault();
@@ -164,7 +165,7 @@ if(chapterindex==totalchapters){
 return;
 }
 var num_lectures = coursedata['chapters'][chapterindex]['lectures'].length;
-  mkdirp('downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name'], function(){
+  mkdirp(homedir+'/Downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name'], function(){
     downloadLecture(chapterindex,0,num_lectures);
   });
 }
@@ -174,7 +175,7 @@ if(lectureindex==num_lectures){
   downloadChapter(++chapterindex);
   return;
 }
-    var file = fs.createWriteStream('downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name']+'/'+(lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
+    var file = fs.createWriteStream(homedir+'/Downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name']+'/'+(lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
      needle.get(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).pipe(file).on('finish', function() {
      progressElem.progress('increment');
      downloadLecture(chapterindex,++lectureindex,num_lectures);
