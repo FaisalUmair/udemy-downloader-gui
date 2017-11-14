@@ -1,0 +1,42 @@
+.ui.dimmer{
+	position: fixed;
+}
+
+.ui.progress{
+	display: none;
+}
+
+.ui.login.grid{
+	padding-top: 120px;
+}
+
+body .dialog-widget.background{
+background: rgba(0,0,0,.85);
+}
+
+.dialog-widget.alert{
+	text-align: center;
+}
+
+.dialog-widget.alert button.ok{
+	margin-top: 30px;
+	float: none;
+}
+
+.ui.dashboard{
+	display: none;
+}
+
+.ui.dashboard .content{
+	margin-left: 110px;
+	width: 100%;
+}
+
+.ui.dashboard .courses{
+	padding: 5px 10px 10px 0;
+}
+
+.ui.dashboard .courses .course .extra .button{
+	padding: 7px 15px;
+}
+

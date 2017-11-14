@@ -1,0 +1,20 @@
+{
+  "name": "udemy-downloader-gui",
+  "version": "1.0.0",
+  "description": "A desktop application for downloading Udemy Courses",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Faisal Umair",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.7.9"
+  },
+  "dependencies": {
+    "dialogs": "^1.1.20",
+    "jquery": "^3.2.1",
+    "needle": "^2.0.1",
+    "semantic-ui-css": "^2.2.12"
+  }
+}

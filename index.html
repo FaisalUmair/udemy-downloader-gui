@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Udemy Downloader</title>
+    <link rel="stylesheet" href="node_modules/semantic-ui-css/semantic.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+
+        <div class="ui center aligned login grid">
+            <div class="ui dimmer">
+              <div class="ui big text loader">Logging in</div>
+            </div>
+          <div class="row">
+            <div class="ten wide column">
+            <img src="udemy.svg" alt="Udemy">
+          </div>
+          </div>
+    
+          <div class="row">
+              <div class="ten wide column">
+                <form class="ui form">
+                <div class="field">
+                  <input type="text" name="email" placeholder="Email">
+                </div>
+                <div class="field">
+                  <input type="password" name="password" placeholder="Password">
+                </div>
+                <button class="ui fluid green button" type="submit">Login</button>
+              </form>
+              </div>
+          </div>
+
+  </div>
+
+     <div class="ui dashboard">      
+            <div class="ui courses dimmer">
+              <div class="ui big text loader">Loading Courses</div>
+            </div>
+             <div class="ui course dimmer">
+              <div class="ui big text loader">Getting Info</div>
+            </div>
+              <div class="ui left vertical inverted sidebar labeled icon menu visible">
+                <a class="active red item">
+                  <i class="file video icon"></i>
+                  Courses
+                </a>
+                <a class="item">
+                  <i class="download icon"></i>
+                  Downloads
+                </a>
+                <a class="item">
+                  <i class="wrench icon"></i>
+                  Settings
+                </a>
+              </div>
+                  <div class="content">
+                      <div class="ui divided unstackable courses items">
+                      </div>
+                </div>
+     </div>
+<script>const $ = jQuery = require('jquery');</script>
+<script src="node_modules/semantic-ui-css/semantic.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+  </body>
+</html>
