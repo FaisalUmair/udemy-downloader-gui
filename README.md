@@ -14,7 +14,7 @@ You must have nodejs and electron installed.
 3. Run npm start
 
 
-The courses will be downloaded in the same folder under downloads directory.
+The courses will be downloaded in the user's download directory.
 
 
 
