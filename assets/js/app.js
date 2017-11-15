@@ -5,6 +5,7 @@ const dialogs = require('dialogs')(opts={});
 const fs = require('fs');
 var mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
+var sanitize = require("sanitize-filename");
 
 $('form').submit((e)=>{
 e.preventDefault();
@@ -58,7 +59,7 @@ needle
                                     <span class="coursename">${course.title}</span>
                                     <div class="extra">
                                        <button class="ui red download icon button"><i class="download icon"></i></button>
-                                       <div class="ui small red progress">
+                                       <div class="ui small indicating red progress">
                                             <div class="bar">
                                               <div class="progress"></div>
                                             </div>
@@ -146,10 +147,11 @@ var courseid = $course.attr('course-id');
 
 function initDownload($course,coursedata){
 
-  var coursename = coursedata['name'];
+  var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
   var totallectures = coursedata['totallectures'];
   var progressElem = $course.find('.progress');
+  var download_directory = homedir+'/Downloads';
   progressElem.progress({
     total    : totallectures,
     text     : {
@@ -165,22 +167,28 @@ if(chapterindex==totalchapters){
 return;
 }
 var num_lectures = coursedata['chapters'][chapterindex]['lectures'].length;
-  mkdirp(homedir+'/Downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name'], function(){
-    downloadLecture(chapterindex,0,num_lectures);
+var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name']);
+  mkdirp(download_directory+'/'+course_name+'/'+chapter_name, function(){
+    downloadLecture(chapterindex,0,num_lectures,chapter_name);
   });
 }
 
-function downloadLecture(chapterindex,lectureindex,num_lectures){
+function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 if(lectureindex==num_lectures){
   downloadChapter(++chapterindex);
   return;
 }
-    var file = fs.createWriteStream(homedir+'/Downloads/'+coursename+'/'+(chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name']+'/'+(lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
+    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
+    var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
      needle.get(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).pipe(file).on('finish', function() {
      progressElem.progress('increment');
-     downloadLecture(chapterindex,++lectureindex,num_lectures);
+     downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
     });
 }
 
 }
 
+
+$('.downloads-sidebar,.settings-sidebar').click(function(){
+dialogs.alert('Feature Coming Soon');
+});
