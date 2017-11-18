@@ -36,6 +36,17 @@ background: rgba(0,0,0,.85);
 	padding: 5px 10px 10px 0;
 }
 
+.ui.dashboard .courses .course{
+	position: relative;
+}
+
+.ui.dashboard .courses .course .download-speed{
+	display: none;
+	position: absolute;
+	right: 0;
+	top:0;
+}
+
 .ui.dashboard .courses .course .extra .button{
 	padding: 7px 15px;
 }
