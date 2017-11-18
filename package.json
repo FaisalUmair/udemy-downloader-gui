@@ -15,6 +15,7 @@
     "dialogs": "^1.1.20",
     "jquery": "^3.2.1",
     "needle": "^2.0.1",
+    "request-progress": "^3.0.0",
     "sanitize-filename": "^1.6.1",
     "semantic-ui-css": "^2.2.12"
   }

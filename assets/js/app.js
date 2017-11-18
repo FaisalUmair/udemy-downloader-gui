@@ -6,7 +6,8 @@ const fs = require('fs');
 var mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 var sanitize = require("sanitize-filename");
-var http = require('http');
+var request = require('request');
+var progress = require('request-progress');
 
 $('form').submit((e)=>{
 e.preventDefault();
@@ -182,39 +183,23 @@ var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapter
 }
 
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
-if(lectureindex==num_lectures){
-  downloadChapter(++chapterindex);
-  return;
-}
+  if(lectureindex==num_lectures){
+    downloadChapter(++chapterindex);
+    return;
+  }
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
     var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-    var url = new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']);
-    var options = {
-    host: url.host,
-    port: 80,
-    path: url.pathname+url.search
-}
 
-
-var size = 0;
-var speed = setInterval(function(){ 
-  $download_speed_value.html((parseInt(size/1000)));
-  size = 0;
-}, 1000);
-
-    http.get(options, function(res) {
-    res.on('data', function(data) {
-            size+=data.length;
-            file.write(data);
-        }).on('end', function() {
-            clearInterval(speed);
-            file.end();
-            progressElem.progress('increment');
-            downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
-        });
-    });
-
+    progress(request(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']))
+      .on('progress', function (state) {
+        $download_speed_value.html((parseInt(state.speed/1000)));
+    })
+    .on('end', function () {
+        progressElem.progress('increment');
+        downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
+    })
+    .pipe(file);
 }
 
 }
