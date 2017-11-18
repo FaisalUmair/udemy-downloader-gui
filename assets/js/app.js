@@ -193,7 +193,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
     progress(request(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']))
       .on('progress', function (state) {
-        $download_speed_value.html((parseInt(state.speed/1000)));
+        $download_speed_value.html(parseInt((state.speed || state.size.total)/1000));
     })
     .on('end', function () {
         progressElem.progress('increment');
@@ -203,7 +203,6 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 }
 
 }
-
 
 $('.downloads-sidebar,.settings-sidebar').click(function(){
 dialogs.alert('Feature Coming Soon');
