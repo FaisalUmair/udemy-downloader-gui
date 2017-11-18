@@ -190,12 +190,18 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
     var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-
+    var throttle = false;
     progress(request(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']))
       .on('progress', function (state) {
-        $download_speed_value.html(parseInt((state.speed || state.size.total)/1000));
+        if(state.speed){
+          throttle = true;
+          $download_speed_value.html(parseInt(state.speed/1000));
+        }
     })
     .on('end', function () {
+        if(!throttle){
+          $download_speed_value.html(parseInt(this.response.headers['content-length']/1000));
+        }
         progressElem.progress('increment');
         downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
     })
