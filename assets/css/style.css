@@ -7,8 +7,14 @@
 }
 
 .ui.login.grid{
-	padding-top: 120px;
+	padding-top: 90px;
 }
+
+.ui.login.header{
+	font-family: Verdana;
+	font-weight: normal;
+}
+
 
 body .dialog-widget.background{
 background: rgba(0,0,0,.85);
@@ -28,12 +34,12 @@ background: rgba(0,0,0,.85);
 }
 
 .ui.dashboard .content{
-	margin-left: 110px;
+	margin-left: 95px;
 	width: 100%;
 }
 
 .ui.dashboard .courses{
-	padding: 5px 10px 10px 0;
+	padding: 8px 10px 10px 0;
 }
 
 .ui.dashboard .courses .course{
