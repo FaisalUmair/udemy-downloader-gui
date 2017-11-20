@@ -1,7 +1,7 @@
 # Udemy Downloader GUI (Under Development)
 A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses (Built with Electron).
 
-![](https://i.imgur.com/v45i2SH.gif)
+![](https://i.imgur.com/b1uxI5d.gif)
 
 # Prerequisites:
 ```
