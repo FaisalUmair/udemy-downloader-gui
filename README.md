@@ -5,24 +5,35 @@ A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy
 
 # Prerequisites:
 ```
-You must have nodejs and electron installed.
+You must have npm and nodejs installed.
 ```
 
 # To use the application:
-```
+``` 
 1. Clone the project
-```
-```
 2. Run npm install 
-```
-```
 3. Run npm start
 ```
 
+# Build:
+Windows:
+``` 
+npm run build-win
+``` 
+Mac:
+``` 
+npm run build-mac
+``` 
+Linux:
+``` 
+npm run build-linux
+``` 
+Cross Platform:
+``` 
+npm run build
+``` 
 
 The courses will be downloaded in the user's download directory.
-
-
 
 # Note: 
 This project is  under development and some features might not work. First version will be released soon.

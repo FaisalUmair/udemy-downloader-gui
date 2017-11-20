@@ -8,7 +8,19 @@
   "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses (Built with Electron).",
   "scripts": {
     "start": "electron .",
-    "pack-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/app-icon/mac/icon.icns --prune=true --out=dist"
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder -wml",
+    "build-mac": "electron-builder -m",
+    "build-win": "electron-builder -w",
+    "build-linux": "electron-builder -l"
+  },
+  "build": {
+    "directories": {
+      "buildResources": "assets/images/build"
+    },
+    "linux": {
+      "category": "Utility"
+    }
   },
   "author": {
     "name": "Faisal Umair",
@@ -17,8 +29,9 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.7.9",
-    "electron-packager": "^9.1.0"
+    "electron": "^1.8.1",
+    "electron-builder": "^19.46.3",
+    "electron-download-tf": "^4.3.4"
   },
   "dependencies": {
     "dialogs": "^1.1.20",
