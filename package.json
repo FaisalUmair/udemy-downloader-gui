@@ -13,7 +13,7 @@
     "build-win": "electron-builder -w",
     "build-mac": "electron-builder -m",
     "build-linux": "electron-builder -l",
-    "dist" : "build"
+    "dist": "build"
   },
   "build": {
     "directories": {
@@ -31,7 +31,7 @@
         }
       ]
     },
-    "win":{
+    "win": {
       "target": [
         {
           "target": "nsis",
@@ -50,7 +50,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.8.1",
+    "electron": "1.7.9",
     "electron-builder": "^19.46.3",
     "electron-download-tf": "^4.3.4"
   },

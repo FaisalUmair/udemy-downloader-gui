@@ -3,11 +3,11 @@ const session = remote.session;
 const needle = require('needle');
 const dialogs = require('dialogs')(opts={});
 const fs = require('fs');
-var mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
-var sanitize = require("sanitize-filename");
-var request = require('request');
-var progress = require('request-progress');
+const sanitize = require("sanitize-filename");
+const request = require('request');
+const progress = require('request-progress');
 
 $('form').submit((e)=>{
 e.preventDefault();
