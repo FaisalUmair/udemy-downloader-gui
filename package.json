@@ -10,16 +10,37 @@
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder -wml",
-    "build-mac": "electron-builder -m",
     "build-win": "electron-builder -w",
-    "build-linux": "electron-builder -l"
+    "build-mac": "electron-builder -m",
+    "build-linux": "electron-builder -l",
+    "dist" : "build"
   },
   "build": {
     "directories": {
       "buildResources": "assets/images/build"
     },
     "linux": {
-      "category": "Utility"
+      "category": "Utility",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "win":{
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "author": {

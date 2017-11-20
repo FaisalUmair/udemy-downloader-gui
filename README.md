@@ -16,6 +16,10 @@ You must have npm and nodejs installed.
 ```
 
 # Build:
+Detect Platform:
+``` 
+npm run dist
+``` 
 Windows:
 ``` 
 npm run build-win
@@ -33,9 +37,5 @@ Cross Platform:
 npm run build
 ``` 
 
-The courses will be downloaded in the user's download directory.
-
 # Note: 
-This project is  under development and some features might not work. First version will be released soon.
-
- 
+The courses will be downloaded to the user's Download folder.
