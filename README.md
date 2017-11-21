@@ -1,4 +1,4 @@
-# Udeler | Udemy Course Downloader (Udemy Downloader GUI)
+# Udeler | Udemy Course Downloader (GUI)
 A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
 
 ![](https://i.imgur.com/b1uxI5d.gif)
