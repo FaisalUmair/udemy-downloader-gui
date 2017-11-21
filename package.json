@@ -20,27 +20,7 @@
       "buildResources": "assets/images/build"
     },
     "linux": {
-      "category": "Utility",
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
+      "category": "Utility"
     }
   },
   "author": {
