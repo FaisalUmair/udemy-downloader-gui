@@ -16,8 +16,11 @@ This software does not magically download any paid course available on Udemy, yo
 | Mac | x64 | 1.0.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.0.0/Udeler-1.0.0-mac.zip)|
 | Linux | x86_x64 | 1.0.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.0.0/Udeler-1.0.0-linux-x86_x64.AppImage)|
 
+### Note: 
+The courses will be downloaded to the user's Download folder.
 
-## For Developers
+
+# For Developers
 
 ### Prerequisites:
 ```
@@ -59,7 +62,4 @@ npm run build
 Example:
 ``` 
 npm run build-win -- --ia32
-``` 
-
-## Note: 
-The courses will be downloaded to the user's Download folder.
+```
