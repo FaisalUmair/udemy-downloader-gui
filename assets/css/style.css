@@ -38,7 +38,11 @@ background: rgba(0,0,0,.85);
 	width: 100%;
 }
 
-.ui.dashboard .courses{
+.ui.dashboard .content .settings{
+	display: none;
+}
+
+.ui.dashboard .content .courses, .ui.dashboard .content .settings{
 	padding: 8px 10px 10px 0;
 }
 

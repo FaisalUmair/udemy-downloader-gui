@@ -8,8 +8,14 @@ const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 const request = require('request');
 const progress = require('request-progress');
+const settings = require('electron-settings');
 
-$('form').submit((e)=>{
+$('.ui.dropdown')
+  .dropdown()
+;
+
+
+$('.ui.login .form').submit((e)=>{
 e.preventDefault();
 var email = $(e.target).find('input[name="email"]').val();
 var password = $(e.target).find('input[name=password]').val();
@@ -210,6 +216,46 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
 }
 
-$('.downloads-sidebar,.settings-sidebar').click(function(){
-dialogs.alert('Feature Coming Soon');
+$('.settings-sidebar').click(function(){
+         $('.content .ui.courses').hide();
+         $('.content .ui.settings').show();
+         $(this).parent('.sidebar').find('.active').removeClass('active red');
+         $(this).addClass('active red');
+         loadSettings();
 });
+
+$('.courses-sidebar').click(function(){
+         $('.content .ui.settings').hide();
+         $('.content .ui.courses').show();
+         $(this).parent('.sidebar').find('.active').removeClass('active red');
+         $(this).addClass('active red');
+});
+
+
+$('.ui.settings .form').submit((e)=>{
+e.preventDefault();
+var enableLectureSettings = $(e.target).find('input[name=enablelecturesettings]').is(':checked');
+var lectureStart = $(e.target).find('input[name=lecturestart]').val();
+var lectureEnd = $(e.target).find('input[name=lectureend]').val();
+var videoQuality = $(e.target).find('input[name=videoquality]').val();
+
+  settings.set('download', {
+    enableLectureSettings: enableLectureSettings,
+    lectureStart: lectureStart,
+    lectureEnd: lectureEnd,
+    videoQuality: videoQuality
+  });
+
+ dialogs.alert('Settings Saved');
+
+});
+
+
+function loadSettings(){
+var settingsForm = $('.ui.settings .form');
+settingsForm.find('input[name="enablelecturesettings"]').prop('checked', settings.get('download.enableLectureSettings'));
+settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
+settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
+settingsForm.find('input[name="videoquality"]').val(settings.get('download.videoQuality'));
+settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(settings.get('download.videoQuality') || 'Select Quality');
+}
