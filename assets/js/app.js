@@ -155,6 +155,14 @@ var courseid = $course.attr('course-id');
 
 
 function initDownload($course,coursedata){
+var lectureChaperMap = {};
+var currentLecture = 0;
+coursedata['chapters'].forEach(function(lecture,chapterindex){
+lecture['lectures'].forEach(function(x,lectureindex){
+currentLecture++;
+lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
+});
+});
 
   var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
@@ -163,36 +171,64 @@ function initDownload($course,coursedata){
   var download_directory = homedir+'/Downloads';
   var $download_speed = $course.find('.download-speed');
   var $download_speed_value = $download_speed.find('.value');
+  var downloaded = 0;
+  var lectureStart = settings.get('download.lectureStart');
+  var lectureEnd = settings.get('download.lectureEnd');
+  var enableLectureSettings = settings.get('download.enableLectureSettings');
   $download_speed.show();
   $course.css('padding-top','25px').css('padding-bottom','25px');
+
+  if(enableLectureSettings){
+
+    if(lectureStart>lectureEnd){
+      lectureStart=lectureEnd;
+    }
+
+    if(lectureStart<1){
+      lectureStart = 1;
+    }else if(lectureStart>totallectures){
+      lectureStart = totallectures;
+    }
+
+    if(lectureEnd<1){
+      lectureEnd = 1;
+    }else if(lectureEnd>totallectures){
+      lectureEnd = totallectures;
+    }
+    var toDownload = (lectureEnd-lectureStart)+1;
+    downloadChapter(lectureChaperMap[lectureStart].chapterindex,lectureChaperMap[lectureStart].lectureindex);
+  }else{
+    var toDownload = totallectures;
+    downloadChapter(0,0);
+  }
+
   progressElem.progress({
-    total    : totallectures,
+    total    : toDownload,
     text     : {
       active: 'Downloaded {value} out of {total} lectures'
     }
   });
 progressElem.progress('reset');
 
-downloadChapter(0);
+function downloadChapter(chapterindex,lectureindex){
 
-function downloadChapter(chapterindex){
-if(chapterindex==totalchapters){
-$download_speed.hide();
-$course.css('padding-top','1em').css('padding-bottom','1em');
-return;
-}
 var num_lectures = coursedata['chapters'][chapterindex]['lectures'].length;
 var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapterindex]['name']);
   mkdirp(download_directory+'/'+course_name+'/'+chapter_name, function(){
-    downloadLecture(chapterindex,0,num_lectures,chapter_name);
+    downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name);
   });
 }
 
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
-  if(lectureindex==num_lectures){
-    downloadChapter(++chapterindex);
-    return;
-  }
+
+  if(downloaded==toDownload){
+      $download_speed.hide();
+      $course.css('padding-top','1em').css('padding-bottom','1em');
+      return;
+  }else if(lectureindex==num_lectures){
+      downloadChapter(++chapterindex,0);
+      return;
+    }
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
     var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
@@ -209,6 +245,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           $download_speed_value.html(parseInt(this.response.headers['content-length']/1000));
         }
         progressElem.progress('increment');
+        downloaded++;
         downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
     })
     .pipe(file);
@@ -217,32 +254,32 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 }
 
 $('.settings-sidebar').click(function(){
-         $('.content .ui.courses').hide();
-         $('.content .ui.settings').show();
-         $(this).parent('.sidebar').find('.active').removeClass('active red');
-         $(this).addClass('active red');
-         loadSettings();
+  $('.content .ui.courses').hide();
+  $('.content .ui.settings').show();
+  $(this).parent('.sidebar').find('.active').removeClass('active red');
+  $(this).addClass('active red');
+  loadSettings();
 });
 
 $('.courses-sidebar').click(function(){
-         $('.content .ui.settings').hide();
-         $('.content .ui.courses').show();
-         $(this).parent('.sidebar').find('.active').removeClass('active red');
-         $(this).addClass('active red');
+  $('.content .ui.settings').hide();
+  $('.content .ui.courses').show();
+  $(this).parent('.sidebar').find('.active').removeClass('active red');
+  $(this).addClass('active red');
 });
 
 
 $('.ui.settings .form').submit((e)=>{
-e.preventDefault();
-var enableLectureSettings = $(e.target).find('input[name=enablelecturesettings]').is(':checked');
-var lectureStart = $(e.target).find('input[name=lecturestart]').val();
-var lectureEnd = $(e.target).find('input[name=lectureend]').val();
-var videoQuality = $(e.target).find('input[name=videoquality]').val();
+  e.preventDefault();
+  var enableLectureSettings = $(e.target).find('input[name=enablelecturesettings]')[0].checked;
+  var lectureStart = $(e.target).find('input[name=lecturestart]').val();
+  var lectureEnd = $(e.target).find('input[name=lectureend]').val();
+  var videoQuality = $(e.target).find('input[name=videoquality]').val();
 
   settings.set('download', {
     enableLectureSettings: enableLectureSettings,
-    lectureStart: lectureStart,
-    lectureEnd: lectureEnd,
+    lectureStart: parseInt(lectureStart),
+    lectureEnd: parseInt(lectureEnd),
     videoQuality: videoQuality
   });
 
@@ -250,12 +287,27 @@ var videoQuality = $(e.target).find('input[name=videoquality]').val();
 
 });
 
+var settingsForm = $('.ui.settings .form');
 
 function loadSettings(){
-var settingsForm = $('.ui.settings .form');
-settingsForm.find('input[name="enablelecturesettings"]').prop('checked', settings.get('download.enableLectureSettings'));
-settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
-settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
-settingsForm.find('input[name="videoquality"]').val(settings.get('download.videoQuality'));
-settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(settings.get('download.videoQuality') || 'Select Quality');
+
+  if(settings.get('download.enableLectureSettings')){
+  settingsForm.find('input[name="enablelecturesettings"]').prop('checked', true);
+  }else{
+  settingsForm.find('input[name="enablelecturesettings"]').prop('checked', false);
+  settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
+  }
+
+  settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
+  settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
+  settingsForm.find('input[name="videoquality"]').val(settings.get('download.videoQuality'));
+  settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(settings.get('download.videoQuality') || 'Select Quality');
 }
+
+settingsForm.find('input[name="enablelecturesettings"]').change(function() {
+   if(this.checked) {
+    settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',false);
+   }else{
+    settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
+   }     
+});
