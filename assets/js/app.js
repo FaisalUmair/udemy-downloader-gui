@@ -60,6 +60,7 @@ needle
                      $.each(response.results,function(index,course){
                         $('.ui.dashboard .ui.courses.items').append(`
                                 <div class="course item" course-id="${course.id}">
+                                <div class="ui tiny label download-quality grey"></div>
                                 <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
                                   <div class="ui tiny image">
                                     <img src="${course.image_240x135}">
@@ -123,8 +124,39 @@ var courseid = $course.attr('course-id');
                              url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset`,
                              headers: header,
                              success: function(response) { 
+
                                 var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
-                                coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:lecture.sources[0].src,name:lecturename};
+                                var qualities = [];
+                                var qualitySrcMap = {};
+                                lecture.sources.forEach(function(val){
+                                  if(val.label=="Auto")  return;                                  
+                                  qualities.push(val.label);
+                                  qualitySrcMap[val.label] = val.src;
+                                });
+                                  var lowest =  Math.min(...qualities);
+                                  var highest = Math.max(...qualities);
+                                  var videoQuality = settings.get('download.videoQuality');
+                                  if(videoQuality){
+                                    switch(videoQuality){
+                                      case 'Highest':
+                                        var src = qualitySrcMap[highest];
+                                        videoQuality = highest;
+                                        break;
+                                      case 'Lowest':
+                                         var src = qualitySrcMap[lowest];
+                                         videoQuality = lowest;
+                                         break;
+                                      default:
+                                         videoQuality = videoQuality.slice(0, -1);
+                                         var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.sources[0].src;
+                                    }
+
+                                  }else{
+                                    var src = lecture.sources[0].src;
+                                    videoQuality = lecture.sources[0].label;
+                                  }         
+
+                                coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality};
                                 remaining--;
                                 coursedata['totallectures']+=1;
                                 if(!remaining){
@@ -156,6 +188,7 @@ var courseid = $course.attr('course-id');
 
 function initDownload($course,coursedata){
 var lectureChaperMap = {};
+var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green'};
 var currentLecture = 0;
 coursedata['chapters'].forEach(function(lecture,chapterindex){
 lecture['lectures'].forEach(function(x,lectureindex){
@@ -171,12 +204,14 @@ lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectu
   var download_directory = homedir+'/Downloads';
   var $download_speed = $course.find('.download-speed');
   var $download_speed_value = $download_speed.find('.value');
+  var $download_quality = $course.find('.download-quality');
   var downloaded = 0;
   var lectureStart = settings.get('download.lectureStart');
   var lectureEnd = settings.get('download.lectureEnd');
   var enableLectureSettings = settings.get('download.enableLectureSettings');
   $download_speed.show();
-  $course.css('padding-top','25px').css('padding-bottom','25px');
+  $download_quality.show();
+  $course.css('cssText','padding-top: 35px !important').css('padding-bottom','25px');
 
   if(enableLectureSettings){
 
@@ -223,6 +258,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
   if(downloaded==toDownload){
       $download_speed.hide();
+      $download_quality.hide();
       $course.css('padding-top','1em').css('padding-bottom','1em');
       return;
   }else if(lectureindex==num_lectures){
@@ -233,6 +269,9 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
     var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
     var throttle = false;
+    var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
+    var lastClass = $download_quality.attr('class').split(' ').pop();
+    $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
     progress(request(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']))
       .on('progress', function (state) {
         if(state.speed){

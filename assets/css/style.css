@@ -50,12 +50,20 @@ background: rgba(0,0,0,.85);
 	position: relative;
 }
 
-.ui.dashboard .courses .course .download-speed{
+.ui.dashboard .courses .course .download-quality, .ui.dashboard .courses .course .download-speed{
 	display: none;
 	position: absolute;
-	right: 0;
 	top:0;
 }
+
+.ui.dashboard .courses .course .download-quality{
+	left: 0;
+}
+
+.ui.dashboard .courses .course .download-speed{
+	right: 0;
+}
+
 
 .ui.dashboard .courses .course .extra .button{
 	padding: 7px 15px;
