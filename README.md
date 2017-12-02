@@ -1,7 +1,7 @@
 # Udeler | Udemy Course Downloader (GUI)
 A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
 
-![](https://i.imgur.com/b1uxI5d.gif)
+![](https://i.imgur.com/nnvTY5e.gif)
 
 ### Disclaimer: 
 This software is intended to help you download Udemy courses for personal use only. Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use. Each and every course on Udemy is subjected to copyright infringement. 
