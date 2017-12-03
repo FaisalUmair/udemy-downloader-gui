@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/FaisalUmair/udemy-downloader-gui.git"
   },
-  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses (Built with Electron).",
+  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
@@ -39,9 +39,8 @@
     "electron-settings": "^3.1.4",
     "jquery": "^3.2.1",
     "mkdirp": "^0.5.1",
+    "mt-files-downloader": "^0.2.5",
     "needle": "^2.0.1",
-    "request": "^2.83.0",
-    "request-progress": "^3.0.0",
     "sanitize-filename": "^1.6.1"
   }
 }

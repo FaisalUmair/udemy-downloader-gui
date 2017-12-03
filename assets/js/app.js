@@ -2,13 +2,12 @@ const remote = require('electron').remote;
 const session = remote.session;
 const needle = require('needle');
 const dialogs = require('dialogs')(opts={});
-const fs = require('fs');
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
-const request = require('request');
-const progress = require('request-progress');
 const settings = require('electron-settings');
+var Downloader = require('mt-files-downloader');
+var Downloader = new Downloader();
 
 $('.ui.dropdown')
   .dropdown()
@@ -59,7 +58,7 @@ needle
                   if(response.results.length){
                      $.each(response.results,function(index,course){
                         $('.ui.dashboard .ui.courses.items').append(`
-                                <div class="course item" course-id="${course.id}">
+                                <div class="ui course item" course-id="${course.id}">
                                 <div class="ui tiny label download-quality grey"></div>
                                 <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
                                   <div class="ui tiny image">
@@ -68,14 +67,20 @@ needle
                                   <div class="content">
                                     <span class="coursename">${course.title}</span>
                                     <div class="extra">
+                                      <div class="ui tiny indicating individual red progress">
+                                        <div class="bar"></div>
+                                      </div>
+                                    </div>
+                                    <div class="extra">
                                        <button class="ui red download icon button"><i class="download icon"></i></button>
-                                       <div class="ui small indicating red progress">
+                                       <div class="ui small indicating combined red progress">
                                             <div class="bar">
                                               <div class="progress"></div>
                                             </div>
                                             <div class="label">Building Course Data</div>
                                       </div>
                                     </div>
+
                                   </div>
                                 </div>
                         `);
@@ -101,6 +106,7 @@ var courseid = $course.attr('course-id');
                success: function(response) { 
                  $(".ui.dashboard .course.dimmer").removeClass('active');
                  $course.find('.download.button').hide();
+                 $course.css('padding-bottom','25px');
                  $course.find('.ui.progress').show();
                  var coursedata = [];
                  coursedata['chapters'] = [];
@@ -196,11 +202,11 @@ currentLecture++;
 lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
 });
 });
-
   var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
   var totallectures = coursedata['totallectures'];
-  var progressElem = $course.find('.progress');
+  var $progressElemCombined = $course.find('.combined.progress');
+  var $progressElemIndividual = $course.find('.individual.progress');
   var download_directory = homedir+'/Downloads';
   var $download_speed = $course.find('.download-speed');
   var $download_speed_value = $download_speed.find('.value');
@@ -237,13 +243,15 @@ lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectu
     downloadChapter(0,0);
   }
 
-  progressElem.progress({
+  $progressElemCombined.progress({
     total    : toDownload,
     text     : {
       active: 'Downloaded {value} out of {total} lectures'
     }
   });
-progressElem.progress('reset');
+
+$progressElemCombined.progress('reset');
+
 
 function downloadChapter(chapterindex,lectureindex){
 
@@ -255,8 +263,9 @@ var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapter
 }
 
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
-
   if(downloaded==toDownload){
+      $progressElemIndividual.progress('complete');
+      $progressElemIndividual.slideUp();
       $download_speed.hide();
       $download_quality.hide();
       $course.css('padding-top','1em').css('padding-bottom','1em');
@@ -266,28 +275,49 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
       return;
     }
 
+$progressElemIndividual.progress('reset');
+
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
-    var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
     var throttle = false;
     var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
-    progress(request(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']))
-      .on('progress', function (state) {
-        if(state.speed){
-          throttle = true;
-          $download_speed_value.html(parseInt(state.speed/1000));
-        }
-    })
-    .on('end', function () {
-        if(!throttle){
-          $download_speed_value.html(parseInt(this.response.headers['content-length']/1000));
-        }
-        progressElem.progress('increment');
-        downloaded++;
-        downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
-    })
-    .pipe(file);
+    var dl = Downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+
+    dl.start();
+
+    dl.on('start', function(dl) {
+       $download_speed_value.html(0);
+       var timer = setInterval(function() {
+            switch(dl.status){
+              case 1:
+              case 2:
+                  var stats = dl.getStats();
+                  $download_speed_value.html(parseInt(stats.present.speed/1000));
+                  $progressElemIndividual.progress('set percent',stats.total.completed);
+                  break;
+              case -1:
+              case  3:
+              case -3:
+                  clearInterval(timer);
+            }
+        }, 1000);
+    });
+
+
+dl.on('error', function(dl) { 
+  $download_speed.hide();
+  $download_quality.hide();
+  $course.css('padding-top','1em').css('padding-bottom','1em');
+});
+
+dl.on('end', function(dl) { 
+  $progressElemCombined.progress('increment');
+  downloaded++;
+  downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
+});
+
+
 }
 
 }
