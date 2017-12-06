@@ -1,13 +1,16 @@
 const remote = require('electron').remote;
+const dialog = remote.dialog;
+const fs = require('fs');
 const session = remote.session;
 const needle = require('needle');
-const dialogs = require('dialogs')(opts={});
+const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 const settings = require('electron-settings');
 var Downloader = require('mt-files-downloader');
 var Downloader = new Downloader();
+
 
 $('.ui.dropdown')
   .dropdown()
@@ -20,7 +23,7 @@ var email = $(e.target).find('input[name="email"]').val();
 var password = $(e.target).find('input[name=password]').val();
 
 if(!email || !password){
-   dialogs.alert('Type Username/Password');
+   prompt.alert('Type Username/Password');
    return;
 }
 $.ajax({
@@ -67,13 +70,13 @@ needle
                                   <div class="content">
                                     <span class="coursename">${course.title}</span>
                                     <div class="extra">
-                                      <div class="ui tiny indicating individual red progress">
+                                      <div class="ui tiny indicating individual progress">
                                         <div class="bar"></div>
                                       </div>
                                     </div>
                                     <div class="extra">
                                        <button class="ui red download icon button"><i class="download icon"></i></button>
-                                       <div class="ui small indicating combined red progress">
+                                       <div class="ui small indicating combined progress">
                                             <div class="bar">
                                               <div class="progress"></div>
                                             </div>
@@ -91,7 +94,7 @@ needle
                }
             });
       }else{
-         dialogs.alert('Incorrect Username/Password');
+         prompt.alert('Incorrect Username/Password');
       }
 $('body').on('click','.download.button', function(){
 var $course = $(this).parents('.course');
@@ -207,7 +210,7 @@ lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectu
   var totallectures = coursedata['totallectures'];
   var $progressElemCombined = $course.find('.combined.progress');
   var $progressElemIndividual = $course.find('.individual.progress');
-  var download_directory = homedir+'/Downloads';
+  var download_directory = settings.get('download.path') || homedir+'/Downloads';
   var $download_speed = $course.find('.download-speed');
   var $download_speed_value = $download_speed.find('.value');
   var $download_quality = $course.find('.download-quality');
@@ -268,7 +271,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
       $progressElemIndividual.slideUp();
       $download_speed.hide();
       $download_quality.hide();
-      $course.css('padding-top','1em').css('padding-bottom','1em');
+      $course.css('padding-top','1em').css('padding-bottom','1.5em');
       return;
   }else if(lectureindex==num_lectures){
       downloadChapter(++chapterindex,0);
@@ -308,7 +311,7 @@ $progressElemIndividual.progress('reset');
 dl.on('error', function(dl) { 
   $download_speed.hide();
   $download_quality.hide();
-  $course.css('padding-top','1em').css('padding-bottom','1em');
+  $course.css('padding-top','1em').css('padding-bottom','1.5em');
 });
 
 dl.on('end', function(dl) { 
@@ -344,15 +347,17 @@ $('.ui.settings .form').submit((e)=>{
   var lectureStart = $(e.target).find('input[name=lecturestart]').val();
   var lectureEnd = $(e.target).find('input[name=lectureend]').val();
   var videoQuality = $(e.target).find('input[name=videoquality]').val();
+  var downloadPath = $(e.target).find('input[name=downloadpath]').val();
 
   settings.set('download', {
     enableLectureSettings: enableLectureSettings,
     lectureStart: parseInt(lectureStart),
     lectureEnd: parseInt(lectureEnd),
-    videoQuality: videoQuality
+    videoQuality: videoQuality,
+    path: downloadPath
   });
 
- dialogs.alert('Settings Saved');
+ prompt.alert('Settings Saved');
 
 });
 
@@ -367,6 +372,7 @@ function loadSettings(){
   settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
   }
 
+  settingsForm.find('input[name="downloadpath"]').val(settings.get('download.path') || homedir+'/Downloads');
   settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
   settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
   settingsForm.find('input[name="videoquality"]').val(settings.get('download.videoQuality'));
@@ -380,3 +386,17 @@ settingsForm.find('input[name="enablelecturesettings"]').change(function() {
     settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
    }     
 });
+
+function selectDownloadPath () {
+  dialog.showOpenDialog({properties: ['openDirectory']},function (path) {
+    if(path){
+      fs.access(path[0], fs.R_OK&&fs.W_OK, function(err) {
+          if(err){
+            prompt.alert('Cannot select this folder!');
+          }else{
+            settingsForm.find('input[name="downloadpath"]').val(path[0]);
+          }
+        });
+    }
+  }); 
+}

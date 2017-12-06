@@ -53,7 +53,7 @@ background: rgba(0,0,0,.85);
 .ui.dashboard .courses .course .download-quality, .ui.dashboard .courses .course .download-speed{
 	display: none;
 	position: absolute;
-	top:0;
+	top: 3px;
 }
 
 .ui.dashboard .courses .course .download-quality{
