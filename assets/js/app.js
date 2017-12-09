@@ -49,13 +49,13 @@ $.ajax({
    beforeSend: function(){
      $(".ui.login .dimmer").addClass('active');
    },
-   	success: function(data, status, xhr){
-   	var token = $('input[name=csrfmiddlewaretoken]',data).val();
-   	var cookie = '';
-   	session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {		
-	for (var key in cookies){
-		cookie +=  cookies[key].name+'='+cookies[key].value+';';
-	}
+    success: function(data, status, xhr){
+    var token = $('input[name=csrfmiddlewaretoken]',data).val();
+    var cookie = '';
+    session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {    
+  for (var key in cookies){
+    cookie +=  cookies[key].name+'='+cookies[key].value+';';
+  }
 
 needle
    .post('https://www.udemy.com/join/login-popup/?ref=&display_type=popup&locale=en_US&response_type=json&next=https%3A%2F%2Fwww.udemy.com%2F&xref=', {email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, {headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}})
@@ -268,13 +268,13 @@ function initDownload($course,coursedata){
 
 
 $pauseButton.click(function(){
-downloader._downloads[0].stop();
+downloader._downloads[downloaded].stop();
 $pauseButton.addClass('disabled');
 $resumeButton.removeClass('disabled');
 });
 
 $resumeButton.click(function(){
-downloader._downloads[0].resume();
+downloader._downloads[downloaded].resume();
 $resumeButton.addClass('disabled');
 $pauseButton.removeClass('disabled');
 });
@@ -340,38 +340,33 @@ $progressElemIndividual.progress('reset');
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-    var timer;
     dl.start();
 
-    dl.on('start', function(dl) {
-       $download_speed_value.html(0);
-       timer = setInterval(function() {
+       
+       var timer = setInterval(function() {
             switch(dl.status){
+              case 0:
+                $download_speed_value.html(0);
+                break;
               case 1:
-              case 2:
                   var stats = dl.getStats();
-                  $download_speed_value.html(parseInt(stats.present.speed/1000));
-                  $progressElemIndividual.progress('set percent',stats.total.completed);
+                  $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
+                  $progressElemIndividual.progress('set percent',stats.total.completed);    
                   break;
-              case -1:
-              case  3:
-              case -3:
-                  clearInterval(timer);
+              default:
+                $download_speed_value.html(0);
             }
         }, 1000);
-    });
-
-
-dl.on('stopped', function(dl) { 
-  clearInterval(timer);
-});
 
 dl.on('error', function(dl) { 
-  resetCourse($course.find('.download-error'));
+  clearInterval(timer);
   dl.destroy();
+  resetCourse($course.find('.download-error'));
 });
 
 dl.on('end', function(dl) { 
+  clearInterval(timer);
+  dl.destroy();
   $progressElemCombined.progress('increment');
   downloaded++;
   downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
@@ -467,5 +462,3 @@ function selectDownloadPath () {
     }
   }); 
 }
-
-
