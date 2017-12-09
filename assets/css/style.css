@@ -33,21 +33,33 @@ background: rgba(0,0,0,.85);
 	display: none;
 }
 
-.ui.dashboard .content{
+.ui.dashboard > .content{
 	margin-left: 95px;
 	width: 100%;
 }
 
-.ui.dashboard .content .settings{
+.ui.dashboard > .content .settings{
 	display: none;
 }
 
-.ui.dashboard .content .courses, .ui.dashboard .content .settings{
-	padding: 8px 10px 10px 0;
+.ui.dashboard > .content .courses, .ui.dashboard > .content .settings{
+	padding: 8px 10px 0px 0px;
+}
+
+.ui.dashboard .courses .course .action.buttons .button{
+ border-radius: 0;
 }
 
 .ui.dashboard .courses .course{
 	position: relative;
+}
+
+.ui.dashboard .courses .course .message{
+	display: none;
+}
+
+.ui.dashboard .courses .course .message:hover{
+	cursor: pointer;
 }
 
 .ui.dashboard .courses .course .download-quality, .ui.dashboard .courses .course .download-speed{

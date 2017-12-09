@@ -9,12 +9,29 @@ const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 const settings = require('electron-settings');
 var Downloader = require('mt-files-downloader');
-var Downloader = new Downloader();
-
-
 $('.ui.dropdown')
   .dropdown()
 ;
+
+
+var downloadTemplate = `
+<div class="ui tiny icon action buttons">
+  <button class="ui basic blue download button"><i class="download icon"></i></button>
+  <button class="ui disabled basic red pause button"><i class="pause icon"></i></button>
+  <button class="ui disabled basic green resume button"><i class="play icon"></i></button>
+</div>
+<div class="ui horizontal divider"></div>
+<div class="ui tiny indicating individual progress">
+   <div class="bar"></div>
+</div>
+<div class="ui horizontal divider"></div>
+<div class="ui small indicating combined progress">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+<div class="label">Building Course Data</div>
+</div>
+`;
 
 
 $('.ui.login .form').submit((e)=>{
@@ -69,19 +86,29 @@ needle
                                   </div>
                                   <div class="content">
                                     <span class="coursename">${course.title}</span>
-                                    <div class="extra">
-                                      <div class="ui tiny indicating individual progress">
-                                        <div class="bar"></div>
-                                      </div>
+
+                                  <div class="ui tiny icon green download-success message">
+                                         <i class="check icon"></i>
+                                          <div class="content">
+                                            <div class="header">
+                                               Download Completed
+                                             </div>
+                                             <p>Click this message to hide it</p>
+                                           </div>
                                     </div>
-                                    <div class="extra">
-                                       <button class="ui red download icon button"><i class="download icon"></i></button>
-                                       <div class="ui small indicating combined progress">
-                                            <div class="bar">
-                                              <div class="progress"></div>
-                                            </div>
-                                            <div class="label">Building Course Data</div>
-                                      </div>
+
+                                  <div class="ui tiny icon  red download-error message">
+                                         <i class="power icon"></i>
+                                          <div class="content">
+                                            <div class="header">
+                                               Something went wrong
+                                             </div>
+                                             <p>Click this message to retry</p>
+                                           </div>
+                                    </div>
+
+                                    <div class="extra download-status">
+                                      ${downloadTemplate}
                                     </div>
 
                                   </div>
@@ -96,9 +123,18 @@ needle
       }else{
          prompt.alert('Incorrect Username/Password');
       }
-$('body').on('click','.download.button', function(){
+
+
+$('body').on('click','.download-success', function(){
+$(this).hide();
+$(this).parents('.course').find('.download-status').show();
+});
+
+$('body').on('click','.download.button, .download-error', function(){
 var $course = $(this).parents('.course');
 var courseid = $course.attr('course-id');
+$course.find('.download-error').hide();
+$course.find('.download-status').show();
       $.ajax({
                type: 'GET',
                url: `https://www.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=100000`,
@@ -108,7 +144,7 @@ var courseid = $course.attr('course-id');
                headers: header,
                success: function(response) { 
                  $(".ui.dashboard .course.dimmer").removeClass('active');
-                 $course.find('.download.button').hide();
+                 $course.find('.download.button').addClass('disabled');
                  $course.css('padding-bottom','25px');
                  $course.find('.ui.progress').show();
                  var coursedata = [];
@@ -196,15 +232,23 @@ var courseid = $course.attr('course-id');
 
 
 function initDownload($course,coursedata){
-var lectureChaperMap = {};
-var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green'};
-var currentLecture = 0;
-coursedata['chapters'].forEach(function(lecture,chapterindex){
-lecture['lectures'].forEach(function(x,lectureindex){
-currentLecture++;
-lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
-});
-});
+  var downloader = new Downloader();
+  var $downloadStatus = $course.find('.download-status');
+  var $actionButtons = $course.find('.action.buttons');
+  var $downloadButton = $actionButtons.find('.download.button');
+  var $pauseButton = $actionButtons.find('.pause.button');
+  var $resumeButton = $actionButtons.find('.resume.button');
+  $pauseButton.removeClass('disabled');
+  var lectureChaperMap = {};
+  var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green'};
+  var currentLecture = 0;
+  coursedata['chapters'].forEach(function(lecture,chapterindex){
+  lecture['lectures'].forEach(function(x,lectureindex){
+  currentLecture++;
+  lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
+  });
+  });
+
   var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
   var totallectures = coursedata['totallectures'];
@@ -221,6 +265,20 @@ lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectu
   $download_speed.show();
   $download_quality.show();
   $course.css('cssText','padding-top: 35px !important').css('padding-bottom','25px');
+
+
+$pauseButton.click(function(){
+downloader._downloads[0].stop();
+$pauseButton.addClass('disabled');
+$resumeButton.removeClass('disabled');
+});
+
+$resumeButton.click(function(){
+downloader._downloads[0].resume();
+$resumeButton.addClass('disabled');
+$pauseButton.removeClass('disabled');
+});
+
 
   if(enableLectureSettings){
 
@@ -267,11 +325,7 @@ var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapter
 
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
   if(downloaded==toDownload){
-      $progressElemIndividual.progress('complete');
-      $progressElemIndividual.slideUp();
-      $download_speed.hide();
-      $download_quality.hide();
-      $course.css('padding-top','1em').css('padding-bottom','1.5em');
+      resetCourse($course.find('.download-success'));
       return;
   }else if(lectureindex==num_lectures){
       downloadChapter(++chapterindex,0);
@@ -285,13 +339,13 @@ $progressElemIndividual.progress('reset');
     var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
-    var dl = Downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-
+    var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+    var timer;
     dl.start();
 
     dl.on('start', function(dl) {
        $download_speed_value.html(0);
-       var timer = setInterval(function() {
+       timer = setInterval(function() {
             switch(dl.status){
               case 1:
               case 2:
@@ -308,10 +362,13 @@ $progressElemIndividual.progress('reset');
     });
 
 
+dl.on('stopped', function(dl) { 
+  clearInterval(timer);
+});
+
 dl.on('error', function(dl) { 
-  $download_speed.hide();
-  $download_quality.hide();
-  $course.css('padding-top','1em').css('padding-bottom','1.5em');
+  resetCourse($course.find('.download-error'));
+  dl.destroy();
 });
 
 dl.on('end', function(dl) { 
@@ -321,6 +378,16 @@ dl.on('end', function(dl) {
 });
 
 
+}
+
+
+function resetCourse(Selem){
+  $download_speed.hide();
+  $download_quality.hide();
+  $download_speed_value.html(0);
+  $downloadStatus.hide().html(downloadTemplate);
+  Selem.css('display','flex');
+  $course.css('padding','14px 0px');
 }
 
 }
@@ -400,3 +467,5 @@ function selectDownloadPath () {
     }
   }); 
 }
+
+
