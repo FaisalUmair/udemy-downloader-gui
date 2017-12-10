@@ -68,7 +68,7 @@ needle
       var header = {"Authorization": `Bearer ${access_token}`};
       $.ajax({
                type: 'GET',
-               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses",
+               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses?page_size=100000",
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
