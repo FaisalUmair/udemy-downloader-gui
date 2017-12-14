@@ -154,6 +154,16 @@ $course.find('.download-status').show();
                  var lectureindex = -1;
                  var remaining = response.count;
                  coursedata['totallectures'] = 0;
+
+                 if(response.results[0]._class=="lecture"){
+                         chapterindex++;
+                         lectureindex = 0;
+                         coursedata['chapters'][chapterindex] = [];
+                         coursedata['chapters'][chapterindex]['name'] = 'Chapter 1';
+                         coursedata['chapters'][chapterindex]['lectures'] = [];
+                         remaining--; 
+                 }
+
                   $.each(response.results, function(i,v){
                     if(v._class=="chapter"){ 
                          chapterindex++;
@@ -169,7 +179,6 @@ $course.find('.download-status').show();
                              url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset`,
                              headers: header,
                              success: function(response) { 
-
                                 var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
                                 var qualities = [];
                                 var qualitySrcMap = {};
@@ -200,7 +209,6 @@ $course.find('.download-status').show();
                                     var src = lecture.sources[0].src;
                                     videoQuality = lecture.sources[0].label;
                                   }         
-
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality};
                                 remaining--;
                                 coursedata['totallectures']+=1;
@@ -232,6 +240,7 @@ $course.find('.download-status').show();
 
 
 function initDownload($course,coursedata){
+  var timer;
   var downloader = new Downloader();
   var $downloadStatus = $course.find('.download-status');
   var $actionButtons = $course.find('.action.buttons');
@@ -335,7 +344,6 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 $progressElemIndividual.progress('reset');
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
-    var throttle = false;
     var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
@@ -343,7 +351,7 @@ $progressElemIndividual.progress('reset');
     dl.start();
 
        
-       var timer = setInterval(function() {
+       timer = setInterval(function() {
             switch(dl.status){
               case 0:
                 $download_speed_value.html(0);
@@ -359,14 +367,14 @@ $progressElemIndividual.progress('reset');
         }, 1000);
 
 dl.on('error', function(dl) { 
-  clearInterval(timer);
-  dl.destroy();
-  resetCourse($course.find('.download-error'));
+  if(dl.getStats()==-1){
+    clearInterval(timer);
+    resetCourse($course.find('.download-error'));
+  }
 });
 
 dl.on('end', function(dl) { 
   clearInterval(timer);
-  dl.destroy();
   $progressElemCombined.progress('increment');
   downloaded++;
   downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
