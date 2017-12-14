@@ -361,16 +361,17 @@ $progressElemIndividual.progress('reset');
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
                   $progressElemIndividual.progress('set percent',stats.total.completed);    
                   break;
+              case -1:
+                  clearInterval(timer);
+                  resetCourse($course.find('.download-error'));
+                  break;
               default:
                 $download_speed_value.html(0);
             }
         }, 1000);
 
 dl.on('error', function(dl) { 
-  if(dl.getStats()==-1){
-    clearInterval(timer);
-    resetCourse($course.find('.download-error'));
-  }
+  // Prevent throwing uncaught error
 });
 
 dl.on('end', function(dl) { 
