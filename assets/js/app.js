@@ -7,7 +7,6 @@ const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
-const settings = require('electron-settings');
 var Downloader = require('mt-files-downloader');
 $('.ui.dropdown')
   .dropdown()
@@ -29,7 +28,7 @@ var downloadTemplate = `
   <div class="bar">
     <div class="progress"></div>
   </div>
-<div class="label">Building Course Data</div>
+<div class="label">${translate("Building Course Data")}</div>
 </div>
 `;
 
@@ -40,7 +39,7 @@ var email = $(e.target).find('input[name="email"]').val();
 var password = $(e.target).find('input[name=password]').val();
 
 if(!email || !password){
-   prompt.alert('Type Username/Password');
+   prompt.alert(translate("Type Username/Password"));
    return;
 }
 $.ajax({
@@ -91,9 +90,9 @@ needle
                                          <i class="check icon"></i>
                                           <div class="content">
                                             <div class="header">
-                                               Download Completed
+                                               ${translate("Download Completed")}
                                              </div>
-                                             <p>Click this message to hide it</p>
+                                             <p>${translate("Click this message to hide it")}</p>
                                            </div>
                                     </div>
 
@@ -101,9 +100,9 @@ needle
                                          <i class="power icon"></i>
                                           <div class="content">
                                             <div class="header">
-                                               Something went wrong
+                                               ${translate("Download Failed")}
                                              </div>
-                                             <p>Click this message to retry</p>
+                                             <p>${translate("Click this message to retry")}</p>
                                            </div>
                                     </div>
 
@@ -116,12 +115,12 @@ needle
                         `);
                      })
                   }else{
-                     $('.ui.dashboard .courses').append('<div class="ui yellow message">You don\'t have any subscribed courses</div>')
+                     $('.ui.dashboard .courses').append(`<div class="ui yellow message">${translate("You have not enrolled in any course")}</div>`)
                   }
                }
             });
       }else{
-         prompt.alert('Incorrect Username/Password');
+         prompt.alert(translate('Incorrect Username/Password'));
       }
 
 
@@ -190,7 +189,10 @@ $course.find('.download-status').show();
                                   var lowest =  Math.min(...qualities);
                                   var highest = Math.max(...qualities);
                                   var videoQuality = settings.get('download.videoQuality');
-                                  if(videoQuality){
+                                  if(!videoQuality || videoQuality=="Auto"){
+                                    var src = lecture.sources[0].src;
+                                    videoQuality = lecture.sources[0].label;
+                                  }else{
                                     switch(videoQuality){
                                       case 'Highest':
                                         var src = qualitySrcMap[highest];
@@ -204,10 +206,6 @@ $course.find('.download-status').show();
                                          videoQuality = videoQuality.slice(0, -1);
                                          var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.sources[0].src;
                                     }
-
-                                  }else{
-                                    var src = lecture.sources[0].src;
-                                    videoQuality = lecture.sources[0].label;
                                   }         
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality};
                                 remaining--;
@@ -316,7 +314,7 @@ $pauseButton.removeClass('disabled');
   $progressElemCombined.progress({
     total    : toDownload,
     text     : {
-      active: 'Downloaded {value} out of {total} lectures'
+      active: `${translate("Downloaded")} {value} ${translate("out of")} {total} ${translate("lectures")}`
     }
   });
 
@@ -419,7 +417,8 @@ $('.ui.settings .form').submit((e)=>{
   var lectureEnd = $(e.target).find('input[name=lectureend]').val();
   var videoQuality = $(e.target).find('input[name=videoquality]').val();
   var downloadPath = $(e.target).find('input[name=downloadpath]').val();
-
+  var language = $(e.target).find('input[name=language]').val();
+  
   settings.set('download', {
     enableLectureSettings: enableLectureSettings,
     lectureStart: parseInt(lectureStart),
@@ -428,14 +427,17 @@ $('.ui.settings .form').submit((e)=>{
     path: downloadPath
   });
 
- prompt.alert('Settings Saved');
+  settings.set('general',{
+    language: language
+  });
+
+ prompt.alert(translate('Settings Saved'));
 
 });
 
 var settingsForm = $('.ui.settings .form');
 
 function loadSettings(){
-
   if(settings.get('download.enableLectureSettings')){
   settingsForm.find('input[name="enablelecturesettings"]').prop('checked', true);
   }else{
@@ -446,8 +448,12 @@ function loadSettings(){
   settingsForm.find('input[name="downloadpath"]').val(settings.get('download.path') || homedir+'/Downloads');
   settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
   settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
-  settingsForm.find('input[name="videoquality"]').val(settings.get('download.videoQuality'));
-  settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(settings.get('download.videoQuality') || 'Select Quality');
+  var videoQuality = settings.get('download.videoQuality');
+  settingsForm.find('input[name="videoquality"]').val(videoQuality);
+  settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(videoQuality || translate('Auto'));
+  var language = settings.get('general.language');
+  settingsForm.find('input[name="language"]').val(language);
+  settingsForm.find('input[name="language"]').parent('.dropdown').find('.default.text').html(language || 'English');
 }
 
 settingsForm.find('input[name="enablelecturesettings"]').change(function() {
@@ -463,7 +469,7 @@ function selectDownloadPath () {
     if(path){
       fs.access(path[0], fs.R_OK&&fs.W_OK, function(err) {
           if(err){
-            prompt.alert('Cannot select this folder!');
+            prompt.alert(translate('Cannot select this folder'));
           }else{
             settingsForm.find('input[name="downloadpath"]').val(path[0]);
           }

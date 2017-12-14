@@ -33,6 +33,10 @@ background: rgba(0,0,0,.85);
 	display: none;
 }
 
+.ui.dashboard .sidebar.menu .item{
+	max-width: 84px;
+}
+
 .ui.dashboard > .content{
 	margin-left: 95px;
 	width: 100%;

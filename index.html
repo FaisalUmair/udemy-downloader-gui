@@ -8,16 +8,37 @@
   </head>
   <body>
 
+<script>const $ = jQuery = require('jquery');</script>
+<script src="assets/js/semantic.min.js"></script>
+<script type="text/javascript">
+const settings = require('electron-settings');
+
+function translate(text){
+  if(!settings.get('general.language') || settings.get('general.language')=="English"){
+    return text;
+ }else{
+    try {
+      var meta = require('./locale/meta.json');
+      var locale = require('./locale/'+meta[settings.get('general.language')]);
+      return locale[text] || text;
+    }
+    catch (e) {
+      return text;
+    }
+  }
+}
+
+var template = `
         <div class="ui center aligned login grid">
             <div class="ui dimmer">
-              <div class="ui big text loader">Logging in</div>
+              <div class="ui big text loader">${translate("Logging in")}</div>
             </div>
     
           <div class="row">
             <div class="ten wide column">
                     <h2 class="ui center aligned icon grey login header">
                       <i class="circular green user icon"></i>
-                       Udemy Login
+                      ${translate("Udemy Login")}
                     </h2>
             </div>
           </div>
@@ -26,12 +47,12 @@
               <div class="ten wide column">
                 <form class="ui form">
                 <div class="field">
-                  <input type="text" name="email" placeholder="Email">
+                  <input type="text" name="email" placeholder="${translate("Email")}">
                 </div>
                 <div class="field">
-                  <input type="password" name="password" placeholder="Password">
+                  <input type="password" name="password" placeholder="${translate("Password")}">
                 </div>
-                <button class="ui fluid green button" type="submit">Login</button>
+                <button class="ui fluid green button" type="submit">${translate("Login")}</button>
               </form>
               </div>
           </div>
@@ -40,19 +61,19 @@
 
      <div class="ui dashboard">      
             <div class="ui courses dimmer">
-              <div class="ui big text loader">Loading Courses</div>
+              <div class="ui big text loader">${translate("Loading Courses")}</div>
             </div>
              <div class="ui course dimmer">
-              <div class="ui big text loader">Getting Info</div>
+              <div class="ui big text loader">${translate("Getting Info")}</div>
             </div>
               <div class="ui left vertical inverted sidebar labeled icon menu visible">
                 <a class="active red courses-sidebar item">
                   <i class="file video icon"></i>
-                  Courses
+                  ${translate("Courses")}
                 </a>
                <a class="settings-sidebar item">
                   <i class="wrench icon"></i>
-                  Settings
+                  ${translate("Settings")}
                 </a>
               </div>
                   <div class="content">
@@ -63,11 +84,11 @@
                       <div class="ui settings"> 
                       <form class="ui form">
                         <h5 class="ui top attached  header">
-                              <i class="ui download icon"></i> Download Settings
+                              <i class="ui download icon"></i> ${translate("Download Settings")}
                           </h5>
                             <div class="ui attached  segment">
                                 <div class="field">
-                                      <label>Download Path</label>
+                                      <label>${translate("Download Path")}</label>
                                     <div class="ui action input">
                                         <input type="text" readonly name="downloadpath">
                                         <label class="ui icon button btn-file" onclick="selectDownloadPath()">
@@ -78,48 +99,76 @@
                               <div class="field">
                                 <div class="ui checkbox">
                                     <input type="checkbox" name="enablelecturesettings">
-                                    <label>Enable Lecture Start/End</label>
+                                    <label>${translate("Enable Lecture Start/End")}</label>
                                   </div>
                                 </div>
                               <div class="two unstackable fields">
                                   <div class="field">
-                                    <label>Lecture Start</label>
-                                    <input placeholder="Start Download at" type="number" min="1" name="lecturestart">
+                                    <label>${translate("Lecture Start")}</label>
+                                    <input placeholder="${translate("Start Download at")}" type="number" min="1" name="lecturestart">
                                   </div>
                                   <div class="field">
-                                    <label>Lecture End</label>
-                                    <input placeholder="End Download at" type="number" min="1" name="lectureend">
+                                    <label>${translate("Lecture End")}</label>
+                                    <input placeholder="${translate("End Download at")}" type="number" min="1" name="lectureend">
                                   </div>
                                 </div>
                                   <div class="ui  divider"></div>
                                     <div class="field">
-                                      <label>Video Quality</label>
+                                      <label>${translate("Video Quality")}</label>
                                       <div class="ui fluid search selection dropdown">
                                           <input type="hidden" name="videoquality">
                                           <i class="dropdown icon"></i>
-                                          <div class="default text">Select Quality</div>
+                                          <div class="default text"></div>
                                           <div class="menu">
-                                          <div class="item" data-value="Lowest">Lowest</div>
+                                          <div class="item" data-value="Auto">${translate("Auto")}</div>
+                                          <div class="item" data-value="Lowest">${translate("Lowest")}</div>
                                           <div class="item" data-value="360p">360p</div>
                                           <div class="item" data-value="480p">480p</div>
                                           <div class="item" data-value="720p">720p</div>
                                           <div class="item" data-value="1080p">1080p</div>
-                                          <div class="item" data-value="Highest">Highest</div>
+                                          <div class="item" data-value="Highest">${translate("Highest")}</div>
                                         </div>
                                          </div>
                                     </div>
 
                               </div>
+                          <h5 class="ui top attached  header">
+                              <i class="ui setting icon"></i> ${translate("Application Settings")}
+                          </h5>
+
+                          <div class="ui attached segment">
+                             <div class="field">
+                                      <label>${translate("Language (Requires App Restart)")}</label>
+                                      <div class="ui fluid search selection language dropdown">
+                                          <input type="hidden" name="language">
+                                          <i class="dropdown icon"></i>
+                                          <div class="default text"></div>
+                                          <div class="menu">
+                                          <div class="item" data-value="English">English</div>
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+
                               <div class="ui horizontal divider"></div>
-                              <button class="ui fluid green button" type="submit">Save</button>
+                              <button class="ui fluid green button" type="submit">${translate("Save")}</button>
                           </form>
 
                       </div>
                 </div>
      </div>
-<script>const $ = jQuery = require('jquery');</script>
-<script src="assets/js/semantic.min.js"></script>
-<script src="assets/js/app.js"></script>
+`;
 
-  </body>
+$('body').prepend(template);
+
+  var $languageDropdown = $('.language.dropdown .menu');
+  $.getJSON('locale/meta.json', function(data){
+      $.each( data, function(key) {
+        $languageDropdown.append(`<div class="item" data-value=${key}>${key}</div>`);
+       });
+  });
+
+</script>
+<script src="assets/js/app.js"></script>
+</body>
 </html>
