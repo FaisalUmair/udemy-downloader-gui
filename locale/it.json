@@ -19,7 +19,7 @@
 	"Download Failed": "Download Fallito",
 	"Click this message to retry": "Clicca su questo messaggio per riprovare",
 	"Settings": "Impostazioni",
-	"Download Settings": "Impostazioni Download",
+	"Download Settings": "Download",
 	"Download Path": "Cartella Download",
 	"Cannot select this folder": "Impossibile selezionare questa cartella",
 	"Enable Lecture Start/End": "Attiva Inizio/Fine Lezioni",
@@ -31,7 +31,7 @@
 	"Auto": "Auto",
 	"Lowest": "Bassa",
 	"Highest": "Massima",
-	"Application Settings": "Impostazioni Applicazione",
+	"Application Settings": "Applicazione",
 	"Language (Requires App Restart)": "Lingua (Richiede Riavvio App)",
 	"Save": "Salva",
 	"Settings Saved": "Impostazioni Salvate"
