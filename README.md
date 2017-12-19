@@ -21,6 +21,9 @@ By default the courses will be downloaded to the user's Download folder. The str
 
 # For Developers
 
+### Contributing:
+Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/FaisalUmair/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
+
 ### Prerequisites:
 ```
 You must have npm and nodejs installed.
