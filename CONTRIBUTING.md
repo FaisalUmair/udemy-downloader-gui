@@ -2,7 +2,7 @@
 
 👍 🎉 Thanks for taking the time to contribute! 🎉 👍
 
-Any contributions to this repository are welcome. If you are planning to contribute, please take time to read this file and follow the guidelines.
+Any contributions to this repository are most welcome. If you are planning to contribute, please take time to read this file and follow the guidelines.
 
 ## How to
 
@@ -10,12 +10,12 @@ Any contributions to this repository are welcome. If you are planning to contrib
 
 `1. Fork this repository`
 
-When you fork this repository you will have a personal copy of the repository where you have complete access to edit any file. 
+When you fork this repository you will have a personal copy of the repository where you will have complete access to edit any file. 
 Edit the files you want to and commit the changes.
 
 `2. Make a Pull request`
 
-When you are done editing the file(s) and you have commited the changes to the fork, you can now make a pull request to this repository.
+When you are done editing the file(s) and have commited the changes to the fork, you can now make a pull request to this repository.
 You will see a Pull request option alogside compare just above the Latest commit message in your fork. 
 Please beaware making a pull request to your own repository and making a pull request to this repository are two different things.
 You need to click on the `Pull request button` and not the `Pull requests tab`. 
