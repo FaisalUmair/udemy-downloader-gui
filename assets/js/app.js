@@ -231,7 +231,7 @@ $course.find('.download-status').show();
                      getLecture(v.title,chapterindex,lectureindex);
                      lectureindex++;
                     }else{
-                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://www.udemy.com${$course.attr('course-url')}t/lecture/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
+                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://www.udemy.com${$course.attr('course-url')}t/${v._class}/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
                        remaining--;
                        coursedata['totallectures']+=1;
                        if(!remaining){
