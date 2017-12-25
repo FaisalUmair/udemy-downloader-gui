@@ -283,8 +283,8 @@ function initDownload($course,coursedata){
   var $download_speed_value = $download_speed.find('.value');
   var $download_quality = $course.find('.download-quality');
   var downloaded = 0;
-  var lectureStart = settings.get('download.lectureStart');
-  var lectureEnd = settings.get('download.lectureEnd');
+  var downloadStart = settings.get('download.downloadStart');
+  var downloadEnd = settings.get('download.downloadEnd');
   var enableLectureSettings = settings.get('download.enableLectureSettings');
   $download_speed.show();
   $download_quality.show();
@@ -306,23 +306,23 @@ $pauseButton.removeClass('disabled');
 
   if(enableLectureSettings){
 
-    if(lectureStart>lectureEnd){
-      lectureStart=lectureEnd;
+    if(downloadStart>downloadEnd){
+      downloadStart=downloadEnd;
     }
 
-    if(lectureStart<1){
-      lectureStart = 1;
-    }else if(lectureStart>totallectures){
-      lectureStart = totallectures;
+    if(downloadStart<1){
+      downloadStart = 1;
+    }else if(downloadStart>totallectures){
+      downloadStart = totallectures;
     }
 
-    if(lectureEnd<1){
-      lectureEnd = 1;
-    }else if(lectureEnd>totallectures){
-      lectureEnd = totallectures;
+    if(downloadEnd<1){
+      downloadEnd = 1;
+    }else if(downloadEnd>totallectures){
+      downloadEnd = totallectures;
     }
-    var toDownload = (lectureEnd-lectureStart)+1;
-    downloadChapter(lectureChaperMap[lectureStart].chapterindex,lectureChaperMap[lectureStart].lectureindex);
+    var toDownload = (downloadEnd-downloadStart)+1;
+    downloadChapter(lectureChaperMap[downloadStart].chapterindex,lectureChaperMap[downloadStart].lectureindex);
   }else{
     var toDownload = totallectures;
     downloadChapter(0,0);
@@ -449,16 +449,16 @@ $('.courses-sidebar').click(function(){
 $('.ui.settings .form').submit((e)=>{
   e.preventDefault();
   var enableLectureSettings = $(e.target).find('input[name=enablelecturesettings]')[0].checked;
-  var lectureStart = $(e.target).find('input[name=lecturestart]').val();
-  var lectureEnd = $(e.target).find('input[name=lectureend]').val();
+  var downloadStart = $(e.target).find('input[name=downloadstart]').val();
+  var downloadEnd = $(e.target).find('input[name=downloadend]').val();
   var videoQuality = $(e.target).find('input[name=videoquality]').val();
   var downloadPath = $(e.target).find('input[name=downloadpath]').val();
   var language = $(e.target).find('input[name=language]').val();
   
   settings.set('download', {
     enableLectureSettings: enableLectureSettings,
-    lectureStart: parseInt(lectureStart),
-    lectureEnd: parseInt(lectureEnd),
+    downloadStart: parseInt(downloadStart),
+    downloadEnd: parseInt(downloadEnd),
     videoQuality: videoQuality,
     path: downloadPath
   });
@@ -478,12 +478,12 @@ function loadSettings(){
   settingsForm.find('input[name="enablelecturesettings"]').prop('checked', true);
   }else{
   settingsForm.find('input[name="enablelecturesettings"]').prop('checked', false);
-  settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
+  settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',true);
   }
 
   settingsForm.find('input[name="downloadpath"]').val(settings.get('download.path') || homedir+'/Downloads');
-  settingsForm.find('input[name="lecturestart"]').val(settings.get('download.lectureStart'));
-  settingsForm.find('input[name="lectureend"]').val(settings.get('download.lectureEnd'));
+  settingsForm.find('input[name="downloadstart"]').val(settings.get('download.downloadStart'));
+  settingsForm.find('input[name="downloadend"]').val(settings.get('download.downloadEnd'));
   var videoQuality = settings.get('download.videoQuality');
   settingsForm.find('input[name="videoquality"]').val(videoQuality);
   settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(videoQuality || translate('Auto'));
@@ -494,9 +494,9 @@ function loadSettings(){
 
 settingsForm.find('input[name="enablelecturesettings"]').change(function() {
    if(this.checked) {
-    settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',false);
+    settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',false);
    }else{
-    settingsForm.find('input[name="lecturestart"], input[name="lectureend"]').prop('readonly',true);
+    settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',true);
    }     
 });
 
