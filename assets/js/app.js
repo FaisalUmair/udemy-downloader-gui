@@ -77,7 +77,7 @@ needle
                   if(response.results.length){
                      $.each(response.results,function(index,course){
                         $('.ui.dashboard .ui.courses.items').append(`
-                                <div class="ui course item" course-id="${course.id}">
+                                <div class="ui course item" course-id="${course.id}" course-url="${course.url}">
                                 <div class="ui tiny label download-quality grey"></div>
                                 <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
                                   <div class="ui tiny image">
@@ -171,13 +171,23 @@ $course.find('.download-status').show();
                          coursedata['chapters'][chapterindex]['name'] = v.title;
                          coursedata['chapters'][chapterindex]['lectures'] = [];
                          remaining--;   
-                    }else if(v._class=="lecture"&&v.asset.asset_type=="Video"){
+                    }else if(v._class=="lecture"&& (v.asset.asset_type=="Video"||v.asset.asset_type=="Article"||v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
                              url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset`,
                              headers: header,
                              success: function(response) { 
+                                if(v.asset.asset_type=="Article"){
+                                  var src = response.view_html;
+                                  var videoQuality = 'Attachment';
+                                  var type = 'Article';
+                                }else if(v.asset.asset_type=="File"||v.asset.asset_type=="E-Book"){
+                                  var src = $(response.view_html).find('a').attr('href');
+                                  var videoQuality = 'Attachment';
+                                  var type = 'File';
+                                }else{
+                                var type = 'Video';  
                                 var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
                                 var qualities = [];
                                 var qualitySrcMap = {};
@@ -206,8 +216,10 @@ $course.find('.download-status').show();
                                          videoQuality = videoQuality.slice(0, -1);
                                          var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.sources[0].src;
                                     }
-                                  }         
-                                coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality};
+                                  }
+                                }
+
+                                coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
                                 remaining--;
                                 coursedata['totallectures']+=1;
                                 if(!remaining){
@@ -219,7 +231,13 @@ $course.find('.download-status').show();
                      getLecture(v.title,chapterindex,lectureindex);
                      lectureindex++;
                     }else{
-                      remaining--;
+                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://www.udemy.com${$course.attr('course-url')}t/lecture/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
+                       remaining--;
+                       coursedata['totallectures']+=1;
+                       if(!remaining){
+                          initDownload($course,coursedata);
+                        }
+                      lectureindex++;
                     }
                   });
                }
@@ -247,7 +265,7 @@ function initDownload($course,coursedata){
   var $resumeButton = $actionButtons.find('.resume.button');
   $pauseButton.removeClass('disabled');
   var lectureChaperMap = {};
-  var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green'};
+  var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green','Attachment':'pink'};
   var currentLecture = 0;
   coursedata['chapters'].forEach(function(lecture,chapterindex){
   lecture['lectures'].forEach(function(x,lectureindex){
@@ -341,14 +359,27 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
 $progressElemIndividual.progress('reset');
 
-    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.mp4');
     var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
-    $download_quality.html(lectureQuality+'p').removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
+    $download_quality.html(lectureQuality+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']!='File' ? 'p' : '')).removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
+    
+    if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Url'){
+      var dl = downloader.download();
+      fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function(err) {
+        if(err) {
+            resetCourse($course.find('.download-error'));
+        }
+        $progressElemCombined.progress('increment');
+        downloaded++;
+        downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
+      }); 
+
+    }else{
+
+    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
     dl.start();
 
-       
        timer = setInterval(function() {
             switch(dl.status){
               case 0:
@@ -379,6 +410,7 @@ dl.on('end', function(dl) {
   downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
 });
 
+}
 
 }
 
