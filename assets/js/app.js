@@ -263,7 +263,6 @@ function initDownload($course,coursedata){
   var $downloadButton = $actionButtons.find('.download.button');
   var $pauseButton = $actionButtons.find('.pause.button');
   var $resumeButton = $actionButtons.find('.resume.button');
-  $pauseButton.removeClass('disabled');
   var lectureChaperMap = {};
   var qualityColorMap = {'144':'red','240':'orange','360':'blue','480':'teal','720':'olive','1080':'green','Attachment':'pink'};
   var currentLecture = 0;
@@ -403,7 +402,12 @@ dl.on('error', function(dl) {
   // Prevent throwing uncaught error
 });
 
+dl.on('start', function(){
+$pauseButton.removeClass('disabled');
+});
+
 dl.on('end', function(dl) { 
+  $pauseButton.addClass('disabled');
   clearInterval(timer);
   $progressElemCombined.progress('increment');
   downloaded++;
