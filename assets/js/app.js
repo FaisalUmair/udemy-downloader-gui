@@ -173,21 +173,29 @@ $course.find('.download-status').show();
                          coursedata['chapters'][chapterindex]['lectures'] = [];
                          remaining--;   
                     }else if(v._class=="lecture"&& (v.asset.asset_type=="Video"||v.asset.asset_type=="Article"||v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
+                        if(v.asset.asset_type!="Video"&&downloadVideosOnly){
+                          remaining--;
+                          if(!remaining){
+                            initDownload($course,coursedata);
+                          }
+                          return;
+                        }
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
                              url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset,supplementary_assets`,
                              headers: header,
                              success: function(response) {
-                                if(v.asset.asset_type=="Article"&&!downloadVideosOnly){
+
+                                if(v.asset.asset_type=="Article"){
                                   var src = response.view_html;
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'Article';
-                                }else if((v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")&&!downloadVideosOnly){
+                                }else if((v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
                                   var src = $(response.view_html).find('a').attr('href');
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'File';
-                                }else if(v.asset.asset_type=="Video"){
+                                }else{
                                 var type = 'Video';  
                                 var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
                                 var qualities = [];
@@ -218,17 +226,9 @@ $course.find('.download-status').show();
                                          var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.sources[0].src;
                                     }
                                   }
-                                }else{
-                                    remaining--;
-                                    coursedata['totallectures']+=1;
-                                    if(!remaining){
-                                      initDownload($course,coursedata);
-                                    }
                                 }
-
+ 
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
-
-
                                 if(response.supplementary_assets.length&&!downloadVideosOnly){
                                   coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'] = [];
                                   var supplementary_assets_remaining = response.supplementary_assets.length;
@@ -261,7 +261,6 @@ $course.find('.download-status').show();
                                     initDownload($course,coursedata);
                                   }
                                 }
-
                              }
                             });
                      }
