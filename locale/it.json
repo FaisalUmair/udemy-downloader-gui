@@ -13,7 +13,7 @@
 	"Building Course Data": "Costruzione Dati Corso",
 	"Downloaded": "Scaricati",
 	"out of": "di",
-	"lectures": "lezioni",
+	"items": "elementi",
 	"Download Completed": "Download Completato!",
 	"Click this message to hide it": "Clicca su questo messaggio per nasconderlo",
 	"Download Failed": "Download Fallito",
@@ -22,10 +22,10 @@
 	"Download Settings": "Impostazioni Download",
 	"Download Path": "Cartella Download",
 	"Cannot select this folder": "Impossibile selezionare questa cartella",
-	"Enable Download Start/End": "Attiva Inizio/Fine Lezioni",
-	"Download Start": "Inizio Lezioni",
+	"Enable Download Start/End": "Attiva Inizio/Fine Download",
+	"Download Start": "Inizio Download",
 	"Start Download at": "Inizia Download da",
-	"Download End": "Fine Lezioni",
+	"Download End": "Fine Download",
 	"End Download at": "Termina Download a",
 	"Video Quality": "Qualità Video",
 	"Auto": "Auto",
@@ -34,5 +34,6 @@
 	"Application Settings": "Impostazioni Applicazione",
 	"Language (Requires App Restart)": "Lingua (Richiede Riavvio App)",
 	"Save": "Salva",
-	"Settings Saved": "Impostazioni Salvate"
+	"Settings Saved": "Impostazioni Salvate",
+	"Download Lecture Videos Only": "Scarica solo video di lezione"
 }

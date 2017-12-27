@@ -13,7 +13,7 @@
     "Building Course Data": "Construyendo datos del Curso",
     "Downloaded": "Descargado",
     "out of": "de",
-    "lectures": "Lectura",
+    "items": "artículos",
     "Download Completed": "Descarga Completa!",
     "Click this message to hide it": "Presiona este mensaje para ocultarlo",
     "Download Failed": "Descarga Fallido!",
@@ -23,9 +23,9 @@
     "Download Path": "Ruta de Descarga",
     "Cannot select this folder": "No se puede seleccionar esta carpeta",
     "Enable Download Start/End": "Activar Inicio/Fin de Lectura",
-    "Download Start": "Inicio de Lectura",
+    "Download Start": "Inicio de Descarga",
     "Start Download at": "Iniciar descarga en",
-    "Download End": "Fin de Lectura",
+    "Download End": "Fin de Descarga",
     "End Download at": "Terminar descarga en",
     "Video Quality": "Calidad de descarga",
     "Auto": "Auto",
@@ -34,5 +34,6 @@
     "Application Settings": "Configuración de la Aplicación",
     "Language (Requires App Restart)": "Idioma (Requiere reiniciar la aplicación)",
     "Save": "Guardar",
-    "Settings Saved": "Configuración guardada"
+    "Settings Saved": "Configuración guardada",
+    "Download Lecture Videos Only": "Descargar conferencia Videos Solamente"
 }

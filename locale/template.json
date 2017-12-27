@@ -13,7 +13,7 @@
 	"Building Course Data": "",
 	"Downloaded": "",
 	"out of": "",
-	"lectures": "",
+	"items": "",
 	"Download Completed": "",
 	"Click this message to hide it": "",
 	"Download Failed": "",
@@ -34,5 +34,6 @@
 	"Application Settings": "",
 	"Language (Requires App Restart)": "",
 	"Save": "",
-	"Settings Saved": ""
+	"Settings Saved": "",
+	"Download Lecture Videos Only": ""
 }
