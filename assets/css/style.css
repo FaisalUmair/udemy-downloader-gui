@@ -43,11 +43,11 @@ background: rgba(0,0,0,.85);
 	width: 100%;
 }
 
-.ui.dashboard > .content .settings{
+.ui.dashboard > .content .settings, .ui.dashboard > .content .about{
 	display: none;
 }
 
-.ui.dashboard > .content .courses, .ui.dashboard > .content .settings{
+.ui.dashboard > .content .courses, .ui.dashboard > .content .settings, .ui.dashboard > .content .about{
 	padding: 8px 10px 0px 0px;
 }
 
@@ -83,4 +83,8 @@ background: rgba(0,0,0,.85);
 
 .ui.dashboard .courses .course .extra .button{
 	padding: 7px 15px;
+}
+
+.ui.dashboard > .content .about .donate-button{
+	text-align: center;
 }

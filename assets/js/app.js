@@ -8,6 +8,7 @@ const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
+var shell = require('electron').shell;
 $('.ui.dropdown')
   .dropdown()
 ;
@@ -549,19 +550,32 @@ function resetCourse(Selem){
 
 }
 
+$('.courses-sidebar').click(function(){
+  $('.content .ui.settings,.content .ui.about').hide();
+  $('.content .ui.courses').show();
+  $(this).parent('.sidebar').find('.active').removeClass('active red');
+  $(this).addClass('active red');
+});
+
 $('.settings-sidebar').click(function(){
-  $('.content .ui.courses').hide();
+  $('.content .ui.courses,.content .ui.about').hide();
   $('.content .ui.settings').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
   loadSettings();
 });
 
-$('.courses-sidebar').click(function(){
-  $('.content .ui.settings').hide();
-  $('.content .ui.courses').show();
+$('.about-sidebar').click(function(){
+  $('.content .ui.courses,.content .ui.settings').hide();
+  $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
+});
+
+
+$('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
+    e.preventDefault();
+    shell.openExternal(this.href);
 });
 
 
