@@ -409,7 +409,7 @@ function initDownload($course,coursedata){
   var downloaded = 0;
   var downloadStart = settings.get('download.downloadStart');
   var downloadEnd = settings.get('download.downloadEnd');
-  var enableLectureSettings = settings.get('download.enableLectureSettings');
+  var enableDownloadStartEnd = settings.get('download.enableDownloadStartEnd');
   $course.css('cssText','padding-top: 35px !important').css('padding-bottom','25px');
 
 
@@ -426,7 +426,7 @@ $pauseButton.removeClass('disabled');
 });
 
 
-  if(enableLectureSettings){
+  if(enableDownloadStartEnd){
 
     if(downloadStart>downloadEnd){
       downloadStart=downloadEnd;
@@ -660,16 +660,16 @@ $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
 
 $('.ui.settings .form').submit((e)=>{
   e.preventDefault();
-  var enableLectureSettings = $(e.target).find('input[name=enablelecturesettings]')[0].checked;
-  var downloadVideosOnly = $(e.target).find('input[name=downloadvideosonly]')[0].checked;
-  var downloadStart = $(e.target).find('input[name=downloadstart]').val();
-  var downloadEnd = $(e.target).find('input[name=downloadend]').val();
-  var videoQuality = $(e.target).find('input[name=videoquality]').val();
-  var downloadPath = $(e.target).find('input[name=downloadpath]').val();
-  var language = $(e.target).find('input[name=language]').val();
+  var enableDownloadStartEnd = $(e.target).find('input[name="enabledownloadstartend"]')[0].checked;
+  var downloadVideosOnly = $(e.target).find('input[name="downloadvideosonly"]')[0].checked;
+  var downloadStart = $(e.target).find('input[name="downloadstart"]').val();
+  var downloadEnd = $(e.target).find('input[name="downloadend"]').val();
+  var videoQuality = $(e.target).find('input[name="videoquality"]').val();
+  var downloadPath = $(e.target).find('input[name="downloadpath"]').val();
+  var language = $(e.target).find('input[name="language"]').val();
   
   settings.set('download', {
-    enableLectureSettings: enableLectureSettings,
+    enableDownloadStartEnd: enableDownloadStartEnd,
     downloadVideosOnly: downloadVideosOnly,
     downloadStart: parseInt(downloadStart),
     downloadEnd: parseInt(downloadEnd),
@@ -688,10 +688,10 @@ $('.ui.settings .form').submit((e)=>{
 var settingsForm = $('.ui.settings .form');
 
 function loadSettings(){
-  if(settings.get('download.enableLectureSettings')){
-  settingsForm.find('input[name="enablelecturesettings"]').prop('checked', true);
+  if(settings.get('download.enableDownloadStartEnd')){
+  settingsForm.find('input[name="enabledownloadstartend"]').prop('checked', true);
   }else{
-  settingsForm.find('input[name="enablelecturesettings"]').prop('checked', false);
+  settingsForm.find('input[name="enabledownloadstartend"]').prop('checked', false);
   settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',true);
   }
 
@@ -712,7 +712,7 @@ function loadSettings(){
   settingsForm.find('input[name="language"]').parent('.dropdown').find('.default.text').html(language || 'English');
 }
 
-settingsForm.find('input[name="enablelecturesettings"]').change(function() {
+settingsForm.find('input[name="enabledownloadstartend"]').change(function() {
    if(this.checked) {
     settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',false);
    }else{
