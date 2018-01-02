@@ -9,6 +9,7 @@ const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
+
 $('.ui.dropdown')
   .dropdown()
 ;
@@ -520,7 +521,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           }, 1000);
 
           dl.on('error', function() { 
-            // Prevent throwing uncaught error
+            analytics.track('Download Failed');
           });
 
           dl.on('start', function(){
@@ -591,7 +592,7 @@ $progressElemIndividual.progress('reset');
         }, 1000);
 
 dl.on('error', function() { 
-  // Prevent throwing uncaught error
+  analytics.track('Download Failed');
 });
 
 dl.on('start', function(){
@@ -649,12 +650,18 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
+  analytics.track('About Page');
 });
 
 
 $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
     e.preventDefault();
     shell.openExternal(this.href);
+    if(this.classList.contains('donate')){
+      analytics.track('Donate');
+    }else{
+      analytics.track(this.text);
+    }
 });
 
 
