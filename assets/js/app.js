@@ -13,6 +13,11 @@ $('.ui.dropdown')
   .dropdown()
 ;
 
+jQuery.expr[':'].contains = function(a, i, m) {
+  return jQuery(a).text().toUpperCase()
+      .indexOf(m[3].toUpperCase()) >= 0;
+};
+
 
 var downloadTemplate = `
 <div class="ui tiny icon action buttons">
@@ -66,9 +71,10 @@ needle
          $('.ui.dashboard').fadeIn('fast').css('display','flex');
       var access_token = this.request.res.cookies.access_token;
       var header = {"Authorization": `Bearer ${access_token}`};
+
       $.ajax({
                type: 'GET',
-               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses?page_size=100000",
+               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50",
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
@@ -114,7 +120,23 @@ needle
                                   </div>
                                 </div>
                         `);
-                     })
+                     });
+                     if(response.count>5){
+                      $('.ui.courses.items').prepend(`
+                        <div class="ui fluid search">
+                          <div class="ui fluid icon input">
+                            <input class="prompt" type="text" placeholder="Filter Courses">
+                            <i class="search icon"></i>
+                          </div>
+                        </div>
+                        `).find('input').keyup(function(){
+                          $('.ui.courses.items .item').hide();
+                          $('.ui.courses.items .item .coursename:contains('+this.value+')').parents('.course.item').show();
+                        });
+                    }
+                    if(response.next){
+                      $('.ui.courses.items').append('<button class="ui basic blue fluid load-more button" data-url='+response.next+'>Load More</button>');
+                    }
                   }else{
                      $('.ui.dashboard .courses').append(`<div class="ui yellow message">${translate("You have not enrolled in any course")}</div>`)
                   }
@@ -125,12 +147,71 @@ needle
       }
 
 
-$('body').on('click','.download-success', function(){
+$('.ui.dashboard .content').on('click','.download-success', function(){
 $(this).hide();
 $(this).parents('.course').find('.download-status').show();
 });
 
-$('body').on('click','.download.button, .download-error', function(){
+$('.ui.dashboard .content').on('click','.load-more.button', function(){
+var $this = $(this);
+      $.ajax({
+               type: 'GET',
+               url: $this.data('url'),
+               beforeSend: function(){
+                   $(".ui.dashboard .courses.dimmer").addClass('active');
+               },
+               headers: header,
+               success: function(response) { 
+                $(".ui.dashboard .courses.dimmer").removeClass('active');
+                $.each(response.results,function(index,course){
+                        $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
+                                <div class="ui tiny label download-quality grey"></div>
+                                <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
+                                  <div class="ui tiny image">
+                                    <img src="${course.image_240x135}">
+                                  </div>
+                                  <div class="content">
+                                    <span class="coursename">${course.title}</span>
+
+                                  <div class="ui tiny icon green download-success message">
+                                         <i class="check icon"></i>
+                                          <div class="content">
+                                            <div class="header">
+                                               ${translate("Download Completed")}
+                                             </div>
+                                             <p>${translate("Click this message to hide it")}</p>
+                                           </div>
+                                    </div>
+
+                                  <div class="ui tiny icon  red download-error message">
+                                         <i class="power icon"></i>
+                                          <div class="content">
+                                            <div class="header">
+                                               ${translate("Download Failed")}
+                                             </div>
+                                             <p>${translate("Click this message to retry")}</p>
+                                           </div>
+                                    </div>
+
+                                    <div class="extra download-status">
+                                      ${downloadTemplate}
+                                    </div>
+
+                                  </div>
+                                </div>
+                        `).insertBefore($this);
+                     });
+                    if(!response.next){
+                      $this.remove();
+                    }else{
+                      $this.data('url',response.next);
+                    }
+               }
+      });
+});
+
+
+$('.ui.dashboard .content').on('click','.download.button, .download-error', function(){
 var $course = $(this).parents('.course');
 var courseid = $course.attr('course-id');
 $course.find('.download-error').hide();
@@ -329,8 +410,6 @@ function initDownload($course,coursedata){
   var downloadStart = settings.get('download.downloadStart');
   var downloadEnd = settings.get('download.downloadEnd');
   var enableLectureSettings = settings.get('download.enableLectureSettings');
-  $download_speed.show();
-  $download_quality.show();
   $course.css('cssText','padding-top: 35px !important').css('padding-bottom','25px');
 
 
@@ -379,7 +458,8 @@ $pauseButton.removeClass('disabled');
   });
 
 $progressElemCombined.progress('reset');
-
+$download_speed.show();
+$download_quality.show();
 
 function downloadChapter(chapterindex,lectureindex){
 
@@ -486,7 +566,6 @@ $progressElemIndividual.progress('reset');
       }); 
 
     }else{
-
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
