@@ -269,7 +269,6 @@ $course.find('.download-status').show();
                              url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset,supplementary_assets`,
                              headers: header,
                              success: function(response) {
-
                                 if(v.asset.asset_type=="Article"){
                                   var src = response.view_html;
                                   var videoQuality = v.asset.asset_type;
@@ -321,9 +320,9 @@ $course.find('.download-status').show();
                                         url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
                                         headers: header,
                                         success: function(response) { 
-                                          if(response.asset_type=="File"){
-                                            coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].push({src:response.download_urls.File[0].file,name:b.title,quality:'Attachment',type:'File'});
-                                          }else if(response.asset_type=="ExternalLink"){
+                                          if(response.download_urls){
+                                            coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].push({src:response.download_urls[response.asset_type][0].file,name:b.title,quality:'Attachment',type:'File'});
+                                          }else{
                                             coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].push({src:`<script type="text/javascript">window.location = "${response.external_url}";</script>`,name:b.title,quality:'Attachment',type:'Url'});
                                           }
                                             supplementary_assets_remaining--;
@@ -487,7 +486,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
         $download_quality.html(lectureQuality).removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
 
         if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['type']=='Url'){
-        fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name']+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], function() {
+        fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], function() {
           index++;
           if(index==total_assets){
             $progressElemCombined.progress('increment');
@@ -498,7 +497,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           }
         }); 
       }else{
-          var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name']+'.'+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name']);
+          var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
           var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
           dl.start();
           timer = setInterval(function() {
@@ -537,7 +536,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
               downloaded++;
               downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
             }else{
-              downloadAttachments(index);
+              downloadAttachments(index,total_assets);
             }
           });
 
@@ -552,7 +551,7 @@ $progressElemIndividual.progress('reset');
     
     if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Url'){
       
-      fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function() {
+      fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function() {
         
           if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
             var total_assets = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].length;
@@ -568,7 +567,7 @@ $progressElemIndividual.progress('reset');
 
     }else{
 
-    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name']+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
+    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
     dl.start();
 
