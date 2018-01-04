@@ -1,3 +1,4 @@
+const appVersion = require(__dirname+'/package.json').version;
 const remote = require('electron').remote;
 const dialog = remote.dialog;
 const fs = require('fs');
@@ -209,6 +210,19 @@ var $this = $(this);
                     }
                }
       });
+});
+
+
+$('.ui.dashboard .content').on('click','.check-updates', function(){
+  $(".ui.dashboard .about.dimmer").addClass('active');
+  $.getJSON('https://api.github.com/repos/FaisalUmair/udemy-downloader-gui/releases/latest', function(response){
+    $(".ui.dashboard .about.dimmer").removeClass('active');
+    if(response.tag_name!=`v${appVersion}`){
+      $('.ui.update-available.modal').modal('show');
+    }else{
+      prompt.alert('No updates available');
+    }
+  });
 });
 
 
@@ -519,8 +533,12 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
               }
           }, 1000);
 
-          dl.on('error', function() { 
-            analytics.track('Download Failed');
+          dl.on('error', function(dl) { 
+            analytics.track('Download Failed',{
+              appVersion: appVersion,
+              errorMessage: dl.error.message,
+              settings: settings.get('download')
+            });
           });
 
           dl.on('start', function(){
@@ -590,8 +608,12 @@ $progressElemIndividual.progress('reset');
             }
         }, 1000);
 
-dl.on('error', function() { 
-  analytics.track('Download Failed');
+dl.on('error', function(dl) { 
+  analytics.track('Download Failed',{
+    appVersion: appVersion,
+    errorMessage: dl.error.message,
+    settings: settings.get('download')
+  });
 });
 
 dl.on('start', function(){
@@ -649,17 +671,27 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
-  analytics.track('About Page');
+  analytics.track('About Page',{
+    appVersion: appVersion
+  });
 });
 
+
+$('.download-update.button').click(function(){
+shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases/latest');
+});
 
 $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
     e.preventDefault();
     shell.openExternal(this.href);
     if(this.classList.contains('donate')){
-      analytics.track('Donate');
+      analytics.track('Donate',{
+        appVersion: appVersion
+      });
     }else{
-      analytics.track(this.text);
+      analytics.track(this.text,{
+        appVersion: appVersion
+      });
     }
 });
 
