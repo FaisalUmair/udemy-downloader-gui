@@ -19,10 +19,10 @@ This software does not magically download any paid course available on Udemy, yo
 
 | Platform | Arch | Version | Link|
 | --- | --- | --- | --- |
-| Windows | x64 | 1.3.1 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.1/Udeler-Setup-1.3.1-windows-x64.exe)|
-| Windows | x86 | 1.3.1 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.1/Udeler-Setup-1.3.1-windows-x86.exe)|
-| Mac | x64 | 1.3.1 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.1/Udeler-1.3.1-mac.zip)|
-| Linux | x86_x64 | 1.3.1 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.1/Udeler-1.3.1-linux-x86_x64.AppImage)|
+| Windows | x64 | 1.3.2 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.2/Udeler-Setup-1.3.2-windows-x64.exe)|
+| Windows | x86 | 1.3.2 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.2/Udeler-Setup-1.3.2-windows-x86.exe)|
+| Mac | x64 | 1.3.2 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.2/Udeler-1.3.2-mac.zip)|
+| Linux | x86_x64 | 1.3.2 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.3.2/Udeler-1.3.2-linux-x86_x64.AppImage)|
 
 ### Note: 
 By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.

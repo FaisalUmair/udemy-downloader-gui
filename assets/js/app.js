@@ -1,4 +1,3 @@
-const appVersion = require(__dirname+'/package.json').version;
 const remote = require('electron').remote;
 const dialog = remote.dialog;
 const fs = require('fs');

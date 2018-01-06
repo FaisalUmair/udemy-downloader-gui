@@ -30,7 +30,7 @@
 <script src="assets/js/semantic.min.js"></script>
 <script type="text/javascript">
 const settings = require('electron-settings');
-
+const appVersion = require(__dirname+'/package.json').version;
 function translate(text){
   if(!settings.get('general.language') || settings.get('general.language')=="English"){
     return text;
@@ -191,7 +191,7 @@ var template = `
                           <div class="ui segment">
                             <h4 class="ui center aligned icon header">
                               <i class="grey file code outline icon"></i>
-                              Udeler v1.3.1
+                              Udeler v${appVersion}
                             </h4>
                             <button class="ui tiny fluid basic check-updates button">Check for updates</button>
                             <h3 class="ui header">Links</h3>
