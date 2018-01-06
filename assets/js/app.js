@@ -524,20 +524,34 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $progressElemIndividual.progress('set percent',stats.total.completed);    
                     break;
                 case -1:
-                    if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
-                      dl.emit('end');
-                      clearInterval(timer);
-                      break;
-                    }else{
-                      clearInterval(timer);
-                      resetCourse($course.find('.download-error'));
-                      analytics.track('Download Failed',{
-                        appVersion: appVersion,
-                        errorMessage: dl.error.message,
-                        settings: settings.get('download')
-                      });
-                      break;
-                    } 
+                  var stats = dl.getStats();
+                  $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
+                  $progressElemIndividual.progress('set percent',stats.total.completed);    
+                  break;
+              case -1:
+                  if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
+                    dl.emit('end');
+                    clearInterval(timer);
+                    break;
+                  }else{
+                      $.ajax({
+                      type: 'HEAD',
+                      url: dl.url,
+                      error: function(){
+                        dl.emit('end');
+                      },
+                      success: function() {
+                         resetCourse($course.find('.download-error'));
+                         analytics.track('Download Failed',{
+                           appVersion: appVersion,
+                           errorMessage: dl.error.message,
+                           settings: settings.get('download')
+                         });
+                      }
+                    });
+                    clearInterval(timer);
+                    break;
+                  } 
                 default:
                   $download_speed_value.html(0);
               }
@@ -596,7 +610,6 @@ $progressElemIndividual.progress('reset');
     dl.start();
 
        timer = setInterval(function() {
-        console.log(dl.status);
             switch(dl.status){
               case 0:
                 $download_speed_value.html(0);
@@ -614,7 +627,7 @@ $progressElemIndividual.progress('reset');
                   }else{
                       $.ajax({
                       type: 'HEAD',
-                      url: coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'],
+                      url: dl.url,
                       error: function(){
                         dl.emit('end');
                       },
