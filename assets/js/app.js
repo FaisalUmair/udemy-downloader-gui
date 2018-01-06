@@ -525,20 +525,27 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $progressElemIndividual.progress('set percent',stats.total.completed);    
                     break;
                 case -1:
-                    clearInterval(timer);
-                    resetCourse($course.find('.download-error'));
-                    break;
+                    if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
+                      dl.emit('end');
+                      clearInterval(timer);
+                      break;
+                    }else{
+                      clearInterval(timer);
+                      resetCourse($course.find('.download-error'));
+                      analytics.track('Download Failed',{
+                        appVersion: appVersion,
+                        errorMessage: dl.error.message,
+                        settings: settings.get('download')
+                      });
+                      break;
+                    } 
                 default:
                   $download_speed_value.html(0);
               }
           }, 1000);
 
           dl.on('error', function(dl) { 
-            analytics.track('Download Failed',{
-              appVersion: appVersion,
-              errorMessage: dl.error.message,
-              settings: settings.get('download')
-            });
+            // Prevent throwing uncaught error
           });
 
           dl.on('start', function(){
@@ -600,20 +607,27 @@ $progressElemIndividual.progress('reset');
                   $progressElemIndividual.progress('set percent',stats.total.completed);    
                   break;
               case -1:
-                  clearInterval(timer);
-                  resetCourse($course.find('.download-error'));
-                  break;
+                  if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
+                    dl.emit('end');
+                    clearInterval(timer);
+                    break;
+                  }else{
+                    clearInterval(timer);
+                    resetCourse($course.find('.download-error'));
+                    analytics.track('Download Failed',{
+                      appVersion: appVersion,
+                      errorMessage: dl.error.message,
+                      settings: settings.get('download')
+                    });
+                    break;
+                  } 
               default:
                 $download_speed_value.html(0);
             }
         }, 1000);
 
 dl.on('error', function(dl) { 
-  analytics.track('Download Failed',{
-    appVersion: appVersion,
-    errorMessage: dl.error.message,
-    settings: settings.get('download')
-  });
+  // Prevent throwing uncaught error
 });
 
 dl.on('start', function(){
