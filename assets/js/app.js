@@ -323,7 +323,6 @@ $course.find('.download-status').show();
                                     }
                                   }
                                 }
- 
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
                                 if(response.supplementary_assets.length&&!downloadVideosOnly){
                                   coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'] = [];
@@ -597,6 +596,7 @@ $progressElemIndividual.progress('reset');
     dl.start();
 
        timer = setInterval(function() {
+        console.log(dl.status);
             switch(dl.status){
               case 0:
                 $download_speed_value.html(0);
@@ -612,13 +612,22 @@ $progressElemIndividual.progress('reset');
                     clearInterval(timer);
                     break;
                   }else{
-                    clearInterval(timer);
-                    resetCourse($course.find('.download-error'));
-                    analytics.track('Download Failed',{
-                      appVersion: appVersion,
-                      errorMessage: dl.error.message,
-                      settings: settings.get('download')
+                      $.ajax({
+                      type: 'HEAD',
+                      url: coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'],
+                      error: function(){
+                        dl.emit('end');
+                      },
+                      success: function() {
+                         resetCourse($course.find('.download-error'));
+                         analytics.track('Download Failed',{
+                           appVersion: appVersion,
+                           errorMessage: dl.error.message,
+                           settings: settings.get('download')
+                         });
+                      }
                     });
+                    clearInterval(timer);
                     break;
                   } 
               default:
