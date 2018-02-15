@@ -212,6 +212,19 @@ var $this = $(this);
 });
 
 
+$('.ui.dashboard .content').on('click','.check-updates', function(){
+  $(".ui.dashboard .about.dimmer").addClass('active');
+  $.getJSON('https://api.github.com/repos/FaisalUmair/udemy-downloader-gui/releases/latest', function(response){
+    $(".ui.dashboard .about.dimmer").removeClass('active');
+    if(response.tag_name!=`v${appVersion}`){
+      $('.ui.update-available.modal').modal('show');
+    }else{
+      prompt.alert('No updates available');
+    }
+  });
+});
+
+
 $('.ui.dashboard .content').on('click','.download.button, .download-error', function(){
 var $course = $(this).parents('.course');
 var courseid = $course.attr('course-id');
@@ -309,7 +322,6 @@ $course.find('.download-status').show();
                                     }
                                   }
                                 }
- 
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
                                 if(response.supplementary_assets.length&&!downloadVideosOnly){
                                   coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'] = [];
@@ -511,16 +523,41 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $progressElemIndividual.progress('set percent',stats.total.completed);    
                     break;
                 case -1:
+                  var stats = dl.getStats();
+                  $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
+                  $progressElemIndividual.progress('set percent',stats.total.completed);    
+                  break;
+              case -1:
+                  if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
+                    dl.emit('end');
                     clearInterval(timer);
-                    resetCourse($course.find('.download-error'));
                     break;
+                  }else{
+                      $.ajax({
+                      type: 'HEAD',
+                      url: dl.url,
+                      error: function(){
+                        dl.emit('end');
+                      },
+                      success: function() {
+                         resetCourse($course.find('.download-error'));
+                         analytics.track('Download Failed',{
+                           appVersion: appVersion,
+                           errorMessage: dl.error.message,
+                           settings: settings.get('download')
+                         });
+                      }
+                    });
+                    clearInterval(timer);
+                    break;
+                  } 
                 default:
                   $download_speed_value.html(0);
               }
           }, 1000);
 
-          dl.on('error', function() { 
-            analytics.track('Download Failed');
+          dl.on('error', function(dl) { 
+            // Prevent throwing uncaught error
           });
 
           dl.on('start', function(){
@@ -582,16 +619,36 @@ $progressElemIndividual.progress('reset');
                   $progressElemIndividual.progress('set percent',stats.total.completed);    
                   break;
               case -1:
-                  clearInterval(timer);
-                  resetCourse($course.find('.download-error'));
-                  break;
+                  if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
+                    dl.emit('end');
+                    clearInterval(timer);
+                    break;
+                  }else{
+                      $.ajax({
+                      type: 'HEAD',
+                      url: dl.url,
+                      error: function(){
+                        dl.emit('end');
+                      },
+                      success: function() {
+                         resetCourse($course.find('.download-error'));
+                         analytics.track('Download Failed',{
+                           appVersion: appVersion,
+                           errorMessage: dl.error.message,
+                           settings: settings.get('download')
+                         });
+                      }
+                    });
+                    clearInterval(timer);
+                    break;
+                  } 
               default:
                 $download_speed_value.html(0);
             }
         }, 1000);
 
-dl.on('error', function() { 
-  analytics.track('Download Failed');
+dl.on('error', function(dl) { 
+  // Prevent throwing uncaught error
 });
 
 dl.on('start', function(){
@@ -649,17 +706,27 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
-  analytics.track('About Page');
+  analytics.track('About Page',{
+    appVersion: appVersion
+  });
 });
 
+
+$('.download-update.button').click(function(){
+shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases/latest');
+});
 
 $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
     e.preventDefault();
     shell.openExternal(this.href);
     if(this.classList.contains('donate')){
-      analytics.track('Donate');
+      analytics.track('Donate',{
+        appVersion: appVersion
+      });
     }else{
-      analytics.track(this.text);
+      analytics.track(this.text,{
+        appVersion: appVersion
+      });
     }
 });
 

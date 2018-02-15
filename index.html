@@ -7,12 +7,30 @@
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
   <body>
-
+<div class="ui basic update-available modal">
+  <div class="ui icon header">
+    <i class="gift icon"></i>
+    New Update Available
+  </div>
+  <div class="content">
+    <p><center>A new version of Udeler is available. You can download the latest version from github releases page</center></p>
+  </div>
+  <div class="actions" style="text-align: center;">
+    <div class="ui red cancel inverted button">
+      <i class="remove icon"></i>
+      Cancel
+    </div>
+    <div class="ui green ok inverted download-update button">
+      <i class="checkmark icon"></i>
+      Download
+    </div>
+  </div>
+</div>
 <script>const $ = jQuery = require('jquery');</script>
 <script src="assets/js/semantic.min.js"></script>
 <script type="text/javascript">
 const settings = require('electron-settings');
-
+const appVersion = require(__dirname+'/package.json').version;
 function translate(text){
   if(!settings.get('general.language') || settings.get('general.language')=="English"){
     return text;
@@ -65,6 +83,9 @@ var template = `
             </div>
              <div class="ui course dimmer">
               <div class="ui big text loader">${translate("Getting Info")}</div>
+            </div>
+            <div class="ui about dimmer">
+              <div class="ui big text loader">Checking for Updates</div>
             </div>
               <div class="ui left vertical inverted sidebar labeled icon menu visible">
                 <a class="active red courses-sidebar item">
@@ -170,8 +191,9 @@ var template = `
                           <div class="ui segment">
                             <h4 class="ui center aligned icon header">
                               <i class="grey file code outline icon"></i>
-                              Udeler v1.3.0
+                              Udeler v${appVersion}
                             </h4>
+                            <button class="ui tiny fluid basic check-updates button">Check for updates</button>
                             <h3 class="ui header">Links</h3>
                             <div class="ui relaxed divided list">
                               <div class="item">
@@ -202,7 +224,7 @@ var template = `
                                   <i class="large github middle aligned icon"></i>
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
-                                    <div class="description">Report Bugs</div>
+                                    <div class="description">Report Bug</div>
                                   </div>
                                 </div>
                                 <div class="item">
@@ -241,7 +263,9 @@ $('body').prepend(template);
 <script>
   !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="4.0.0";
   analytics.load("5ytQPclNP2gLRsHx0wfHs2NYLjqDl9al");
-  analytics.page();
+  analytics.page({
+    appVersion:appVersion
+  });
   }}();
 </script>
 </body>

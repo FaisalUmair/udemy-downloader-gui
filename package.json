@@ -1,6 +1,6 @@
 {
   "name": "Udeler",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/FaisalUmair/udemy-downloader-gui.git"
@@ -39,8 +39,8 @@
     "electron-settings": "^3.1.4",
     "jquery": "^3.2.1",
     "mkdirp": "^0.5.1",
-    "mt-files-downloader": "^0.2.5",
     "needle": "^2.0.1",
-    "sanitize-filename": "^1.6.1"
+    "sanitize-filename": "^1.6.1",
+    "mt-files-downloader": "https://github.com/zeltice/node-mt-files-downloader"
   }
 }
