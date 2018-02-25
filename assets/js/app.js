@@ -10,6 +10,8 @@ const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 
+var subDomain = 'www';
+
 $('.ui.dropdown')
   .dropdown()
 ;
@@ -39,11 +41,23 @@ var downloadTemplate = `
 </div>
 `;
 
+$('.ui.login #business').change(function() {
+    var textField = $('.ui.login #subdomain');
+    if($(this).is(":checked")) {
+        textField.show();
+    } else {
+        textField.hide();
+    }
+});
 
 $('.ui.login .form').submit((e)=>{
 e.preventDefault();
 var email = $(e.target).find('input[name="email"]').val();
-var password = $(e.target).find('input[name=password]').val();
+var password = $(e.target).find('input[name="password"]').val();
+var isBusiness = $(e.target).find('input[name="business"]').is(":checked");
+
+if(isBusiness)
+    subDomain = $(e.target).find('input[name="subdomain"]').val();
 
 if(!email || !password){
    prompt.alert(translate("Type Username/Password"));
@@ -58,7 +72,7 @@ $.ajax({
     success: function(data, status, xhr){
     var token = $('input[name=csrfmiddlewaretoken]',data).val();
     var cookie = '';
-    session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {    
+    session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {
   for (var key in cookies){
     cookie +=  cookies[key].name+'='+cookies[key].value+';';
   }
@@ -75,12 +89,12 @@ needle
 
       $.ajax({
                type: 'GET',
-               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50",
+               url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
                headers: header,
-               success: function(response) { 
+               success: function(response) {
                   $(".ui.dashboard .courses.dimmer").removeClass('active');
                   if(response.results.length){
                      $.each(response.results,function(index,course){
@@ -162,7 +176,7 @@ var $this = $(this);
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
                headers: header,
-               success: function(response) { 
+               success: function(response) {
                 $(".ui.dashboard .courses.dimmer").removeClass('active');
                 $.each(response.results,function(index,course){
                         $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
@@ -232,12 +246,12 @@ $course.find('.download-error').hide();
 $course.find('.download-status').show();
       $.ajax({
                type: 'GET',
-               url: `https://www.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=100000`,
+               url: `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=100000`,
                beforeSend: function(){
                    $(".ui.dashboard .course.dimmer").addClass('active');
                },
                headers: header,
-               success: function(response) { 
+               success: function(response) {
                  $(".ui.dashboard .course.dimmer").removeClass('active');
                  $course.find('.download.button').addClass('disabled');
                  $course.css('padding-bottom','25px');
@@ -257,17 +271,17 @@ $course.find('.download-status').show();
                          coursedata['chapters'][chapterindex] = [];
                          coursedata['chapters'][chapterindex]['name'] = 'Chapter 1';
                          coursedata['chapters'][chapterindex]['lectures'] = [];
-                         remaining--; 
+                         remaining--;
                  }
 
                   $.each(response.results, function(i,v){
-                    if(v._class=="chapter"){ 
+                    if(v._class=="chapter"){
                          chapterindex++;
                          lectureindex = 0;
                          coursedata['chapters'][chapterindex] = [];
                          coursedata['chapters'][chapterindex]['name'] = v.title;
                          coursedata['chapters'][chapterindex]['lectures'] = [];
-                         remaining--;   
+                         remaining--;
                     }else if(v._class=="lecture"&& (v.asset.asset_type=="Video"||v.asset.asset_type=="Article"||v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
                         if(v.asset.asset_type!="Video"&&downloadVideosOnly){
                           remaining--;
@@ -279,7 +293,7 @@ $course.find('.download-status').show();
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
-                             url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset,supplementary_assets`,
+                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset,supplementary_assets`,
                              headers: header,
                              success: function(response) {
                                 if(v.asset.asset_type=="Article"){
@@ -291,12 +305,12 @@ $course.find('.download-status').show();
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'File';
                                 }else{
-                                var type = 'Video';  
+                                var type = 'Video';
                                 var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
                                 var qualities = [];
                                 var qualitySrcMap = {};
                                 lecture.sources.forEach(function(val){
-                                  if(val.label=="Auto")  return;                                  
+                                  if(val.label=="Auto")  return;
                                   qualities.push(val.label);
                                   qualitySrcMap[val.label] = val.src;
                                 });
@@ -329,9 +343,9 @@ $course.find('.download-status').show();
                                   $.each(response.supplementary_assets, function(a,b){
                                       $.ajax({
                                         type: 'GET',
-                                        url: `https://www.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
+                                        url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
                                         headers: header,
-                                        success: function(response) { 
+                                        success: function(response) {
                                           if(response.download_urls){
                                             coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].push({src:response.download_urls[response.asset_type][0].file,name:b.title,quality:'Attachment',type:'File'});
                                           }else{
@@ -361,7 +375,7 @@ $course.find('.download-status').show();
                      getLecture(v.title,chapterindex,lectureindex);
                      lectureindex++;
                     }else if(!downloadVideosOnly){
-                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://www.udemy.com${$course.attr('course-url')}t/${v._class}/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
+                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://${subDomain}.udemy.com${$course.attr('course-url')}t/${v._class}/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
                        remaining--;
                        coursedata['totallectures']+=1;
                        if(!remaining){
@@ -507,7 +521,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           }else{
             downloadAttachments(index,total_assets);
           }
-        }); 
+        });
       }else{
           var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
           var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
@@ -520,12 +534,12 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                 case 1:
                     var stats = dl.getStats();
                     $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
-                    $progressElemIndividual.progress('set percent',stats.total.completed);    
+                    $progressElemIndividual.progress('set percent',stats.total.completed);
                     break;
                 case -1:
                   var stats = dl.getStats();
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
-                  $progressElemIndividual.progress('set percent',stats.total.completed);    
+                  $progressElemIndividual.progress('set percent',stats.total.completed);
                   break;
               case -1:
                   if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
@@ -550,13 +564,13 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     });
                     clearInterval(timer);
                     break;
-                  } 
+                  }
                 default:
                   $download_speed_value.html(0);
               }
           }, 1000);
 
-          dl.on('error', function(dl) { 
+          dl.on('error', function(dl) {
             // Prevent throwing uncaught error
           });
 
@@ -564,7 +578,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
             $pauseButton.removeClass('disabled');
           });
 
-          dl.on('end', function() { 
+          dl.on('end', function() {
               index++;
               $pauseButton.addClass('disabled');
               clearInterval(timer);
@@ -585,11 +599,11 @@ $progressElemIndividual.progress('reset');
     var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Video' ? 'p' : '')).removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
-    
+
     if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Url'){
-      
+
       fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function() {
-        
+
           if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
             var total_assets = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].length;
             var index = 0;
@@ -600,7 +614,7 @@ $progressElemIndividual.progress('reset');
             downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
           }
 
-      }); 
+      });
 
     }else{
 
@@ -616,7 +630,7 @@ $progressElemIndividual.progress('reset');
               case 1:
                   var stats = dl.getStats();
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
-                  $progressElemIndividual.progress('set percent',stats.total.completed);    
+                  $progressElemIndividual.progress('set percent',stats.total.completed);
                   break;
               case -1:
                   if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
@@ -641,13 +655,13 @@ $progressElemIndividual.progress('reset');
                     });
                     clearInterval(timer);
                     break;
-                  } 
+                  }
               default:
                 $download_speed_value.html(0);
             }
         }, 1000);
 
-dl.on('error', function(dl) { 
+dl.on('error', function(dl) {
   // Prevent throwing uncaught error
 });
 
@@ -655,7 +669,7 @@ dl.on('start', function(){
   $pauseButton.removeClass('disabled');
 });
 
-dl.on('end', function() { 
+dl.on('end', function() {
   $pauseButton.addClass('disabled');
   clearInterval(timer);
   if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
@@ -666,7 +680,7 @@ dl.on('end', function() {
     $progressElemCombined.progress('increment');
     downloaded++;
     downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
-  } 
+  }
 
 });
 
@@ -740,7 +754,7 @@ $('.ui.settings .form').submit((e)=>{
   var videoQuality = $(e.target).find('input[name="videoquality"]').val();
   var downloadPath = $(e.target).find('input[name="downloadpath"]').val();
   var language = $(e.target).find('input[name="language"]').val();
-  
+
   settings.set('download', {
     enableDownloadStartEnd: enableDownloadStartEnd,
     downloadVideosOnly: downloadVideosOnly,
@@ -790,7 +804,7 @@ settingsForm.find('input[name="enabledownloadstartend"]').change(function() {
     settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',false);
    }else{
     settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',true);
-   }     
+   }
 });
 
 function selectDownloadPath () {
@@ -804,5 +818,5 @@ function selectDownloadPath () {
           }
         });
     }
-  }); 
+  });
 }
