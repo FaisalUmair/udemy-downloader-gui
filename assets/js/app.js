@@ -9,7 +9,6 @@ const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
-var video_num = 1;
 
 var subDomain = 'www';
 
@@ -423,10 +422,7 @@ function initDownload($course,coursedata){
   lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
   });
   });
-  var numberScheme = settings.get('download.numberScheme');	
-  if(numberScheme=="Consecutive"){
-     video_num = 1;                                    
-  }
+
   var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
   var totallectures = coursedata['totallectures'];
@@ -500,12 +496,6 @@ var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapter
   });
 }
 
-Number.prototype.pad = function(size) {
-    var s = String(this);
-    while (s.length < (size || 2)) {s = "0" + s;}
-    return s;
-}
-
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
   if(downloaded==toDownload){
       resetCourse($course.find('.download-success'));
@@ -514,7 +504,6 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
       downloadChapter(++chapterindex,0);
       return;
     }
-
 
     function downloadAttachments(index,total_assets){
         $progressElemIndividual.progress('reset');
@@ -628,19 +617,8 @@ $progressElemIndividual.progress('reset');
       });
 
     }else{
-	//name video files here.	
-	var numberScheme = settings.get('download.numberScheme');
-	switch(numberScheme)
-	{
-		default:
-		case "Raw":
-			var number = lextureindex+1; break;
-		case "Padded":
-			var number = (lectureindex+1).pad(3); break;
-		case "Consecutive":
-			var number = (video_num++).pad(3); break;
-	}
-    var lecture_name = sanitize(number+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
+
+    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
     dl.start();
 
@@ -774,7 +752,6 @@ $('.ui.settings .form').submit((e)=>{
   var downloadStart = $(e.target).find('input[name="downloadstart"]').val();
   var downloadEnd = $(e.target).find('input[name="downloadend"]').val();
   var videoQuality = $(e.target).find('input[name="videoquality"]').val();
-  var numberScheme = $(e.target).find('input[name="numberscheme"]').val();
   var downloadPath = $(e.target).find('input[name="downloadpath"]').val();
   var language = $(e.target).find('input[name="language"]').val();
 
@@ -784,8 +761,7 @@ $('.ui.settings .form').submit((e)=>{
     downloadStart: parseInt(downloadStart),
     downloadEnd: parseInt(downloadEnd),
     videoQuality: videoQuality,
-    path: downloadPath,
-	numberScheme: numberScheme
+    path: downloadPath
   });
 
   settings.set('general',{
@@ -805,26 +781,22 @@ function loadSettings(){
   settingsForm.find('input[name="enabledownloadstartend"]').prop('checked', false);
   settingsForm.find('input[name="downloadstart"], input[name="downloadend"]').prop('readonly',true);
   }
-  
+
   if(settings.get('download.downloadVideosOnly')){
   settingsForm.find('input[name="downloadvideosonly"]').prop('checked', true);
   }else{
   settingsForm.find('input[name="downloadvideosonly"]').prop('checked', false);
   }
-  
+
   settingsForm.find('input[name="downloadpath"]').val(settings.get('download.path') || homedir+'/Downloads');
   settingsForm.find('input[name="downloadstart"]').val(settings.get('download.downloadStart'));
   settingsForm.find('input[name="downloadend"]').val(settings.get('download.downloadEnd'));
   var videoQuality = settings.get('download.videoQuality');
   settingsForm.find('input[name="videoquality"]').val(videoQuality);
   settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(videoQuality || translate('Auto'));
-  var numberscheme = settings.get('download.numberScheme');
-  settingsForm.find('input[name="numberscheme"]').val(numberscheme); 
-  settingsForm.find('input[name="numberscheme"]').parent('.dropdown').find('.default.text').html(numberscheme || translate('Raw'));
   var language = settings.get('general.language');
   settingsForm.find('input[name="language"]').val(language);
   settingsForm.find('input[name="language"]').parent('.dropdown').find('.default.text').html(language || 'English');
-  
 }
 
 settingsForm.find('input[name="enabledownloadstartend"]').change(function() {
