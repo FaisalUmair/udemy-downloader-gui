@@ -70,6 +70,15 @@ var template = `
                 <div class="field">
                   <input type="password" name="password" placeholder="${translate("Password")}">
                 </div>
+                <div class="field">                   
+                   <div class="ui fluid label checkbox">
+                    <input type="checkbox" name="business" id="business">
+                    <label for="business">${translate("Udemy Business")} ?</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <input type="text" id="subdomain" name="subdomain" placeholder="${translate("Udemy Business Sub-Domain")}" style="display: none">
+                </div>
                 <button class="ui fluid green button" type="submit">${translate("Login")}</button>
               </form>
               </div>
