@@ -11,6 +11,7 @@ var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 
 var subDomain = 'www';
+var businessDomain = $('.ui.login #subdomain');
 
 $('.ui.dropdown')
   .dropdown()
@@ -42,11 +43,10 @@ var downloadTemplate = `
 `;
 
 $('.ui.login #business').change(function() {
-    var textField = $('.ui.login #subdomain');
     if($(this).is(":checked")) {
-        textField.show();
+        businessDomain.show();
     } else {
-        textField.hide();
+        businessDomain.hide();
     }
 });
 
@@ -56,13 +56,15 @@ var email = $(e.target).find('input[name="email"]').val();
 var password = $(e.target).find('input[name="password"]').val();
 var isBusiness = $(e.target).find('input[name="business"]').is(":checked");
 
-if(isBusiness)
-    subDomain = $(e.target).find('input[name="subdomain"]').val();
+if(isBusiness){
+    subDomain = $(e.target).find('input[name="subdomain"]').val() || subDomain;
+}
 
 if(!email || !password){
    prompt.alert(translate("Type Username/Password"));
    return;
 }
+
 $.ajax({
    type: 'GET',
    url:'https://www.udemy.com/join/login-popup',
