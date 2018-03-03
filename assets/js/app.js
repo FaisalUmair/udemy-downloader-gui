@@ -527,10 +527,36 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
       }else{
           var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
           var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+
+          // Change retry options to something more forgiving and threads to keep udemy from getting upset
+          dl.setRetryOptions({
+            retryInterval: 15000
+          });
+
+          dl.setOptions({
+            threadsCount: 1
+          });
+
           dl.start();
+          // To track time and restarts
+          let notStarted = 0;
+          let reStarted = 0;
+
           timer = setInterval(function() {
               switch(dl.status){
                 case 0:
+                  // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
+                  // once one of them starts the errors from the others will be ignored and we still get the file.
+                  if(reStarted <= 5) {
+                    notStarted++;
+                    console.log('0 stats : ', notStarted, reStarted);
+                    if (notStarted >= 15) {
+                      console.log('Restarting Download :', reStarted);
+                      dl.start();
+                      notStarted = 0;
+                      reStarted++;
+                    }
+                  }
                   $download_speed_value.html(0);
                   break;
                 case 1:
@@ -538,6 +564,11 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
                     $progressElemIndividual.progress('set percent',stats.total.completed);
                     break;
+                case 2:
+                  // Just info for troubleshooting
+                  console.log('Case 2 Error Retrying ...');
+
+                  break;
                 case -1:
                   var stats = dl.getStats();
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
@@ -568,6 +599,8 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     break;
                   }
                 default:
+                  // Just info for troubleshooting
+                  console.log('Case Default Status : ', dl.status);
                   $download_speed_value.html(0);
               }
           }, 1000);
@@ -621,12 +654,38 @@ $progressElemIndividual.progress('reset');
     }else{
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
-    var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-    dl.start();
+    // Just to keep track of where we are in relation to errors.
+    console.log('Course Data : ',lecture_name);
 
+    var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+      // Change retry options to something more forgiving and threads to keep udemy from getting upset
+    dl.setRetryOptions({
+      retryInterval: 15000
+    });
+
+    dl.setOptions({
+      threadsCount: 1
+    });
+
+    dl.start();
+    // To track time and restarts
+    let notStarted = 0;
+    let reStarted = 0;
        timer = setInterval(function() {
             switch(dl.status){
               case 0:
+                // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
+                // once one of them starts the errors from the others will be ignored and we still get the file.
+                if(reStarted <= 5) {
+                  notStarted++;
+                  console.log('0 stats : ', notStarted, reStarted);
+                  if (notStarted >= 15) {
+                    console.log('Restarting Download :', reStarted);
+                    dl.start();
+                    notStarted = 0;
+                    reStarted++;
+                  }
+                }
                 $download_speed_value.html(0);
                 break;
               case 1:
@@ -634,6 +693,12 @@ $progressElemIndividual.progress('reset');
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
                   $progressElemIndividual.progress('set percent',stats.total.completed);
                   break;
+
+              case 2:
+                // Just info for troubleshooting
+                console.log('Case 2 Error Retrying ...');
+
+                break;
               case -1:
                   if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
                     dl.emit('end');
@@ -659,6 +724,8 @@ $progressElemIndividual.progress('reset');
                     break;
                   }
               default:
+                // Just info for troubleshooting
+                console.log('Case Default Status : ', dl.status);
                 $download_speed_value.html(0);
             }
         }, 1000);
