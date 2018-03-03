@@ -786,9 +786,6 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
-  analytics.track('About Page',{
-    appVersion: appVersion
-  });
 });
 
 
@@ -799,15 +796,6 @@ shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases
 $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
     e.preventDefault();
     shell.openExternal(this.href);
-    if(this.classList.contains('donate')){
-      analytics.track('Donate',{
-        appVersion: appVersion
-      });
-    }else{
-      analytics.track(this.text,{
-        appVersion: appVersion
-      });
-    }
 });
 
 
