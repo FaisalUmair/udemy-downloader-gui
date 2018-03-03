@@ -525,9 +525,16 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           }
         });
       }else{
-          var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
-          var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-
+            var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
+              if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+                var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+              }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+                endDownload();
+                return;
+              }else{
+                var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+              }
+          
           // Change retry options to something more forgiving and threads to keep udemy from getting upset
           dl.setRetryOptions({
             retryInterval: 15000
@@ -549,9 +556,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                   // once one of them starts the errors from the others will be ignored and we still get the file.
                   if(reStarted <= 5) {
                     notStarted++;
-                    console.log('0 stats : ', notStarted, reStarted);
                     if (notStarted >= 15) {
-                      console.log('Restarting Download :', reStarted);
                       dl.start();
                       notStarted = 0;
                       reStarted++;
@@ -565,9 +570,6 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $progressElemIndividual.progress('set percent',stats.total.completed);
                     break;
                 case 2:
-                  // Just info for troubleshooting
-                  console.log('Case 2 Error Retrying ...');
-
                   break;
                 case -1:
                   var stats = dl.getStats();
@@ -588,19 +590,12 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                       },
                       success: function() {
                          resetCourse($course.find('.download-error'));
-                         analytics.track('Download Failed',{
-                           appVersion: appVersion,
-                           errorMessage: dl.error.message,
-                           settings: settings.get('download')
-                         });
                       }
                     });
                     clearInterval(timer);
                     break;
                   }
                 default:
-                  // Just info for troubleshooting
-                  console.log('Case Default Status : ', dl.status);
                   $download_speed_value.html(0);
               }
           }, 1000);
@@ -614,6 +609,10 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           });
 
           dl.on('end', function() {
+            endDownload();
+          });
+
+          function endDownload(){
               index++;
               $pauseButton.addClass('disabled');
               clearInterval(timer);
@@ -624,7 +623,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
             }else{
               downloadAttachments(index,total_assets);
             }
-          });
+          }
 
       }
     }
@@ -654,11 +653,17 @@ $progressElemIndividual.progress('reset');
     }else{
 
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
-    // Just to keep track of where we are in relation to errors.
-    console.log('Course Data : ',lecture_name);
-
-    var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-      // Change retry options to something more forgiving and threads to keep udemy from getting upset
+    
+    if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+      var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+    }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+      endDownload();
+      return;
+    }else{
+      var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+    }
+    
+    // Change retry options to something more forgiving and threads to keep udemy from getting upset
     dl.setRetryOptions({
       retryInterval: 15000
     });
@@ -678,9 +683,7 @@ $progressElemIndividual.progress('reset');
                 // once one of them starts the errors from the others will be ignored and we still get the file.
                 if(reStarted <= 5) {
                   notStarted++;
-                  console.log('0 stats : ', notStarted, reStarted);
                   if (notStarted >= 15) {
-                    console.log('Restarting Download :', reStarted);
                     dl.start();
                     notStarted = 0;
                     reStarted++;
@@ -695,9 +698,6 @@ $progressElemIndividual.progress('reset');
                   break;
 
               case 2:
-                // Just info for troubleshooting
-                console.log('Case 2 Error Retrying ...');
-
                 break;
               case -1:
                   if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
@@ -713,19 +713,12 @@ $progressElemIndividual.progress('reset');
                       },
                       success: function() {
                          resetCourse($course.find('.download-error'));
-                         analytics.track('Download Failed',{
-                           appVersion: appVersion,
-                           errorMessage: dl.error.message,
-                           settings: settings.get('download')
-                         });
                       }
                     });
                     clearInterval(timer);
                     break;
                   }
               default:
-                // Just info for troubleshooting
-                console.log('Case Default Status : ', dl.status);
                 $download_speed_value.html(0);
             }
         }, 1000);
@@ -739,8 +732,13 @@ dl.on('start', function(){
 });
 
 dl.on('end', function() {
-  $pauseButton.addClass('disabled');
-  clearInterval(timer);
+  endDownload();
+});
+
+
+function endDownload(){
+    $pauseButton.addClass('disabled');
+    clearInterval(timer);
   if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
     var total_assets = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].length;
     var index = 0;
@@ -750,8 +748,7 @@ dl.on('end', function() {
     downloaded++;
     downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
   }
-
-});
+}
 
 }
 
