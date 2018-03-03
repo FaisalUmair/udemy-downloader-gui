@@ -153,6 +153,20 @@ var template = `
                                           <label>${translate("Download Lecture Videos Only")}</label>
                                         </div>
                                       </div>
+									<div class="field">
+									<label>${translate("Video Numbering Scheme")}</label>
+                                      <div class="ui fluid search selection dropdown">
+                                          <input type="hidden" name="numberscheme">
+                                          <i class="dropdown icon"></i>
+                                          <div class="default text"></div>
+                                          <div class="menu">
+                                          <div class="item" data-value="Raw">${translate("Raw (1.)")}</div>
+                                          <div class="item" data-value="Padded">${translate("Padded (009,010)")}</div>
+                                          <div class="item" data-value="Consecutive">${translate("Consecutive (001-max)")}</div>
+
+                                        </div>
+                                         </div>
+                                      </div>  
                                     <div class="field">
                                       <label>${translate("Video Quality")}</label>
                                       <div class="ui fluid search selection dropdown">
