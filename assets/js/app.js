@@ -528,7 +528,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
             var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
               if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
                 var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-                if(!dl.url){
+                if(!fs.statSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd').size){
                   dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
                 }
               }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
@@ -656,7 +656,7 @@ $progressElemIndividual.progress('reset');
     var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
     if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
       var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
-      if(!dl.url){
+      if(!fs.statSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd').size){
         dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
       }
     }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
