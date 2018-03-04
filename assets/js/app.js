@@ -10,6 +10,9 @@ const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var video_num = 1;
+const con = require('electron').remote.getGlobal('console')
+var subDomain = 'www';
+var businessDomain = $('.ui.login #subdomain');
 
 $('.ui.dropdown')
   .dropdown()
@@ -40,16 +43,29 @@ var downloadTemplate = `
 </div>
 `;
 
+$('.ui.login #business').change(function() {
+    if($(this).is(":checked")) {
+        businessDomain.show();
+    } else {
+        businessDomain.hide();
+    }
+});
 
 $('.ui.login .form').submit((e)=>{
 e.preventDefault();
 var email = $(e.target).find('input[name="email"]').val();
-var password = $(e.target).find('input[name=password]').val();
+var password = $(e.target).find('input[name="password"]').val();
+var isBusiness = $(e.target).find('input[name="business"]').is(":checked");
+
+if(isBusiness){
+    subDomain = $(e.target).find('input[name="subdomain"]').val() || subDomain;
+}
 
 if(!email || !password){
    prompt.alert(translate("Type Username/Password"));
    return;
 }
+
 $.ajax({
    type: 'GET',
    url:'https://www.udemy.com/join/login-popup',
@@ -76,7 +92,7 @@ needle
 
       $.ajax({
                type: 'GET',
-               url: "https://www.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50",
+               url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
@@ -362,7 +378,7 @@ $course.find('.download-status').show();
                      getLecture(v.title,chapterindex,lectureindex);
                      lectureindex++;
                     }else if(!downloadVideosOnly){
-                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://www.udemy.com${$course.attr('course-url')}t/${v._class}/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
+                       coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:`<script type="text/javascript">window.location = "https://${subDomain}.udemy.com${$course.attr('course-url')}t/${v._class}/${v.id}";</script>`,name:v.title,quality:'Attachment',type:'Url'};
                        remaining--;
                        coursedata['totallectures']+=1;
                        if(!remaining){
@@ -519,13 +535,44 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
             downloadAttachments(index,total_assets);
           }
         }); 
-      }else{
-          var lecture_name = sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
+      }else{	
+          var lecture_name = sanitize(lectureindex+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
+              if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+                var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+              }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+                endDownload();
+                return;
+              }else{
           var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+              }
+          
+          // Change retry options to something more forgiving and threads to keep udemy from getting upset
+          dl.setRetryOptions({
+            retryInterval: 15000
+          });
+
+          dl.setOptions({
+            threadsCount: 1
+          });
+
           dl.start();
+          // To track time and restarts
+          let notStarted = 0;
+          let reStarted = 0;
+
           timer = setInterval(function() {
               switch(dl.status){
                 case 0:
+                  // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
+                  // once one of them starts the errors from the others will be ignored and we still get the file.
+                  if(reStarted <= 5) {
+                    notStarted++;
+                    if (notStarted >= 15) {
+                      dl.start();
+                      notStarted = 0;
+                      reStarted++;
+                    }
+                  }
                   $download_speed_value.html(0);
                   break;
                 case 1:
@@ -533,6 +580,8 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                     $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
                     $progressElemIndividual.progress('set percent',stats.total.completed);    
                     break;
+                case 2:
+                  break;
                 case -1:
                   var stats = dl.getStats();
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
@@ -552,11 +601,6 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                       },
                       success: function() {
                          resetCourse($course.find('.download-error'));
-                         analytics.track('Download Failed',{
-                           appVersion: appVersion,
-                           errorMessage: dl.error.message,
-                           settings: settings.get('download')
-                         });
                       }
                     });
                     clearInterval(timer);
@@ -569,6 +613,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
           dl.on('error', function(dl) { 
             // Prevent throwing uncaught error
+			con.log('This will be output to the main process console.');
           });
 
           dl.on('start', function(){
@@ -576,6 +621,10 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           });
 
           dl.on('end', function() { 
+            endDownload();
+          });
+
+          function endDownload(){
               index++;
               $pauseButton.addClass('disabled');
               clearInterval(timer);
@@ -586,7 +635,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
             }else{
               downloadAttachments(index,total_assets);
             }
-          });
+          }
 
       }
     }
@@ -627,12 +676,42 @@ $progressElemIndividual.progress('reset');
 			var number = (video_num++).pad(3); break;
 	}
     var lecture_name = sanitize(number+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
+    
+    if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+      var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+    }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+      endDownload();
+      return;
+    }else{
     var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+    }
+    
+    // Change retry options to something more forgiving and threads to keep udemy from getting upset
+    dl.setRetryOptions({
+      retryInterval: 15000
+    });
+
+    dl.setOptions({
+      threadsCount: 1
+    });
+
     dl.start();
 
+    let notStarted = 0;
+    let reStarted = 0;
        timer = setInterval(function() {
             switch(dl.status){
               case 0:
+                // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
+                // once one of them starts the errors from the others will be ignored and we still get the file.
+                if(reStarted <= 5) {
+                  notStarted++;
+                  if (notStarted >= 15) {
+                    dl.start();
+                    notStarted = 0;
+                    reStarted++;
+                  }
+                }
                 $download_speed_value.html(0);
                 break;
               case 1:
@@ -640,6 +719,9 @@ $progressElemIndividual.progress('reset');
                   $download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
                   $progressElemIndividual.progress('set percent',stats.total.completed);    
                   break;
+
+              case 2:
+                break;
               case -1:
                   if(dl.stats.total.size==0&&dl.status==-1&&fs.existsSync(dl.filePath)){
                     dl.emit('end');
@@ -654,11 +736,6 @@ $progressElemIndividual.progress('reset');
                       },
                       success: function() {
                          resetCourse($course.find('.download-error'));
-                         analytics.track('Download Failed',{
-                           appVersion: appVersion,
-                           errorMessage: dl.error.message,
-                           settings: settings.get('download')
-                         });
                       }
                     });
                     clearInterval(timer);
@@ -678,6 +755,11 @@ dl.on('start', function(){
 });
 
 dl.on('end', function() { 
+  endDownload();
+});
+
+
+function endDownload(){
   $pauseButton.addClass('disabled');
   clearInterval(timer);
   if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
@@ -689,8 +771,7 @@ dl.on('end', function() {
     downloaded++;
     downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
   } 
-
-});
+}
 
 }
 
@@ -728,10 +809,7 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
-  analytics.track('About Page',{
-    appVersion: appVersion
   });
-});
 
 
 $('.download-update.button').click(function(){
@@ -741,16 +819,7 @@ shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases
 $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
     e.preventDefault();
     shell.openExternal(this.href);
-    if(this.classList.contains('donate')){
-      analytics.track('Donate',{
-        appVersion: appVersion
       });
-    }else{
-      analytics.track(this.text,{
-        appVersion: appVersion
-      });
-    }
-});
 
 
 $('.ui.settings .form').submit((e)=>{
