@@ -21,7 +21,7 @@
 	"Settings": "Einstellungen",
 	"Download Settings": "Downloadeinstellungen",
 	"Download Path": "Ziel-Pfad",
-	"Cannot select this folder": "Dieser Ordner kann nicht verwendet werden.",
+	"Cannot select this folder": "Dieser Ordner kann nicht verwendet werden",
 	"Enable Download Start/End": "Start-/Endzeit aktivieren",
 	"Download Start": "Startzeit",
 	"Start Download at": "Starte das Herunterladen um",
@@ -30,11 +30,11 @@
 	"Video Quality": "Video Qualität",
 	"Auto": "Automatisch",
 	"Lowest": "Niedrigste",
-	"Highest": "Höchsze",
+	"Highest": "Höchste",
 	"Application Settings": "Anwendungseinstellungen",
 	"Language (Requires App Restart)": "Sprache (erfordert App Neustart)",
 	"Save": "Übernehmen",
 	"Settings Saved": "Einstellungen übernommen",
-	"Download Lecture Videos Only": "Nur Lektions-Videos herunterladen",
+	"Download Lecture Videos Only": "Nur Lektionen-Videos herunterladen",
 	"About": "Über"
 }
