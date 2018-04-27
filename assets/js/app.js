@@ -295,7 +295,7 @@ $course.find('.download-status').show();
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
-                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=view_html,asset,supplementary_assets`,
+                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,title,filename&fields[lecture]=asset,supplementary_assets`,
                              headers: header,
                              success: function(response) {
                                 if(v.asset.asset_type=="Article"){
@@ -303,25 +303,25 @@ $course.find('.download-status').show();
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'Article';
                                 }else if((v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
-                                  var src = $(response.view_html).find('a').attr('href');
+                                  var src = response.asset.download_urls[v.asset.asset_type][0].file;
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'File';
                                 }else{
                                 var type = 'Video';
-                                var lecture = JSON.parse($(response.view_html).find('react-video-player').attr('videojs-setup-data'));
+                                var lecture = response.asset.stream_urls;
                                 var qualities = [];
                                 var qualitySrcMap = {};
-                                lecture.sources.forEach(function(val){
+                                lecture.Video.forEach(function(val){
                                   if(val.label=="Auto")  return;
                                   qualities.push(val.label);
-                                  qualitySrcMap[val.label] = val.src;
+                                  qualitySrcMap[val.label] = val.file;
                                 });
                                   var lowest =  Math.min(...qualities);
                                   var highest = Math.max(...qualities);
                                   var videoQuality = settings.get('download.videoQuality');
                                   if(!videoQuality || videoQuality=="Auto"){
-                                    var src = lecture.sources[0].src;
-                                    videoQuality = lecture.sources[0].label;
+                                    var src = lecture.Video[0].file;
+                                    videoQuality = lecture.Video[0].label;
                                   }else{
                                     switch(videoQuality){
                                       case 'Highest':
@@ -334,7 +334,7 @@ $course.find('.download-status').show();
                                          break;
                                       default:
                                          videoQuality = videoQuality.slice(0, -1);
-                                         var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.sources[0].src;
+                                         var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.Video[0].file;
                                     }
                                   }
                                 }
