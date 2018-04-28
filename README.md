@@ -73,3 +73,8 @@ Example:
 ``` 
 npm run build-win -- --ia32
 ```
+
+## Donate
+Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
+
+[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.me/udeler)
