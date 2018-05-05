@@ -101,6 +101,10 @@ var template = `
                   <i class="file video icon"></i>
                   ${translate("Courses")}
                 </a>
+                <a class="downloads-sidebar item">
+                  <i class="download icon"></i>
+                  ${translate("Downloads")}
+                </a>
                <a class="settings-sidebar item">
                   <i class="wrench icon"></i>
                   ${translate("Settings")}
@@ -112,10 +116,28 @@ var template = `
               </div>
                   <div class="content">
 
-                      <div class="ui divided unstackable courses items">
+                      <div class="ui courses section">
+                        <form class="ui search form">
+                        <div class="ui fluid search">
+                          <div class="ui fluid icon input">
+                            <input class="prompt" type="text" placeholder=${translate("Search Courses")}>
+                            <i class="search icon"></i>
+                          </div>
+                        </div>
+                        </form>
+                        <div class="ui divided unstackable courses items">
+                        </div>
                       </div>
 
-                      <div class="ui settings"> 
+                    <div class="ui downloads section">
+                        <h5 class="ui top attached header">
+                              <i class="ui download icon"></i> ${translate("Downloads")}
+                        </h5>
+                        <div class="ui divided unstackable courses items attached segment">
+                        </div>
+                      </div>
+
+                      <div class="ui settings section"> 
                       <form class="ui form">
                         <h5 class="ui top attached  header">
                               <i class="ui download icon"></i> ${translate("Download Settings")}
@@ -149,8 +171,8 @@ var template = `
                                   <div class="ui  divider"></div>
                                     <div class="field">
                                       <div class="ui checkbox">
-                                          <input type="checkbox" name="downloadvideosonly">
-                                          <label>${translate("Download Lecture Videos Only")}</label>
+                                          <input type="checkbox" name="skipattachments">
+                                          <label>${translate("Skip Attachments")}</label>
                                         </div>
                                       </div>
                                     <div class="field">
@@ -170,6 +192,12 @@ var template = `
                                         </div>
                                          </div>
                                     </div>
+                                    <div class="field">
+                                      <div class="ui checkbox">
+                                          <input type="checkbox" name="skipsubtitles">
+                                          <label>${translate("Skip Subtitles")}</label>
+                                        </div>
+                                      </div>
 
                               </div>
                           <h5 class="ui top attached  header">
@@ -196,7 +224,7 @@ var template = `
 
                       </div>
 
-                      <div class="ui about">   
+                      <div class="ui about section">   
                           <div class="ui segment">
                             <h4 class="ui center aligned icon header">
                               <i class="grey file code outline icon"></i>
