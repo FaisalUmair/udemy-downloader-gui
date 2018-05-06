@@ -23,10 +23,14 @@ $('.ui.dropdown')
   .dropdown()
 ;
 
-jQuery.expr[':'].contains = function(a, i, m) {
-  return jQuery(a).text().toUpperCase()
-      .indexOf(m[3].toUpperCase()) >= 0;
-};
+
+$(document).ajaxError(function(event, request) {
+     $(".dimmer").removeClass('active');
+});
+
+$(document).ajaxSuccess(function(event, request) {
+     $(".ui.dashboard .dimmer").removeClass('active');
+});
 
 
 var downloadTemplate = `
@@ -127,7 +131,6 @@ var $courses = $this.prev('.courses.items');
                },
                headers: header,
                success: function(response) {
-                $(".ui.dashboard .courses.dimmer").removeClass('active');
                 $.each(response.results,function(index,course){
                         $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
                                 <div class="ui tiny label download-quality grey"></div>
@@ -192,17 +195,38 @@ $('.ui.dashboard .content').on('click','.check-updates', function(){
 $('.ui.dashboard .content .courses.section .search.form').submit(function(e){
    e.preventDefault();
    var keyword = $(e.target).find('input').val();
-   $.ajax({
-    type: 'GET',
-    url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50&page=1&fields[user]=job_title&search=${keyword}`,
-    beforeSend: function(){
-        $(".ui.dashboard .courses.dimmer").addClass('active');
-    },
-    headers: header,
-    success: function(response) {
-      handleResponse(response,header,keyword);
+   if(validURL(keyword)){
+    if(keyword.search(new RegExp('^(http|https)'))){  
+      keyword = 'http://'+keyword;
     }
-   });
+          $.ajax({
+               type: 'GET',
+               url: keyword,
+               beforeSend: function(){
+                   $(".ui.dashboard .course.dimmer").addClass('active');
+               },
+               headers: header,
+               success: function(response) {
+                var keyword = $('.main-content h1.clp-lead__title',response).text().trim();
+                  if(typeof keyword!="undefined"&&keyword!=""){
+                    search(keyword,header);
+                  }else{
+                    $(".ui.dashboard .courses.dimmer").removeClass('active');
+                    $('.ui.dashboard .ui.courses.section .disposable').remove();
+                    $('.ui.dashboard .ui.courses.section .ui.courses.items').empty();
+                    $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`);
+                  } 
+               },
+               error: function(){
+                    $(".ui.dashboard .courses.dimmer").removeClass('active');
+                    $('.ui.dashboard .ui.courses.section .disposable').remove();
+                    $('.ui.dashboard .ui.courses.section .ui.courses.items').empty();
+                    $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`);
+               }
+          });
+   }else{
+    search(keyword,header);
+   }
 });
 
 
@@ -223,7 +247,6 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                },
                headers: header,
                success: function(response) {
-                 $(".ui.dashboard .course.dimmer").removeClass('active');
                  $course.find('.download.button').addClass('disabled');
                  $course.css('padding-bottom','25px');
                  $course.find('.ui.progress').show();
@@ -455,11 +478,10 @@ $pauseButton.removeClass('disabled');
       downloadStart = totallectures;
     }
 
-    if(downloadEnd<1){
-      downloadEnd = 1;
-    }else if(downloadEnd>totallectures){
+    if(downloadEnd<1 || downloadEnd>totallectures){
       downloadEnd = totallectures;
     }
+
     var toDownload = (downloadEnd-downloadStart)+1;
     downloadChapter(lectureChaperMap[downloadStart].chapterindex,lectureChaperMap[downloadStart].lectureindex);
   }else{
@@ -553,7 +575,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                          resetCourse($course.find('.download-error'));
                       },
                       success: function(){
-                        resetCourse($course.find('.download-error'));
+                         initDownload($course,coursedata);
                       }
                     });
                     clearInterval(timer);
@@ -643,6 +665,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
         $progressElemIndividual.progress('reset');
         var lastClass = $download_quality.attr('class').split(' ').pop();
         $download_quality.html('Subtitle').removeClass(lastClass).addClass(qualityColorMap['Subtitle'] || 'grey');
+        $download_speed_value.html(0);
         var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.vtt');
         if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
           checkAttachment();
@@ -764,18 +787,18 @@ $('.ui.settings .form').submit((e)=>{
   var enableDownloadStartEnd = $(e.target).find('input[name="enabledownloadstartend"]')[0].checked;
   var skipAttachments = $(e.target).find('input[name="skipattachments"]')[0].checked;
   var skipSubtitles = $(e.target).find('input[name="skipsubtitles"]')[0].checked;
-  var downloadStart = $(e.target).find('input[name="downloadstart"]').val();
-  var downloadEnd = $(e.target).find('input[name="downloadend"]').val();
-  var videoQuality = $(e.target).find('input[name="videoquality"]').val();
-  var downloadPath = $(e.target).find('input[name="downloadpath"]').val();
-  var language = $(e.target).find('input[name="language"]').val();
+  var downloadStart = parseInt($(e.target).find('input[name="downloadstart"]').val()) || false;
+  var downloadEnd = parseInt($(e.target).find('input[name="downloadend"]').val()) || false;
+  var videoQuality = $(e.target).find('input[name="videoquality"]').val() || false;
+  var downloadPath = $(e.target).find('input[name="downloadpath"]').val() || false;
+  var language = $(e.target).find('input[name="language"]').val() || false;
 
   settings.set('download', {
     enableDownloadStartEnd: enableDownloadStartEnd,
     skipAttachments: skipAttachments,
     skipSubtitles: skipSubtitles,
-    downloadStart: parseInt(downloadStart),
-    downloadEnd: parseInt(downloadEnd),
+    downloadStart: downloadStart,
+    downloadEnd: downloadEnd,
     videoQuality: videoQuality,
     path: downloadPath
   });
@@ -812,13 +835,13 @@ function loadSettings(){
   }
 
   settingsForm.find('input[name="downloadpath"]').val(settingsCached.download.path || homedir+'/Downloads');
-  settingsForm.find('input[name="downloadstart"]').val(settingsCached.download.downloadStart);
-  settingsForm.find('input[name="downloadend"]').val(settingsCached.download.downloadEnd);
-  var videoQuality = settings.get('download.videoQuality');
-  settingsForm.find('input[name="videoquality"]').val(videoQuality);
+  settingsForm.find('input[name="downloadstart"]').val(settingsCached.download.downloadStart || '');
+  settingsForm.find('input[name="downloadend"]').val(settingsCached.download.downloadEnd || '');
+  var videoQuality = settingsCached.download.videoQuality;
+  settingsForm.find('input[name="videoquality"]').val(videoQuality || '');
   settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(videoQuality || translate('Auto'));
   var language = settingsCached.general.language;
-  settingsForm.find('input[name="language"]').val(language);
+  settingsForm.find('input[name="language"]').val(language || '');
   settingsForm.find('input[name="language"]').parent('.dropdown').find('.default.text').html(language || 'English');
 }
 
@@ -893,7 +916,7 @@ function handleResponse(response,header,keyword='') {
         $('.ui.courses.section').append('<button class="ui basic blue fluid load-more button disposable" data-url='+response.next+'>Load More</button>');
       }
     }else{
-       $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`)
+       $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`);
     }
 }
 
@@ -927,7 +950,8 @@ function saveDownloads(){
 }
 
 function loadDownloads(){
-  settings.get('downloadedCourses').forEach(function(course){
+  if(downloadedCourses = settings.get('downloadedCourses')){
+  downloadedCourses.forEach(function(course){
   $course = $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
                   <div class="ui tiny label download-quality grey"></div>
                   <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
@@ -977,5 +1001,49 @@ function loadDownloads(){
       }
   });
 }
+}
 
 loadDownloads();
+
+
+function validURL(value)
+{
+    var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
+    var regexp = new RegExp(expression);
+    return regexp.test(value);
+}
+
+
+function search(keyword,header){
+    $.ajax({
+    type: 'GET',
+    url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50&page=1&fields[user]=job_title&search=${keyword}`,
+    beforeSend: function(){
+        $(".ui.dashboard .courses.dimmer").addClass('active');
+    },
+    headers: header,
+    success: function(response) {
+      handleResponse(response,header,keyword);
+    }
+   });
+}
+
+function loadDefaults(){
+    settings.set('download', {
+    enableDownloadStartEnd: false,
+    skipAttachments: false,
+    skipSubtitles: false,
+    downloadStart: false,
+    downloadEnd: false,
+    videoQuality: false,
+    path: false
+  });
+
+  settings.set('general',{
+    language: false
+  });
+}
+
+if(!settings.get('general')){
+  loadDefaults();
+}
