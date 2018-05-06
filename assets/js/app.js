@@ -23,15 +23,9 @@ $('.ui.dropdown')
   .dropdown()
 ;
 
-
 $(document).ajaxError(function(event, request) {
      $(".dimmer").removeClass('active');
 });
-
-$(document).ajaxSuccess(function(event, request) {
-     $(".ui.dashboard .dimmer").removeClass('active');
-});
-
 
 var downloadTemplate = `
 <div class="ui tiny icon action buttons">
@@ -131,6 +125,7 @@ var $courses = $this.prev('.courses.items');
                },
                headers: header,
                success: function(response) {
+                $(".ui.dashboard .courses.dimmer").removeClass('active');
                 $.each(response.results,function(index,course){
                         $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
                                 <div class="ui tiny label download-quality grey"></div>
@@ -207,6 +202,7 @@ $('.ui.dashboard .content .courses.section .search.form').submit(function(e){
                },
                headers: header,
                success: function(response) {
+                $(".ui.dashboard .course.dimmer").removeClass('active');
                 var keyword = $('.main-content h1.clp-lead__title',response).text().trim();
                   if(typeof keyword!="undefined"&&keyword!=""){
                     search(keyword,header);
@@ -247,6 +243,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                },
                headers: header,
                success: function(response) {
+                 $(".ui.dashboard .course.dimmer").removeClass('active');
                  $course.find('.download.button').addClass('disabled');
                  $course.css('padding-bottom','25px');
                  $course.find('.ui.progress').show();
@@ -386,6 +383,12 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                     }
 
                   });
+               },
+               error: function(error){
+                $(".ui.dashboard .course.dimmer").removeClass('active');
+                if(error.status==403){
+                  prompt.alert('You do not have permission to access this course');
+                }
                }
     });
 });
