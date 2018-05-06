@@ -15,9 +15,9 @@
     "out of": "hariç",
     "items": "Bölüm",
     "Download Completed": "İndirme tamamlandı.",
-    "Click this message to hide it": "Kapatmak için bu yazıya tıklayın.",
+    "Click to dismiss": "Kapatmak için bu yazıya tıklayın.",
     "Download Failed": "İndirme başarısız.",
-    "Click this message to retry": "Tekrar denemek için bur mesaja tıklayın.",
+    "Click to retry": "Tekrar denemek için bur mesaja tıklayın.",
     "Settings": "Ayarlar",
     "Download Settings": "İndirme ayarları.",
     "Download Path": "Nereye indirilecek",
@@ -35,6 +35,9 @@
     "Language (Requires App Restart)": "Diller (Aktif olması için kapatıp açın.)",
     "Save": "Kaydet",
     "Settings Saved": "Ayarlarınız kaydedildi.",
-    "Download Lecture Videos Only": "Sadece videoları indir.",
-    "About": "Hakkında"
+    "Skip Attachments": "Sadece videoları indir.",
+    "About": "Hakkında",
+    "Skip Subtitles": "Altyazıları Atla",
+    "Search Courses": "Kursları ara",
+    "Downloads": "İndirilenler"
 }
