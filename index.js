@@ -19,6 +19,13 @@ function createWindow () {
 // Open the DevTools.
 //  win.webContents.openDevTools()
 
+  win.on('close', (event) => {
+    if(!downloadsSaved){
+     event.preventDefault();
+     win.webContents.send('saveDownloads');
+    }
+  });
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -82,18 +89,7 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('before-quit', (event) => {
-  if(!downloadsSaved){
-    event.preventDefault();
-    win.webContents.send('saveDownloads',event);
-  }
+    app.quit();
 });
 
 app.on('activate', () => {
