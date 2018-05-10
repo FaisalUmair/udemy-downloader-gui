@@ -1,14 +1,14 @@
-const {app, BrowserWindow, Menu} = require('electron')
+const {app, BrowserWindow, Menu, ipcMain} = require('electron')
 const path = require('path')
 const url = require('url')
-
+var downloadsSaved = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 520, height: 680, icon: __dirname+'/assets/images/build/icon.png', resizable: false});
+  win = new BrowserWindow({width: 520, height: 680, icon: __dirname+'/assets/images/build/icon.png', resizable: true});
   // and load the index.html of the app.
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -17,7 +17,7 @@ function createWindow () {
   }))
 
 // Open the DevTools.
-// win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -89,6 +89,13 @@ app.on('window-all-closed', () => {
   }
 })
 
+app.on('before-quit', (event) => {
+  if(!downloadsSaved){
+    event.preventDefault();
+    win.webContents.send('saveDownloads',event);
+  }
+});
+
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -96,6 +103,11 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('quitApp',function(){
+  downloadsSaved = true;
+  app.quit();
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

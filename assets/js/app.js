@@ -11,8 +11,9 @@ const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var https = require('https');
+var headers;
 
-remote.getCurrentWindow().on('close', function() {
+electron.ipcRenderer.on('saveDownloads',function(){
   saveDownloads();
 });
 
@@ -91,7 +92,7 @@ needle
          $('.ui.login').slideUp('fast');
          $('.ui.dashboard').fadeIn('fast').css('display','flex');
       var access_token = this.request.res.cookies.access_token;
-      var header = {"Authorization": `Bearer ${access_token}`};
+      headers = {"Authorization": `Bearer ${access_token}`};
 
       $.ajax({
                type: 'GET',
@@ -99,9 +100,9 @@ needle
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
-               headers: header,
+               headers: headers,
                success: function(response){
-                  handleResponse(response,header);
+                  handleResponse(response);
                }
             });
       }else{
@@ -123,7 +124,7 @@ var $courses = $this.prev('.courses.items');
                beforeSend: function(){
                    $(".ui.dashboard .courses.dimmer").addClass('active');
                },
-               headers: header,
+               headers: headers,
                success: function(response) {
                 $(".ui.dashboard .courses.dimmer").removeClass('active');
                 $.each(response.results,function(index,course){
@@ -139,7 +140,7 @@ var $courses = $this.prev('.courses.items');
                                   <div class="ui tiny icon green download-success message">
                                          <i class="check icon"></i>
                                           <div class="content">
-                                            <div class="header">
+                                            <div class="headers">
                                                ${translate("Download Completed")}
                                              </div>
                                              <p>${translate("Click to dismiss")}</p>
@@ -149,7 +150,7 @@ var $courses = $this.prev('.courses.items');
                                   <div class="ui tiny icon  red download-error message">
                                          <i class="power icon"></i>
                                           <div class="content">
-                                            <div class="header">
+                                            <div class="headers">
                                                ${translate("Download Failed")}
                                              </div>
                                              <p>${translate("Click to retry")}</p>
@@ -200,12 +201,12 @@ $('.ui.dashboard .content .courses.section .search.form').submit(function(e){
                beforeSend: function(){
                    $(".ui.dashboard .course.dimmer").addClass('active');
                },
-               headers: header,
+               headers: headers,
                success: function(response) {
                 $(".ui.dashboard .course.dimmer").removeClass('active');
                 var keyword = $('.main-content h1.clp-lead__title',response).text().trim();
                   if(typeof keyword!="undefined"&&keyword!=""){
-                    search(keyword,header);
+                    search(keyword,headers);
                   }else{
                     $(".ui.dashboard .courses.dimmer").removeClass('active');
                     $('.ui.dashboard .ui.courses.section .disposable').remove();
@@ -221,7 +222,7 @@ $('.ui.dashboard .content .courses.section .search.form').submit(function(e){
                }
           });
    }else{
-    search(keyword,header);
+    search(keyword,headers);
    }
 });
 
@@ -241,7 +242,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                beforeSend: function(){
                    $(".ui.dashboard .course.dimmer").addClass('active');
                },
-               headers: header,
+               headers: headers,
                success: function(response) {
                  $(".ui.dashboard .course.dimmer").removeClass('active');
                  $course.find('.download.button').addClass('disabled');
@@ -284,7 +285,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                           $.ajax({
                              type: 'GET',
                              url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data&fields[lecture]=asset,supplementary_assets`,
-                             headers: header,
+                             headers: headers,
                              success: function(response) {
                                 if(v.asset.asset_type=="Article"){
                                   var src = response.asset.data.body;
@@ -337,7 +338,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                       $.ajax({
                                         type: 'GET',
                                         url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
-                                        headers: header,
+                                        headers: headers,
                                         success: function(response) {
                                           if(response.download_urls){
                                             coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].push({src:response.download_urls[response.asset_type][0].file,name:b.title,quality:'Attachment',type:'File'});
@@ -873,7 +874,7 @@ function selectDownloadPath () {
 }
 
 
-function handleResponse(response,header,keyword='') {
+function handleResponse(response,keyword='') {
     $(".ui.dashboard .courses.dimmer").removeClass('active');
     $('.ui.dashboard .ui.courses.section .disposable').remove();
     $('.ui.dashboard .ui.courses.section .ui.courses.items').empty();
@@ -892,7 +893,7 @@ function handleResponse(response,header,keyword='') {
                     <div class="ui tiny icon green download-success message">
                            <i class="check icon"></i>
                             <div class="content">
-                              <div class="header">
+                              <div class="headers">
                                  ${translate("Download Completed")}
                                </div>
                                <p>${translate("Click to dismiss")}</p>
@@ -902,7 +903,7 @@ function handleResponse(response,header,keyword='') {
                     <div class="ui tiny icon  red download-error message">
                            <i class="power icon"></i>
                             <div class="content">
-                              <div class="header">
+                              <div class="headers">
                                  ${translate("Download Failed")}
                                </div>
                                <p>${translate("Click to retry")}</p>
@@ -928,30 +929,34 @@ function handleResponse(response,header,keyword='') {
 
 function saveDownloads(){
     var downloadedCourses = [];
-    $('.ui.downloads.section .ui.courses.items .ui.course.item').slice(0,50).each(function(index,elem){
-      $elem = $(elem);
-       if($elem.find('.progress.active').length){
-          var individualProgress = $elem.find('.download-status .individual.progress').attr('data-percent');
-          var combinedProgress = $elem.find('.download-status .combined.progress').attr('data-percent');
-          var completed = false;
-        }else{
-          var individualProgress = 0;
-          var combinedProgress = 0;
-          var completed = true;
+    var $downloads = $('.ui.downloads.section .ui.courses.items .ui.course.item').slice(0,50);
+    if($downloads.length){
+      $downloads.each(function(index,elem){
+        $elem = $(elem);
+         if($elem.find('.progress.active').length){
+            var individualProgress = $elem.find('.download-status .individual.progress').attr('data-percent');
+            var combinedProgress = $elem.find('.download-status .combined.progress').attr('data-percent');
+            var completed = false;
+          }else{
+            var individualProgress = 0;
+            var combinedProgress = 0;
+            var completed = true;
+          }
+        var course = {
+          id: $elem.attr('course-id'),
+          url: $elem.attr('course-url'),
+          title: $elem.find('.coursename').text(),
+          image: $elem.find('.image img').attr('src'),
+          individualProgress: individualProgress,
+          combinedProgress: combinedProgress,
+          completed: completed,
+          progressStatus: $elem.find('.download-status .label').text() 
         }
-      var course = {
-        id: $elem.attr('course-id'),
-        url: $elem.attr('course-url'),
-        title: $elem.find('.coursename').text(),
-        image: $elem.find('.image img').attr('src'),
-        individualProgress: individualProgress,
-        combinedProgress: combinedProgress,
-        completed: completed,
-        progressStatus: $elem.find('.download-status .label').text() 
-      }
-      downloadedCourses.push(course);
-    });
-    settings.set('downloadedCourses', downloadedCourses);
+        downloadedCourses.push(course);
+      });
+      settings.set('downloadedCourses', downloadedCourses);
+  }
+  electron.ipcRenderer.send('quitApp');
 }
 
 function loadDownloads(){
@@ -972,7 +977,7 @@ function loadDownloads(){
                     <div class="ui tiny icon green download-success message">
                            <i class="check icon"></i>
                             <div class="content">
-                              <div class="header">
+                              <div class="headers">
                                  ${translate("Download Completed")}
                                </div>
                                <p>${translate("Click to dismiss")}</p>
@@ -982,7 +987,7 @@ function loadDownloads(){
                     <div class="ui tiny icon  red download-error message">
                            <i class="power icon"></i>
                             <div class="content">
-                              <div class="header">
+                              <div class="headers">
                                  ${translate("Download Failed")}
                                </div>
                                <p>${translate("Click to retry")}</p>
@@ -1020,16 +1025,16 @@ function validURL(value)
 }
 
 
-function search(keyword,header){
+function search(keyword,headers){
     $.ajax({
     type: 'GET',
     url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50&page=1&fields[user]=job_title&search=${keyword}`,
     beforeSend: function(){
         $(".ui.dashboard .courses.dimmer").addClass('active');
     },
-    headers: header,
+    headers: headers,
     success: function(response) {
-      handleResponse(response,header,keyword);
+      handleResponse(response,keyword);
     }
    });
 }
