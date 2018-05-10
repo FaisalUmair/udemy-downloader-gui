@@ -37,10 +37,11 @@
   "dependencies": {
     "dialogs": "^1.1.20",
     "electron-settings": "^3.1.4",
+    "fs-extra": "^6.0.0",
     "jquery": "^3.2.1",
     "mkdirp": "^0.5.1",
+    "mt-files-downloader": "https://github.com/FaisalUmair/mt-files-downloader-wrapper",
     "needle": "^2.0.1",
-    "sanitize-filename": "^1.6.1",
-    "mt-files-downloader": "https://github.com/zeltice/node-mt-files-downloader"
+    "sanitize-filename": "^1.6.1"
   }
 }

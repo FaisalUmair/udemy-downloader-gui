@@ -226,8 +226,8 @@ $('.ui.dashboard .content .courses.section .search.form').submit(function(e){
 });
 
 
-$('.ui.dashboard .content').on('click','.download.button, .download-error', function(event){
-event.stopPropagation();
+$('.ui.dashboard .content').on('click','.download.button, .download-error', function(e){
+e.stopImmediatePropagation();
 var $course = $(this).parents('.course');
 var courseid = $course.attr('course-id');
 $course.find('.download-error').hide();
@@ -283,11 +283,11 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
-                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename&fields[lecture]=asset,supplementary_assets`,
+                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data&fields[lecture]=asset,supplementary_assets`,
                              headers: header,
                              success: function(response) {
                                 if(v.asset.asset_type=="Article"){
-                                  var src = response.view_html;
+                                  var src = response.asset.data.body;
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'Article';
                                 }else if((v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
@@ -405,9 +405,9 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
 
 
 function initDownload($course,coursedata){
-  $clone = $course.clone();
-  $downloads = $('.ui.downloads.section .ui.courses.items');
-  $courses = $('.ui.courses.section .ui.courses.items');
+  var $clone = $course.clone();
+  var $downloads = $('.ui.downloads.section .ui.courses.items');
+  var $courses = $('.ui.courses.section .ui.courses.items');
   if($course.parents('.courses.section').length){
     $downloadItem = $downloads.find('[course-id='+$course.attr("course-id")+']');
     if($downloadItem.length){
@@ -573,12 +573,12 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                       url: dl.url,
                       error: function(error){
                         if(error.status==401){
-                         fs.unlinkSync(dl.filePath);
+                         fs.unlinkSync(dl.filePath);               
                         }
                          resetCourse($course.find('.download-error'));
                       },
                       success: function(){
-                         initDownload($course,coursedata);
+                         resetCourse($course.find('.download-error'));
                       }
                     });
                     clearInterval(timer);
@@ -753,10 +753,12 @@ $('.courses-sidebar').click(function(){
 });
 
 $('.downloads-sidebar').click(function(){
+  $(".ui.dashboard .downloads.dimmer").addClass('active');
   $('.content .ui.section').hide();
   $('.content .ui.downloads.section').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
+  loadDownloads();
 });
 
 $('.settings-sidebar').click(function(){
@@ -926,7 +928,7 @@ function handleResponse(response,header,keyword='') {
 
 function saveDownloads(){
     var downloadedCourses = [];
-    $('.ui.downloads.section .ui.courses.items .ui.course.item').each(function(index,elem){
+    $('.ui.downloads.section .ui.courses.items .ui.course.item').slice(0,50).each(function(index,elem){
       $elem = $(elem);
        if($elem.find('.progress.active').length){
           var individualProgress = $elem.find('.download-status .individual.progress').attr('data-percent');
@@ -953,6 +955,9 @@ function saveDownloads(){
 }
 
 function loadDownloads(){
+  if($('.ui.downloads.section .ui.courses.items .ui.course.item').length){
+    return;
+  }
   if(downloadedCourses = settings.get('downloadedCourses')){
   downloadedCourses.forEach(function(course){
   $course = $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
@@ -1005,8 +1010,6 @@ function loadDownloads(){
   });
 }
 }
-
-loadDownloads();
 
 
 function validURL(value)
