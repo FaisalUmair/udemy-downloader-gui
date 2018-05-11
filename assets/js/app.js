@@ -236,6 +236,9 @@ $course.find('.download-status').show();
 var settingsCached = settings.getAll();
 var skipAttachments = settingsCached.download.skipAttachments;
 var skipSubtitles = settingsCached.download.skipSubtitles;
+var appLanguageCode = '';
+if (!skipSubtitles)
+    appLanguageCode = extractLanguage();
       $.ajax({
                type: 'GET',
                url: `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=100000`,
@@ -329,7 +332,14 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                 }
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
                                 if(!skipSubtitles&&response.asset.captions.length){
-                                  coursedata['chapters'][chapterindex]['lectures'][lectureindex].caption = response.asset.captions[0].url;
+                                  captionIndex = 0;
+                                  for (capIndex = 0; capIndex < response.asset.captions.length; capIndex++) {
+                                    if (response.asset.captions[capIndex].locale.locale === appLanguageCode) {
+                                      captionIndex = capIndex;
+                                      break;
+                                    }
+                                  }
+                                  coursedata['chapters'][chapterindex]['lectures'][lectureindex].caption = response.asset.captions[captionIndex].url;
                                 }
                                 if(response.supplementary_assets.length&&!skipAttachments){
                                   coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'] = [];
@@ -403,7 +413,18 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
 
 });
 
-
+function extractLanguage() {
+  var meta = require('./locale/meta.json');
+  var languageFile = meta[settings.get('general.language')];
+  if (typeof languageFile != 'undefined') {
+    var languageCode = languageFile.substr(0, languageFile.indexOf("."));
+    if (languageCode.length == 2)
+      languageCode = languageCode.toLowerCase() + "_" + languageCode.toUpperCase();
+  } else {
+    languageCode = 'en_US';
+  }
+  return languageCode;
+}
 
 function initDownload($course,coursedata){
   var $clone = $course.clone();
