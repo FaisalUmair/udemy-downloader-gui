@@ -72,7 +72,7 @@ if(!email || !password){
 
 $.ajax({
    type: 'GET',
-   url:'https://www.udemy.com/join/login-popup',
+   url:'https://www.udemy.com/join/login-popup/',
    beforeSend: function(){
      $(".ui.login .dimmer").addClass('active');
    },
@@ -85,7 +85,7 @@ $.ajax({
   }
 
 needle
-   .post('https://www.udemy.com/join/login-popup/?ref=&display_type=popup&locale=en_US&response_type=json&next=https%3A%2F%2Fwww.udemy.com%2F&xref=', {email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, {headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}})
+   .post('https://www.udemy.com/join/login-popup/?ref=&display_type=popup&locale=en_US&response_type=json&next=https%3A%2F%2Fwww.udemy.com%2F&xref=', {email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, {headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36','origin':'https://www.udemy.com'}})
    .on('readable', function() {
       $(".ui.login .dimmer").removeClass('active');
       if(this.request.res.cookies.access_token){
