@@ -41,7 +41,7 @@
     "jquery": "^3.2.1",
     "mkdirp": "^0.5.1",
     "mt-files-downloader": "https://github.com/FaisalUmair/mt-files-downloader-wrapper",
-    "needle": "^2.0.1",
+    "request": "^2.87.0",
     "sanitize-filename": "^1.6.1"
   }
 }

@@ -3,11 +3,11 @@ const remote = electron.remote;
 const dialog = remote.dialog;
 const fs = require('fs');
 const session = remote.session;
-const needle = require('needle');
 const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
+const request = require('request');
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var https = require('https');
@@ -84,16 +84,21 @@ $.ajax({
     cookie +=  cookies[key].name+'='+cookies[key].value+';';
   }
 
-needle
-   .post('https://www.udemy.com/join/login-popup/?ref=&display_type=popup&locale=en_US&response_type=json&next=https%3A%2F%2Fwww.udemy.com%2F&xref=', {email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, {headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36','origin':'https://www.udemy.com'}})
-   .on('readable', function() {
+request
+   .post({url:'https://www.udemy.com/join/login-popup/', form:{email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/join/login-popup/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36','origin':'https://www.udemy.com'}},function(err,httpResponse,body) {
       $(".ui.login .dimmer").removeClass('active');
-      if(this.request.res.cookies.access_token){
+      var access_token;
+      this.response.headers['set-cookie'].forEach(function(a){
+        var b = a.trim().split(';')[0].split('=');
+        if(b[0]=="access_token"){
+          access_token = b[1];
+          return true;
+        }
+      });
+      if(access_token){
          $('.ui.login').slideUp('fast');
          $('.ui.dashboard').fadeIn('fast').css('display','flex');
-      var access_token = this.request.res.cookies.access_token;
       headers = {"Authorization": `Bearer ${access_token}`};
-
       $.ajax({
                type: 'GET',
                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
