@@ -15,9 +15,9 @@
     "out of": "de",
     "items": "artículos",
     "Download Completed": "Descarga Completa!",
-    "Click this message to hide it": "Presiona este mensaje para ocultarlo",
+    "Click to dismiss": "Presiona este mensaje para ocultarlo",
     "Download Failed": "Descarga Fallido!",
-    "Click this message to retry": "Presiona este mensaje para reintentarlo",
+    "Click to retry": "Presiona este mensaje para reintentarlo",
     "Settings": "Configuración",
     "Download Settings": "Configuración de Descargar",
     "Download Path": "Ruta de Descarga",
@@ -35,6 +35,9 @@
     "Language (Requires App Restart)": "Idioma (Requiere reiniciar la aplicación)",
     "Save": "Guardar",
     "Settings Saved": "Configuración guardada",
-    "Download Lecture Videos Only": "Descargar conferencia Videos Solamente",
-    "About": "Acerca de"
+    "Skip Attachments": "Descargar conferencia Videos Solamente",
+    "About": "Acerca de",
+    "Skip Subtitles": "Omitir subtítulos",
+    "Search Courses": "Buscar cursos",
+    "Downloads": "Descargas"
 }

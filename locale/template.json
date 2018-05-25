@@ -15,9 +15,9 @@
 	"out of": "",
 	"items": "",
 	"Download Completed": "",
-	"Click this message to hide it": "",
+	"Click to dismiss": "",
 	"Download Failed": "",
-	"Click this message to retry": "",
+	"Click to retry": "",
 	"Settings": "",
 	"Download Settings": "",
 	"Download Path": "",
@@ -35,6 +35,9 @@
 	"Language (Requires App Restart)": "",
 	"Save": "",
 	"Settings Saved": "",
-	"Download Lecture Videos Only": "",
-	"About": ""
+	"Skip Attachments": "",
+	"About": "",
+	"Skip Subtitles": "",
+	"Search Courses": "",
+	"Downloads": ""
 }
