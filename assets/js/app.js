@@ -2,17 +2,14 @@ const electron = require('electron');
 const remote = electron.remote;
 const dialog = remote.dialog;
 const fs = require('fs');
-const session = remote.session;
 const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
-var request = require('request');
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var https = require('https');
 var headers;
-var cookieJar = request.jar();
 
 electron.ipcRenderer.on('saveDownloads',function(){
   saveDownloads(true);
@@ -96,29 +93,20 @@ if(!email || !password){
 }
 
 $.ajax({
-   type: 'GET',
-   url:'https://www.udemy.com/join/login-popup/?displayType=ajax&display_type=popup',
+   type: 'POST',
+   url:'https://www.udemy.com/api-2.0/auth/udemy-auth/login/?fields[user]=access_token',
+   data: {email:email,password:password},
+   headers: {"Authorization": "Basic YWQxMmVjYTljYmUxN2FmYWM2MjU5ZmU1ZDk4NDcxYTY6YTdjNjMwNjQ2MzA4ODI0YjIzMDFmZGI2MGVjZmQ4YTA5NDdlODJkNQ=="},
    beforeSend: function(){
      $(".ui.login .dimmer").addClass('active');
    },
     success: function(data, status, xhr){
-    var token = $('input[name=csrfmiddlewaretoken]',data).val();
-    session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {
-    for (var key in cookies){
-      cookieJar.setCookie(cookies[key].name+'='+cookies[key].value,'https://www.udemy.com');
-    }
-
-request
-   .post({url:'https://www.udemy.com/join/login-popup/?displayType=ajax&display_type=popup', jar:cookieJar,form:{email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, headers: {'Referer': 'https://www.udemy.com/join/login-popup/?displayType=ajax&display_type=popup','Host': 'www.udemy.com','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36','origin':'https://www.udemy.com'}},function(err,httpResponse,body) {
-      $(".ui.login .dimmer").removeClass('active');
-      if(cookieJar._jar.store.idx['www.udemy.com']['/'].access_token){
-        var access_token = cookieJar._jar.store.idx['www.udemy.com']['/'].access_token.value;
-         $('.ui.login').slideUp('fast');
-         $('.ui.dashboard').fadeIn('fast').css('display','flex');
-      settings.set('access_token',access_token);
-      settings.set('cookie',cookieJar.getCookieString('https://www.udemy.com'));
-      headers = {"Authorization": `Bearer ${access_token}`};
-      $.ajax({
+      if(data.access_token){
+        $('.ui.login').slideUp('fast');
+        $('.ui.dashboard').fadeIn('fast').css('display','flex');
+        settings.set('access_token',data.access_token);
+        headers = {"Authorization": `Bearer ${data.access_token}`};
+              $.ajax({
                type: 'GET',
                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
                beforeSend: function(){
@@ -129,15 +117,15 @@ request
                   handleResponse(response);
                }
             });
-      }else{
-         prompt.alert(translate('Incorrect Username/Password'));
-      }
-});
-
-});
-
-}
-
+        }
+},
+  error:function(response){
+    if(response.status==400){
+      prompt.alert(translate('Incorrect Username/Password'));
+    }else{
+      prompt.alert(translate('Connection Failed'));
+    }
+  }
 });
 
 });
@@ -803,12 +791,10 @@ $('.about-sidebar').click(function(){
 $('.logout-sidebar').click(function(){
 prompt.confirm('Confirm Log Out?', function(ok) {
 if(ok){
-  $('.ui.logout.dimmer').addClass('active');
-  request({url:'https://www.udemy.com/user/logout/?h=E0ofeFhaTXoT',headers:{'Cookie': settings.get('cookie'),'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36','Host': 'www.udemy.com','origin':'https://www.udemy.com'}},function(){
+    $('.ui.logout.dimmer').addClass('active');
     saveDownloads(false);
     settings.set('access_token',false);
     location.reload();
-  });
 }
 });
 });
