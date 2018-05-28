@@ -86,7 +86,10 @@ var template = `
 
   </div>
 
-     <div class="ui dashboard">      
+     <div class="ui dashboard">    
+            <div class="ui logout dimmer">
+              <div class="ui big text loader">${translate("Logging Out")}</div>
+            </div>  
             <div class="ui courses dimmer">
               <div class="ui big text loader">${translate("Loading Courses")}</div>
             </div>
@@ -112,6 +115,10 @@ var template = `
                 <a class="about-sidebar item">
                   <i class="info icon"></i>
                   ${translate("About")}
+                </a>
+                <a class="logout-sidebar item">
+                  <i class="power off icon"></i>
+                  ${translate("Logout")}
                 </a>
               </div>
                   <div class="content">
