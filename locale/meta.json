@@ -4,6 +4,7 @@
 	"Español" : "es.json",
 	"Russian" : "ru.json",
 	"Türkçe"  : "tr.json",
-	"Português": "pt_BR.json",
-    "Français" : "fr.json"
+	"Português" : "pt_BR.json",
+        "Français" : "fr.json",
+	"Tiếng Việt" : "vi.json"
 }
