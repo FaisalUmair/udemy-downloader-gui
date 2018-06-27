@@ -48,16 +48,6 @@ function translate(text){
   if(!settings.get('general.language') || settings.get('general.language')=="English"){
     return text;
  }else{
-    if(settings.get('general.language')=="العربية"){
-      var head  = document.getElementsByTagName('head')[0];
-      var link  = document.createElement('link');
-      link.id   = cssId;
-      link.rel  = 'stylesheet';
-      link.type = 'text/css';
-      link.href = 'assets/css/style_rtl.css';
-      link.media = 'all';
-      head.appendChild(link);
-    }
     try {
       var meta = require('./locale/meta.json');
       var locale = require('./locale/'+meta[settings.get('general.language')]);
