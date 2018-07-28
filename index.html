@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Udeler | Udemy Course Downloader</title>
     <link rel="stylesheet" href="assets/css/semantic.min.css">
-	<link rel="stylesheet" href="" id="style">
+	  <link rel="stylesheet" href="assets/css/style.css">
   </head>
   <body>
 <div class="ui basic subtitle modal">
@@ -57,12 +57,6 @@ function translate(text){
       return text;
     }
   }
-}
-
-if(!settings.get('general.language') || settings.get('general.language')=="English"){
-	$('#style').attr('href','assets/css/style.css');
-} else if(settings.get('general.language')=="Arabic"){
-	$('#style').attr('href','assets/css/style_rtl.css');
 }
 
 var template = `
@@ -303,7 +297,7 @@ var template = `
                               ${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.")}
                               </p>
                               <br>
-                              <a href="https://paypal.me/udeler" class="ui centered donate grid">
+                              <a href="https://paypal.me/UdelerDonate" class="ui centered donate grid">
                                 <img src="assets/images/donate.png" alt="Donate"/>
                               </a>
                           </div>
@@ -313,6 +307,10 @@ var template = `
 `;
 
 $('body').prepend(template);
+
+if(settings.get('general.language')=="Arabic"){
+  $('.ui.dashboard .content').css('margin-left','10px').css('width','80%');
+}
 
   var $languageDropdown = $('.language.dropdown .menu');
   $.getJSON('locale/meta.json', function(data){
