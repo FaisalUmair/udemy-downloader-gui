@@ -1,6 +1,6 @@
 {
 	"Udemy Login": "Accesso Udemy",
-    "Email": "Email",
+  "Email": "Email",
 	"Password": "Password",
 	"Login": "Accedi",
 	"Type Username/Password": "Inserisci Username/Password",
@@ -15,9 +15,9 @@
 	"out of": "di",
 	"items": "elementi",
 	"Download Completed": "Download Completato!",
-	"Click this message to hide it": "Clicca su questo messaggio per nasconderlo",
+	"Click to dismiss": "Clicca su questo messaggio per nasconderlo",
 	"Download Failed": "Download Fallito",
-	"Click this message to retry": "Clicca su questo messaggio per riprovare",
+	"Click to retry": "Clicca su questo messaggio per riprovare",
 	"Settings": "Impostazioni",
 	"Download Settings": "Impostazioni Download",
 	"Download Path": "Cartella Download",
@@ -35,6 +35,9 @@
 	"Language (Requires App Restart)": "Lingua (Richiede Riavvio App)",
 	"Save": "Salva",
 	"Settings Saved": "Impostazioni Salvate",
-	"Download Lecture Videos Only": "Scarica solo video di lezione",
-	"About": "Di"
+	"Skip Attachments": "Scarica solo video di lezione",
+	"About": "Di",
+	"Skip Subtitles": "Salta i sottotitoli",
+	"Search Courses": "Cerca corsi",
+	"Downloads": "Downloads"
 }

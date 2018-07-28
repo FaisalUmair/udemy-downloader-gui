@@ -7,6 +7,19 @@
 	<link rel="stylesheet" href="" id="style">
   </head>
   <body>
+<div class="ui basic subtitle modal">
+  <div class="ui icon header">
+    <i class="closed captioning icon"></i>
+    Select Subtitle
+  </div>
+  <div class="content">
+<div class="ui fluid selection dropdown">
+  <input type="hidden" name="subtitle">
+  <i class="dropdown icon"></i>
+  <div class="default text">Subtitle Language</div>
+</div>
+</div>
+</div>
 <div class="ui basic update-available modal">
   <div class="ui icon header">
     <i class="gift icon"></i>
@@ -92,7 +105,10 @@ var template = `
 
   </div>
 
-     <div class="ui dashboard">      
+     <div class="ui dashboard">    
+            <div class="ui logout dimmer">
+              <div class="ui big text loader">${translate("Logging Out")}</div>
+            </div>  
             <div class="ui courses dimmer">
               <div class="ui big text loader">${translate("Loading Courses")}</div>
             </div>
@@ -107,6 +123,10 @@ var template = `
                   <i class="file video icon"></i>
                   ${translate("Courses")}
                 </a>
+                <a class="downloads-sidebar item">
+                  <i class="download icon"></i>
+                  ${translate("Downloads")}
+                </a>
                <a class="settings-sidebar item">
                   <i class="wrench icon"></i>
                   ${translate("Settings")}
@@ -115,13 +135,35 @@ var template = `
                   <i class="info icon"></i>
                   ${translate("About")}
                 </a>
+                <a class="logout-sidebar item">
+                  <i class="power off icon"></i>
+                  ${translate("Logout")}
+                </a>
               </div>
                   <div class="content">
 
-                      <div class="ui divided unstackable courses items">
+                      <div class="ui courses section">
+                        <form class="ui search form">
+                        <div class="ui fluid search">
+                          <div class="ui fluid icon input">
+                            <input class="prompt" type="text" placeholder="${translate("Search Courses")}">
+                            <i class="search icon"></i>
+                          </div>
+                        </div>
+                        </form>
+                        <div class="ui divided unstackable courses items">
+                        </div>
                       </div>
 
-                      <div class="ui settings"> 
+                    <div class="ui downloads section">
+                        <h5 class="ui top attached header">
+                              <i class="ui download icon"></i> ${translate("Downloads")}
+                        </h5>
+                        <div class="ui divided unstackable courses items attached segment">
+                        </div>
+                      </div>
+
+                      <div class="ui settings section"> 
                       <form class="ui form">
                         <h5 class="ui top attached  header">
                               <i class="ui download icon"></i> ${translate("Download Settings")}
@@ -155,8 +197,8 @@ var template = `
                                   <div class="ui  divider"></div>
                                     <div class="field">
                                       <div class="ui checkbox">
-                                          <input type="checkbox" name="downloadvideosonly">
-                                          <label>${translate("Download Lecture Videos Only")}</label>
+                                          <input type="checkbox" name="skipattachments">
+                                          <label>${translate("Skip Attachments")}</label>
                                         </div>
                                       </div>
                                     <div class="field">
@@ -176,6 +218,12 @@ var template = `
                                         </div>
                                          </div>
                                     </div>
+                                    <div class="field">
+                                      <div class="ui checkbox">
+                                          <input type="checkbox" name="skipsubtitles">
+                                          <label>${translate("Skip Subtitles")}</label>
+                                        </div>
+                                      </div>
 
                               </div>
                           <h5 class="ui top attached  header">
@@ -202,44 +250,44 @@ var template = `
 
                       </div>
 
-                      <div class="ui about">   
+                      <div class="ui about section">   
                           <div class="ui segment">
                             <h4 class="ui center aligned icon header">
                               <i class="grey file code outline icon"></i>
                               Udeler v${appVersion}
                             </h4>
-                            <button class="ui tiny fluid basic check-updates button">Check for updates</button>
-                            <h3 class="ui header">Links</h3>
+                            <button class="ui tiny fluid basic check-updates button">${translate("Check for updates")}</button>
+                            <h3 class="ui header">${translate("Links")}</h3>
                             <div class="ui relaxed divided list">
                               <div class="item">
                                 <i class="large github middle aligned icon"></i>
                                 <div class="content">
                                   <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui">FaisalUmair/udemy-downloader-gui</a>
-                                  <div class="description">Repository</div>
+                                  <div class="description">${translate("Repository")}</div>
                                 </div>
                               </div>
                               <div class="item">
                                 <i class="large github middle aligned icon"></i>
                                 <div class="content">
                                   <a class="header" href="https://github.com/FaisalUmair">FaisalUmair</a>
-                                  <div class="description">Developer</div>
+                                  <div class="description">${translate("Developer")}</div>
                                 </div>
                               </div>
                               <div class="item">
                                 <i class="large world middle aligned icon"></i>
                                 <div class="content">
                                   <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
-                                  <div class="description">Website</div>
+                                  <div class="description">${translate("Website")}</div>
                                 </div>
                               </div>
                             </div>
-                            <h3 class="ui header">Development</h3>
+                            <h3 class="ui header">${translate("Development")}</h3>
                               <div class="ui relaxed divided list">
                                 <div class="item">
                                   <i class="large github middle aligned icon"></i>
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
-                                    <div class="description">Report Bug</div>
+                                    <div class="description">${translate("Report Bug")}</div>
                                   </div>
                                 </div>
                                 <div class="item">
@@ -252,7 +300,7 @@ var template = `
                               </div>
                             <h3 class="ui header">Donate</h3>
                               <p>
-                              Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
+                              ${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.")}
                               </p>
                               <br>
                               <a href="https://paypal.me/udeler" class="ui centered donate grid">

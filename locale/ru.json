@@ -1,6 +1,6 @@
 {
 	"Udemy Login": "Udemy логин",
-    "Email": "Почта",
+  "Email": "Почта",
 	"Password": "Пароль",
 	"Login": "Войти",
 	"Type Username/Password": "Введите Логин/Пароль",
@@ -15,9 +15,9 @@
 	"out of": "из",
 	"items": "элементов",
 	"Download Completed": "Скачивание завершено",
-	"Click this message to hide it": "Кликните, чтобы скрыть сообщение",
+	"Click to dismiss": "Кликните, чтобы скрыть сообщение",
 	"Download Failed": "Скачивание завершилось с ошибкой",
-	"Click this message to retry": "Кликните, чтобы попробовать снова",
+	"Click to retry": "Кликните, чтобы попробовать снова",
 	"Settings": "Настройки",
 	"Download Settings": "Настройки загрузок",
 	"Download Path": "Каталог загрузки",
@@ -35,6 +35,9 @@
 	"Language (Requires App Restart)": "Язык (требуется перезапуск приложения)",
 	"Save": "ОК",
 	"Settings Saved": "Настройки сохранены",
-	"Download Lecture Videos Only": "Загружать только видео",
-	"About": "Около"
+	"Skip Attachments": "Загружать только видео",
+	"About": "Около",
+	"Skip Subtitles": "Пропустить Субтитры",
+	"Search Courses": "Поиск курсов",
+	"Downloads": "Загрузки"
 }

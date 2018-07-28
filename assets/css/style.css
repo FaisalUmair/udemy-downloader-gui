@@ -34,6 +34,8 @@ background: rgba(0,0,0,.85);
 }
 
 .ui.dashboard .sidebar.menu .item{
+	padding-left: 7px;
+	padding-right: 7px;
 	max-width: 84px;
 	word-wrap: break-word;
 }
@@ -43,20 +45,22 @@ background: rgba(0,0,0,.85);
 	width: 100%;
 }
 
-.ui.dashboard > .content .settings, .ui.dashboard > .content .about{
+.ui.dashboard > .content .section{
 	display: none;
+	padding: 8px 10px 0px 0px;
+	margin-bottom: 10px;
 }
 
-.ui.dashboard > .content .courses, .ui.dashboard > .content .settings, .ui.dashboard > .content .about{
-	padding: 8px 10px 0px 0px;
+.ui.dashboard > .content .courses.section{
+	display: block;
+}
+
+.ui.dashboard > .content .ui.courses.items, .ui.dashboard > .content .courses.section .load-more.button{
+	margin-bottom: 10px;
 }
 
 .ui.dashboard .courses .course .action.buttons .button{
  	border-radius: 0;
-}
-
-.ui.dashboard .courses .search{
-	padding-bottom: 10px;
 }
 
 .ui.dashboard .courses .course{
@@ -91,4 +95,8 @@ background: rgba(0,0,0,.85);
 
 .ui.dashboard > .content .about .donate-button{
 	text-align: center;
+}
+
+.ui.dashboard > .content .ui.downloads.section .ui.courses.segment{
+	padding-bottom: 30px;
 }
