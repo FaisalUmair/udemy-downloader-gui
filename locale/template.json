@@ -1,6 +1,6 @@
 {
 	"Udemy Login": "",
-    "Email": "",
+  "Email": "",
 	"Password": "",
 	"Login": "",
 	"Type Username/Password": "",
@@ -39,5 +39,6 @@
 	"About": "",
 	"Skip Subtitles": "",
 	"Search Courses": "",
-	"Downloads": ""
+	"Downloads": "",
+	"Udemy Business": ""
 }
