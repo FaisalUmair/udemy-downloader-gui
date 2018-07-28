@@ -1,11 +1,12 @@
 {
-	"Deutsch"  : "de.json",
-	"Italian"  : "it.json",
-	"Español"  : "es.json",
-	"Russian"  : "ru.json",
-	"Türkçe"   : "tr.json",
-        "हिंदी"      : "hi.json",
-	"Português": "pt_BR.json",
-	"Français" : "fr.json",
-	"မြန်မာ"    : "my.json"
+"Deutsch": "de.json",
+"Italian": "it.json",
+"Español": "es.json",
+"Russian": "ru.json",
+"Türkçe": "tr.json",
+"हिंदी": "hi.json",
+"Português": "pt_BR.json",
+"Français": "fr.json",
+"မြန်မာ": "my.json",
+ "Indonesia" : "id.json"
 }
