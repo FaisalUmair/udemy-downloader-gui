@@ -6,5 +6,6 @@
 	"Türkçe"   : "tr.json",
         "हिंदी"      : "hi.json",
 	"Português": "pt_BR.json",
-    "Français" : "fr.json"
+	"Français" : "fr.json",
+	"မြန်မာ"    : "my.json"
 }
