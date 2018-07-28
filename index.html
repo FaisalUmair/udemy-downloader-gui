@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Udeler | Udemy Course Downloader</title>
     <link rel="stylesheet" href="assets/css/semantic.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="" id="style">
   </head>
   <body>
 <div class="ui basic subtitle modal">
@@ -57,6 +57,12 @@ function translate(text){
       return text;
     }
   }
+}
+
+if(!settings.get('general.language') || settings.get('general.language')=="English"){
+	$('#style').attr('href','assets/css/style.css');
+} else if(settings.get('general.language')=="Arabic"){
+	$('#style').attr('href','assets/css/style_rtl.css');
 }
 
 var template = `
@@ -112,7 +118,7 @@ var template = `
             <div class="ui about dimmer">
               <div class="ui big text loader">Checking for Updates</div>
             </div>
-              <div class="ui left vertical inverted sidebar labeled icon menu visible">
+              <div class="ui vertical inverted sidebar labeled icon menu visible ${settings.get('general.language') == "Arabic" ? "right":"left"}">
                 <a class="active red courses-sidebar item">
                   <i class="file video icon"></i>
                   ${translate("Courses")}
