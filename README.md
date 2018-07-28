@@ -22,10 +22,10 @@ This software does not magically download any paid course available on Udemy, yo
 
 | Platform | Arch | Version | Link|
 | --- | --- | --- | --- |
-| Windows | x64 | 1.5.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.5.0/Udeler-Setup-1.5.0-windows-x64.exe)|
-| Windows | x86 | 1.5.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.5.0/Udeler-Setup-1.5.0-windows-x86.exe)|
-| Mac | x64 | 1.5.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.5.0/Udeler-1.5.0-mac.zip)|
-| Linux | x86_x64 | 1.5.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.5.0/Udeler-1.5.0-linux-x86_x64.AppImage)|
+| Windows | x64 | 1.6.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.0/Udeler-Setup-1.6.0-windows-x64.exe)|
+| Windows | x86 | 1.6.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.0/Udeler-Setup-1.6.0-windows-x86.exe)|
+| Mac | x64 | 1.6.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.0/Udeler-1.6.0-mac.zip)|
+| Linux | x86_x64 | 1.6.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.0/Udeler-1.6.0-linux-x86_x64.AppImage)|
 
 ### Note: 
 By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.
@@ -77,4 +77,4 @@ npm run build-win -- --ia32
 ## Donate
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
-[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.me/udeler)
+[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.me/UdelerDonate)

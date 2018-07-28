@@ -2,8 +2,6 @@ const electron = require('electron');
 const remote = electron.remote;
 const dialog = remote.dialog;
 const fs = require('fs');
-const session = remote.session;
-const needle = require('needle');
 const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
@@ -14,7 +12,7 @@ var https = require('https');
 var headers;
 
 electron.ipcRenderer.on('saveDownloads',function(){
-  saveDownloads();
+  saveDownloads(true);
 });
 
 var subDomain = 'www';
@@ -55,6 +53,30 @@ $('.ui.login #business').change(function() {
     }
 });
 
+if(settings.get('access_token')){
+$('.ui.login').slideUp('fast');
+$('.ui.dashboard').fadeIn('fast').css('display','flex');
+  headers = {"Authorization": `Bearer ${settings.get('access_token')}`};
+      $.ajax({
+           type: 'GET',
+           url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
+           beforeSend: function(){
+               $(".ui.dashboard .courses.dimmer").addClass('active');
+           },
+           headers: headers,
+           success: function(response){
+              handleResponse(response);
+           },
+           error: function(response){
+              if(response.status==403){
+               settings.set('access_token',false);
+              }
+              $('.ui.login').slideDown('fast');
+              $('.ui.dashboard').fadeOut('fast');
+           }
+        });
+}
+
 $('.ui.login .form').submit((e)=>{
 e.preventDefault();
 var email = $(e.target).find('input[name="email"]').val();
@@ -71,30 +93,20 @@ if(!email || !password){
 }
 
 $.ajax({
-   type: 'GET',
-   url:'https://www.udemy.com/join/login-popup',
+   type: 'POST',
+   url:'https://www.udemy.com/api-2.0/auth/udemy-auth/login/?fields[user]=access_token',
+   data: {email:email,password:password},
+   headers: {"Authorization": "Basic YWQxMmVjYTljYmUxN2FmYWM2MjU5ZmU1ZDk4NDcxYTY6YTdjNjMwNjQ2MzA4ODI0YjIzMDFmZGI2MGVjZmQ4YTA5NDdlODJkNQ=="},
    beforeSend: function(){
      $(".ui.login .dimmer").addClass('active');
    },
     success: function(data, status, xhr){
-    var token = $('input[name=csrfmiddlewaretoken]',data).val();
-    var cookie = '';
-    session.defaultSession.cookies.get({url: 'https://www.udemy.com'}, (error, cookies) => {
-  for (var key in cookies){
-    cookie +=  cookies[key].name+'='+cookies[key].value+';';
-  }
-
-needle
-   .post('https://www.udemy.com/join/login-popup/?ref=&display_type=popup&locale=en_US&response_type=json&next=https%3A%2F%2Fwww.udemy.com%2F&xref=', {email:email,password:password,csrfmiddlewaretoken:token,locale:'en_US'}, {headers: {'Cookie': cookie,'Referer': 'https://www.udemy.com/','Host': 'www.udemy.com','X-Requested-With': 'XMLHttpRequest','User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}})
-   .on('readable', function() {
-      $(".ui.login .dimmer").removeClass('active');
-      if(this.request.res.cookies.access_token){
-         $('.ui.login').slideUp('fast');
-         $('.ui.dashboard').fadeIn('fast').css('display','flex');
-      var access_token = this.request.res.cookies.access_token;
-      headers = {"Authorization": `Bearer ${access_token}`};
-
-      $.ajax({
+      if(data.access_token){
+        $('.ui.login').slideUp('fast');
+        $('.ui.dashboard').fadeIn('fast').css('display','flex');
+        settings.set('access_token',data.access_token);
+        headers = {"Authorization": `Bearer ${data.access_token}`};
+              $.ajax({
                type: 'GET',
                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
                beforeSend: function(){
@@ -105,9 +117,18 @@ needle
                   handleResponse(response);
                }
             });
-      }else{
-         prompt.alert(translate('Incorrect Username/Password'));
-      }
+        }
+},
+  error:function(response){
+    if(response.status==400){
+      prompt.alert(translate('Incorrect Username/Password'));
+    }else{
+      prompt.alert(translate('Connection Failed'));
+    }
+  }
+});
+
+});
 
 
 $('.ui.dashboard .content').on('click','.download-success', function(){
@@ -255,6 +276,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                  var lectureindex = -1;
                  var remaining = response.count;
                  coursedata['totallectures'] = 0;
+                 var availableSubs = [];
 
                  if(response.results[0]._class=="lecture"){
                          chapterindex++;
@@ -277,7 +299,12 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                         if(v.asset.asset_type!="Video"&&skipAttachments){
                           remaining--;
                           if(!remaining){
-                            initDownload($course,coursedata);
+                            if(Object.keys(availableSubs).length){
+                             askforSubtile(availableSubs,initDownload,$course,coursedata);
+                            }else{
+                              initDownload($course,coursedata);  
+                            }
+                            
                           }
                           return;
                         }
@@ -329,7 +356,11 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                 }
                                 coursedata['chapters'][chapterindex]['lectures'][lectureindex] = {src:src,name:lecturename,quality:videoQuality,type:type};
                                 if(!skipSubtitles&&response.asset.captions.length){
-                                  coursedata['chapters'][chapterindex]['lectures'][lectureindex].caption = response.asset.captions[0].url;
+                                  coursedata['chapters'][chapterindex]['lectures'][lectureindex].caption = [];
+                                  response.asset.captions.forEach(function(caption){
+                                    caption.video_label in availableSubs ? availableSubs[caption.video_label] = availableSubs[caption.video_label]+1 : availableSubs[caption.video_label] = 1;
+                                    coursedata['chapters'][chapterindex]['lectures'][lectureindex].caption[caption.video_label] = caption.url;
+                                  });
                                 }
                                 if(response.supplementary_assets.length&&!skipAttachments){
                                   coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'] = [];
@@ -350,7 +381,12 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                                 remaining--;
                                                 coursedata['totallectures']+=1;
                                                 if(!remaining){
-                                                  initDownload($course,coursedata);
+                                                  if(Object.keys(availableSubs).length){
+                                                   askforSubtile(availableSubs,initDownload,$course,coursedata);
+                                                  }else{
+                                                    initDownload($course,coursedata);  
+                                                  }
+                                                  
                                                 }
                                             }
                                         }
@@ -360,7 +396,11 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                   remaining--;
                                   coursedata['totallectures']+=1;
                                   if(!remaining){
-                                    initDownload($course,coursedata);
+                                    if(Object.keys(availableSubs).length){
+                                     askforSubtile(availableSubs,initDownload,$course,coursedata);
+                                    }else{
+                                      initDownload($course,coursedata);  
+                                    }
                                   }
                                 }
                              }
@@ -373,13 +413,21 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                        remaining--;
                        coursedata['totallectures']+=1;
                        if(!remaining){
-                          initDownload($course,coursedata);
+                          if(Object.keys(availableSubs).length){
+                           askforSubtile(availableSubs,initDownload,$course,coursedata);
+                          }else{
+                            initDownload($course,coursedata);  
+                          }
                         }
                       lectureindex++;
                     }else{
                       remaining--;
                       if(!remaining){
-                        initDownload($course,coursedata);
+                        if(Object.keys(availableSubs).length){
+                         askforSubtile(availableSubs,initDownload,$course,coursedata);
+                        }else{
+                          initDownload($course,coursedata);  
+                        }
                       }
                     }
 
@@ -393,19 +441,9 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                }
     });
 });
-});
-
-});
-
-}
-
-});
-
-});
 
 
-
-function initDownload($course,coursedata){
+function initDownload($course,coursedata,subtitle=false){
   var $clone = $course.clone();
   var $downloads = $('.ui.downloads.section .ui.courses.items');
   var $courses = $('.ui.courses.section .ui.courses.items');
@@ -678,7 +716,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
         var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name).on('finish', function(){
           checkAttachment();
         });
-        var request = https.get(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'], function(response) {
+        var request = https.get(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][subtitle] ? coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][subtitle] : coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][Object.keys(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'])[0]], function(response) {
           response.pipe(file);
         });
     }
@@ -775,6 +813,17 @@ $('.about-sidebar').click(function(){
   $('.content .ui.about.section').show();
   $(this).parent('.sidebar').find('.active').removeClass('active red');
   $(this).addClass('active red');
+});
+
+$('.logout-sidebar').click(function(){
+prompt.confirm('Confirm Log Out?', function(ok) {
+if(ok){
+    $('.ui.logout.dimmer').addClass('active');
+    saveDownloads(false);
+    settings.set('access_token',false);
+    location.reload();
+}
+});
 });
 
 
@@ -927,7 +976,7 @@ function handleResponse(response,keyword='') {
 }
 
 
-function saveDownloads(){
+function saveDownloads(quit){
     var downloadedCourses = [];
     var $downloads = $('.ui.downloads.section .ui.courses.items .ui.course.item').slice(0,50);
     if($downloads.length){
@@ -956,7 +1005,9 @@ function saveDownloads(){
       });
       settings.set('downloadedCourses', downloadedCourses);
   }
-  electron.ipcRenderer.send('quitApp');
+  if(quit){
+    electron.ipcRenderer.send('quitApp');
+  }
 }
 
 function loadDownloads(){
@@ -1057,4 +1108,25 @@ function loadDefaults(){
 
 if(!settings.get('general')){
   loadDefaults();
+}
+
+function askforSubtile(availableSubs,initDownload,$course,coursedata){
+  var $subtitleModal = $('.ui.subtitle.modal');
+  var $subtitleDropdown = $subtitleModal.find('.ui.dropdown');
+  var subtitleLanguages = [];
+  for(var key in availableSubs){
+    subtitleLanguages.push({
+      name: `<b>${key}</b> <i>${availableSubs[key]} Lectures</i>`,
+      value: key
+    })
+  }
+  $subtitleModal.modal({closable: false}).modal('show');
+  $subtitleDropdown.dropdown({
+    values: subtitleLanguages,
+    onChange: function(subtitle){
+      $subtitleModal.modal('hide');
+      $subtitleDropdown.dropdown({values:[]});
+      initDownload($course,coursedata,subtitle);
+    }
+  });
 }
