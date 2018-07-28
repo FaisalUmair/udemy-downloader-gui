@@ -196,6 +196,17 @@ var template = `
                                         </div>
                                       </div>
                                     <div class="field">
+									<label>${translate("Numbering Scheme")}</label>
+                                      <div class="ui fluid search selection dropdown">
+                                          <input type="hidden" name="numberscheme">
+                                          <i class="dropdown icon"></i>
+                                          <div class="default text"></div>
+                                          <div class="menu">
+                                          <div class="item" data-value="Raw">${translate("Raw")}</div>
+                                          <div class="item" data-value="Padded">${translate("Padded")}</div>
+										  </div>
+									  </div>
+                                     </div>  <div class="field">
                                       <label>${translate("Video Quality")}</label>
                                       <div class="ui fluid search selection dropdown">
                                           <input type="hidden" name="videoquality">

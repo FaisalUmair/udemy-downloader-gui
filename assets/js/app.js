@@ -22,9 +22,22 @@ $('.ui.dropdown')
   .dropdown()
 ;
 
+<<<<<<< HEAD
+jQuery.expr[':'].contains = function(a, i, m) {
+  return jQuery(a).text().toUpperCase()
+      .indexOf(m[3].toUpperCase()) >= 0;
+};
+
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+}
+=======
 $(document).ajaxError(function(event, request) {
      $(".dimmer").removeClass('active');
 });
+>>>>>>> 9484582602a6331cf9a0c7e4fb461b96f848b7de
 
 var downloadTemplate = `
 <div class="ui tiny icon action buttons">
@@ -477,7 +490,8 @@ function initDownload($course,coursedata,subtitle=false){
   lectureChaperMap[currentLecture] = {chapterindex:chapterindex,lectureindex:lectureindex};
   });
   });
-
+  
+  var numberScheme = settings.get('download.numberScheme');
   var course_name = sanitize(coursedata['name']);
   var totalchapters = coursedata['chapters'].length;
   var totallectures = coursedata['totallectures'];
@@ -562,7 +576,37 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
 
     function dlStart(dl,callback){
 
+<<<<<<< HEAD
+        if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['type']=='Url'){
+        fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'.'+(index+1)+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], function() {
+          index++;
+          if(index==total_assets){
+            $progressElemCombined.progress('increment');
+            downloaded++;
+            downloadLecture(chapterindex,++lectureindex,num_lectures,chapter_name);
+          }else{
+            downloadAttachments(index,total_assets);
+          }
+        });
+      }else{
+
+            var lecture_name = sanitize((numberScheme == "Raw" ? lectureindex+1 :(lectureindex+1).pad(3))+'.'+(numberScheme == "Raw" ? index+1 : (index+1).pad(3))+' '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['name'].trim()+'.'+new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src']).searchParams.get('filename').split('.').pop());
+              if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+                var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+                if(!fs.statSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd').size){
+                  dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+                }
+              }else if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+                endDownload();
+                return;
+              }else{
+                var dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'][index]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+              }
+          
+          // Change retry options to something more forgiving and threads to keep udemy from getting upset
+=======
         // Change retry options to something more forgiving and threads to keep udemy from getting upset
+>>>>>>> 9484582602a6331cf9a0c7e4fb461b96f848b7de
           dl.setRetryOptions({
             retryInterval: 5000
           });
@@ -722,13 +766,12 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
     }
 
 $progressElemIndividual.progress('reset');
-
-    var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
+	var lectureQuality = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['quality'];
     var lastClass = $download_quality.attr('class').split(' ').pop();
     $download_quality.html(lectureQuality+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Video' ? 'p' : '')).removeClass(lastClass).addClass(qualityColorMap[lectureQuality] || 'grey');
 
     if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Article'||coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='Url'){
-      fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function() {
+      fs.writeFile(download_directory+'/'+course_name+'/'+chapter_name+'/'+sanitize((numberScheme == "Raw" ? lectureindex+1 : (lectureindex+1).pad(3))+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.html'), coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], function() {
           if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
             var total_assets = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].length;
             var index = 0;
@@ -743,8 +786,8 @@ $progressElemIndividual.progress('reset');
 
     }else{
 
-    var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
-    if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
+    var lecture_name = sanitize((numberScheme == "Raw" ? lectureindex+1 :(lectureindex+1).pad(3))+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.'+(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['type']=='File' ? new URL(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src']).searchParams.get('filename').split('.').pop() : 'mp4'));
+	if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd')){
       var dl = downloader.resumeDownload(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
       if(!fs.statSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name+'.mtd').size){
         dl = downloader.download(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['src'], download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
@@ -840,6 +883,15 @@ $('.content .ui.about').on('click', 'a[href^="http"]', function(e) {
 $('.ui.settings .form').submit((e)=>{
   e.preventDefault();
   var enableDownloadStartEnd = $(e.target).find('input[name="enabledownloadstartend"]')[0].checked;
+<<<<<<< HEAD
+  var downloadVideosOnly = $(e.target).find('input[name="downloadvideosonly"]')[0].checked;
+  var downloadStart = $(e.target).find('input[name="downloadstart"]').val();
+  var downloadEnd = $(e.target).find('input[name="downloadend"]').val();
+  var videoQuality = $(e.target).find('input[name="videoquality"]').val();
+  var numberScheme = $(e.target).find('input[name="numberscheme"]').val();
+  var downloadPath = $(e.target).find('input[name="downloadpath"]').val();
+  var language = $(e.target).find('input[name="language"]').val();
+=======
   var skipAttachments = $(e.target).find('input[name="skipattachments"]')[0].checked;
   var skipSubtitles = $(e.target).find('input[name="skipsubtitles"]')[0].checked;
   var downloadStart = parseInt($(e.target).find('input[name="downloadstart"]').val()) || false;
@@ -847,6 +899,7 @@ $('.ui.settings .form').submit((e)=>{
   var videoQuality = $(e.target).find('input[name="videoquality"]').val() || false;
   var downloadPath = $(e.target).find('input[name="downloadpath"]').val() || false;
   var language = $(e.target).find('input[name="language"]').val() || false;
+>>>>>>> 9484582602a6331cf9a0c7e4fb461b96f848b7de
 
   settings.set('download', {
     enableDownloadStartEnd: enableDownloadStartEnd,
@@ -855,7 +908,8 @@ $('.ui.settings .form').submit((e)=>{
     downloadStart: downloadStart,
     downloadEnd: downloadEnd,
     videoQuality: videoQuality,
-    path: downloadPath
+    path: downloadPath,
+	numberScheme: numberScheme
   });
 
   settings.set('general',{
@@ -895,8 +949,16 @@ function loadSettings(){
   var videoQuality = settingsCached.download.videoQuality;
   settingsForm.find('input[name="videoquality"]').val(videoQuality || '');
   settingsForm.find('input[name="videoquality"]').parent('.dropdown').find('.default.text').html(videoQuality || translate('Auto'));
+<<<<<<< HEAD
+  var numberscheme = settings.get('download.numberScheme');
+  settingsForm.find('input[name="numberscheme"]').val(numberscheme); 
+  settingsForm.find('input[name="numberscheme"]').parent('.dropdown').find('.default.text').html(numberscheme || translate('Raw'));
+  var language = settings.get('general.language');
+  settingsForm.find('input[name="language"]').val(language);
+=======
   var language = settingsCached.general.language;
   settingsForm.find('input[name="language"]').val(language || '');
+>>>>>>> 9484582602a6331cf9a0c7e4fb461b96f848b7de
   settingsForm.find('input[name="language"]').parent('.dropdown').find('.default.text').html(language || 'English');
 }
 
