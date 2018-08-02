@@ -311,11 +311,15 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                       function  getLecture(lecturename,chapterindex,lectureindex){
                           $.ajax({
                              type: 'GET',
-                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data&fields[lecture]=asset,supplementary_assets`,
+                             url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data,body&fields[lecture]=asset,supplementary_assets`,
                              headers: headers,
                              success: function(response) {
                                 if(v.asset.asset_type=="Article"){
-                                  var src = response.asset.data.body;
+                                  if(response.asset.data){
+                                    var src = response.asset.data.body;
+                                  }else{
+                                    var src = response.asset.body;
+                                  }
                                   var videoQuality = v.asset.asset_type;
                                   var type = 'Article';
                                 }else if((v.asset.asset_type=="File"||v.asset.asset_type=="E-Book")){
