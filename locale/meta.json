@@ -1,4 +1,5 @@
 {
+	"فارسی": "fa.json",
 	"Deutsch": "de.json",
 	"Italian": "it.json",
 	"Español": "es.json",
@@ -11,5 +12,5 @@
 	"Indonesia": "id.json",
 	"Greek": "gr.json",
 	"Tiếng Việt": "vi.json",
-	"Arabic": "ar.json"
+	"Arabic": "ar.json"	
 }
