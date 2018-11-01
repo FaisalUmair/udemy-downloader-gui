@@ -1,6 +1,9 @@
 # Udeler | Udemy Course Downloader (GUI)
 A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
 
+### Udeler 2.0 Feature Requests:
+I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172)
+
 ### Udeler Web Anouncement:
 In case you only want the download links of videos. You can use the Web version of Udeler.
 

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Udeler | Udemy Course Downloader</title>
+    <title>Udeler | ${translate("Udemy Course Downloader")}</title>
     <link rel="stylesheet" href="assets/css/semantic.min.css">
 	  <link rel="stylesheet" href="assets/css/style.css">
   </head>
@@ -23,7 +23,7 @@
 <div class="ui basic update-available modal">
   <div class="ui icon header">
     <i class="gift icon"></i>
-    New Update Available
+    ${translate("New Update Available")}
   </div>
   <div class="content">
     <p><center>A new version of Udeler is available. You can download the latest version from github releases page</center></p>
@@ -31,11 +31,11 @@
   <div class="actions" style="text-align: center;">
     <div class="ui red cancel inverted button">
       <i class="remove icon"></i>
-      Cancel
+      ${translate("Cancel")}
     </div>
     <div class="ui green ok inverted download-update button">
       <i class="checkmark icon"></i>
-      Download
+      ${translate("Download")}
     </div>
   </div>
 </div>
@@ -289,6 +289,16 @@ var template = `
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
                                     <div class="description">Contribute</div>
+                                  </div>
+                                </div>
+                              </div>
+                            <h3 class="ui header">${translate("Translate")}</h3>
+                              <div class="ui relaxed divided list">
+                                <div class="item">
+                                  <i class="large github middle aligned icon"></i>
+                                  <div class="content">
+                                    <a class="header" href="https://github.com/${translate("Github User")}/">${translate("Github User")}</a>
+                                    <div class="description">${translate("Translator")}</div>
                                   </div>
                                 </div>
                               </div>

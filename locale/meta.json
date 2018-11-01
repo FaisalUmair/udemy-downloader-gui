@@ -1,5 +1,6 @@
 {
 	"العربية": "ar.json",
+	"فارسی": "fa.json",
 	"Deutsch": "de.json",
 	"Ελληνικά": "gr.json",
 	"Español": "es.json",
@@ -13,4 +14,8 @@
 	"Русский": "ru.json",
 	"Türkçe": "tr.json",
 	"Tiếng Việt": "vi.json"
+	"Greek": "gr.json",
+	"Tiếng Việt": "vi.json",
+	"Arabic": "ar.json",
+	"Magyar": "hu.json"
 }
