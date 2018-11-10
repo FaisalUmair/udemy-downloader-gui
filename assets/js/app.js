@@ -354,7 +354,12 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                                          break;
                                       default:
                                          videoQuality = videoQuality.slice(0, -1);
-                                         var src = qualitySrcMap[videoQuality] ? qualitySrcMap[videoQuality] : lecture.Video[0].file;
+                                         if(qualitySrcMap[videoQuality]){
+                                          var src = qualitySrcMap[videoQuality];
+                                         }else{
+                                          var src = lecture.Video[0].file;
+                                          videoQuality = lecture.Video[0].label;
+                                         }
                                     }
                                   }
                                 }
