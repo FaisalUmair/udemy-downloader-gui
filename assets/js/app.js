@@ -203,7 +203,7 @@ $('.ui.dashboard .content').on('click','.check-updates', function(){
     if(response.tag_name!=`v${appVersion}`){
       $('.ui.update-available.modal').modal('show');
     }else{
-      prompt.alert('No updates available');
+      prompt.alert(translate("No updates available"));
     }
   });
 });
@@ -445,7 +445,7 @@ var skipSubtitles = settingsCached.download.skipSubtitles;
                error: function(error){
                 $(".ui.dashboard .course.dimmer").removeClass('active');
                 if(error.status==403){
-                  prompt.alert('You do not have permission to access this course');
+                  prompt.alert(translate("You do not have permission to access this course"));
                 }
                }
     });
@@ -977,7 +977,7 @@ function handleResponse(response,keyword='') {
           `);
        });
       if(response.next){
-        $('.ui.courses.section').append('<button class="ui basic blue fluid load-more button disposable" data-url='+response.next+'>Load More</button>');
+        $('.ui.courses.section').append(`<button class="ui basic blue fluid load-more button disposable" data-url='+response.next+'>${translate("Load More")}</button>`);
       }
     }else{
        $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`);

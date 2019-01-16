@@ -50,7 +50,7 @@ function translate(text){
  }else{
     try {
       var meta = require('./locale/meta.json');
-      var locale = require('./locale/'+meta[settings.get('general.language')]);
+      var locale = require(`./locale/${meta[settings.get('general.language')]}`);
       return locale[text] || text;
     }
     catch (e) {
@@ -110,7 +110,7 @@ var template = `
               <div class="ui big text loader">${translate("Getting Info")}</div>
             </div>
             <div class="ui about dimmer">
-              <div class="ui big text loader">Checking for Updates</div>
+              <div class="ui big text loader">${translate("Checking for Updates")}</div>
             </div>
               <div class="ui vertical inverted sidebar labeled icon menu visible ${settings.get('general.language') == "Arabic" ? "right":"left"}">
                 <a class="active red courses-sidebar item">
@@ -288,7 +288,7 @@ var template = `
                                   <i class="large github middle aligned icon"></i>
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
-                                    <div class="description">Contribute</div>
+                                    <div class="description">${translate("Contribute")}</div>
                                   </div>
                                 </div>
                               </div>
