@@ -16,7 +16,7 @@ Edit the files you want to and commit the changes.
 `2. Make a Pull request`
 
 When you are done editing the file(s) and have commited the changes to the fork, you can now make a pull request to this repository.
-You will see a Pull request option alogside compare just above the Latest commit message in your fork. 
+You will see a Pull request option alongside compare just above the Latest commit message in your fork. 
 Please beaware making a pull request to your own repository and making a pull request to this repository are two different things.
 You need to click on the `Pull request button` and not the `Pull requests tab`. 
 
