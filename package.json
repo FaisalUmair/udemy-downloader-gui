@@ -3,12 +3,13 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=DEV electron .",
+    "start": "electron .",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "dotenv": "^6.2.0",
     "vue": "^2.6.6"
   },
   "devDependencies": {

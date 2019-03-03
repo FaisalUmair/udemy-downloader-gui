@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 
@@ -16,10 +18,11 @@ function createWindow () {
   })
 
   let url
-    if (process.env.NODE_ENV === 'DEV') {
-    url = 'http://localhost:8081/'
+    if (process.env.NODE_ENV === 'PROD') {
+      url = `file://${process.cwd()}/dist/index.html`
     } else {
-    url = `file://${process.cwd()}/dist/index.html`
+      let port = process.env.PORT || 8989;
+      url = 'http://localhost:'+port
     }
 
   // and load the index.html of the app.
