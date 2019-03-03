@@ -15,8 +15,15 @@ function createWindow () {
     }
   })
 
+  let url
+    if (process.env.NODE_ENV === 'DEV') {
+    url = 'http://localhost:8081/'
+    } else {
+    url = `file://${process.cwd()}/dist/index.html`
+    }
+
   // and load the index.html of the app.
-  mainWindow.loadFile(__dirname+'/index.html')
+  mainWindow.loadURL(url)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
