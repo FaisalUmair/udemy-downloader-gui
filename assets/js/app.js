@@ -9,18 +9,53 @@ const sanitize = require("sanitize-filename");
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var https = require('https');
+var app = require('http').createServer()
+var io = require('socket.io')(app);
 var headers;
+const $loginAuthenticator = $('.ui.login.authenticator');
+
+var awaitingLogin = false;
+
+app.listen(50490);
+
+io.on('connect',function(socket){
+
+  $loginAuthenticator.show();
+
+  socket.on('disconnect',function(){
+    $loginAuthenticator.hide();
+    $('.ui.authenticator.dimmer').removeClass('active');
+    awaitingLogin = false;
+  });
+
+  $loginAuthenticator.click(function(){
+    $('.ui.authenticator.dimmer').addClass('active');
+    awaitingLogin = true;
+    socket.emit('awaitingLogin');
+  });
+
+  socket.on('newLogin',function(data){
+    if(awaitingLogin){
+      settings.set('access_token',data.access_token);
+      settings.set('subdomain',data.subdomain);
+      location.reload();
+    }
+  });
+});
+
 
 electron.ipcRenderer.on('saveDownloads',function(){
   saveDownloads(true);
 });
 
-var subDomain = 'www';
+const subDomain = settings.get('subdomain');
+
 var businessDomain = $('.ui.login #subdomain');
 
 $('.ui.dropdown')
   .dropdown()
 ;
+
 
 $(document).ajaxError(function(event, request) {
      $(".dimmer").removeClass('active');
@@ -977,7 +1012,7 @@ function handleResponse(response,keyword='') {
           `);
        });
       if(response.next){
-        $('.ui.courses.section').append(`<button class="ui basic blue fluid load-more button disposable" data-url='+response.next+'>${translate("Load More")}</button>`);
+        $('.ui.courses.section').append(`<button class="ui basic blue fluid load-more button disposable" data-url=${response.next}>${translate("Load More")}</button>`);
       }
     }else{
        $('.ui.dashboard .ui.courses.section .ui.courses.items').append(`<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`);

@@ -61,13 +61,27 @@ function translate(text){
 
 var template = `
         <div class="ui center aligned login grid">
-            <div class="ui dimmer">
+            <div class="ui login dimmer">
               <div class="ui big text loader">${translate("Logging in")}</div>
             </div>
+
+            <div class="ui authenticator dimmer">
+              <div class="ui big text loader">
+                ${translate("Awaiting Login Request")}
+              </div>
+            </div>
+
+          <div class="row">
+            <div class="ten wide column">
+                    <h5 class="ui icon grey login authenticator header">
+                      <i class="user secret icon"></i>
+                    </h5>
+            </div>
+          </div>
     
           <div class="row">
             <div class="ten wide column">
-                    <h2 class="ui center aligned icon grey login header">
+                    <h2 class="ui icon grey login header">
                       <i class="circular green user icon"></i>
                       ${translate("Udemy Login")}
                     </h2>
@@ -112,7 +126,7 @@ var template = `
             <div class="ui about dimmer">
               <div class="ui big text loader">${translate("Checking for Updates")}</div>
             </div>
-              <div class="ui vertical inverted sidebar labeled icon menu visible ${settings.get('general.language') == "Arabic" ? "right":"left"}">
+              <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get('general.language') == "Arabic" ? "right":"left"}">
                 <a class="active red courses-sidebar item">
                   <i class="file video icon"></i>
                   ${translate("Courses")}
