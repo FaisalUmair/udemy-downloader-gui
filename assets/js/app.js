@@ -89,7 +89,7 @@ $('.ui.login #business').change(function() {
 });
 
 if(settings.get('access_token')){
-$('.ui.login').slideUp('fast');
+$('.ui.login.grid').slideUp('fast');
 $('.ui.dashboard').fadeIn('fast').css('display','flex');
   headers = {"Authorization": `Bearer ${settings.get('access_token')}`};
       $.ajax({
@@ -106,7 +106,7 @@ $('.ui.dashboard').fadeIn('fast').css('display','flex');
               if(response.status==403){
                settings.set('access_token',false);
               }
-              $('.ui.login').slideDown('fast');
+              $('.ui.login.grid').slideDown('fast');
               $('.ui.dashboard').fadeOut('fast');
            }
         });
