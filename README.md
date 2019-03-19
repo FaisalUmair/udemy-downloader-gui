@@ -13,10 +13,10 @@ Since Udeler v1.6.3, there is support for login through Udeler Authenticator (A 
 
 2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
 
-3. Open Udemy webiste on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply vist the website and it will still detect your account.
+3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
 
 
-### Udeler Web Anouncement:
+### Udeler Web Announcement:
 In case you only want the download links of videos. You can use the Web version of Udeler.
 
 [https://www.udeler.com](https://www.udeler.com)
