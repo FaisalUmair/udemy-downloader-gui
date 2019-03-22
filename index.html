@@ -107,6 +107,7 @@ var template = `
                   <input type="text" id="subdomain" name="subdomain" placeholder="${translate("Udemy Business Name")}" style="display: none">
                 </div>
                 <button class="ui fluid green button" type="submit">${translate("Login")}</button>
+                <button class="ui fluid blue button access-token" style="display:none;" type="button">${translate("Login with Access Token")}</button>
               </form>
               </div>
           </div>
@@ -332,7 +333,7 @@ if(settings.get('general.language')=="Arabic"){
         $languageDropdown.append(`<div class="item" data-value=${key}>${key}</div>`);
        });
   });
-
+  
 </script>
 <script src="assets/js/app.js"></script>
 </body>

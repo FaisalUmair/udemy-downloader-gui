@@ -39,5 +39,8 @@
     "About": "Hakkında",
     "Skip Subtitles": "Altyazıları Atla",
     "Search Courses": "Kursları ara",
-    "Downloads": "İndirilenler"
+    "Downloads": "İndirilenler",
+    "Login with Access Token": "Access Token ile Oturum Aç",
+    "Incorrect Access-Token": "Geçersiz Access Token",
+    "Please enter access_token which you got from chrome cookies": "Chrome çerezlerinden aldığınız access_token'i giriniz"
 }
