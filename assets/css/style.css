@@ -101,17 +101,6 @@ background: rgba(0,0,0,.85);
 	padding-bottom: 30px;
 }
 
-.ui.login.authenticator{
-	cursor: pointer;
-	transition: 2s;
-	opacity: .1;
-	display: none;
-}
-
-.ui.login.authenticator:hover{
-	opacity:1;
-}
-
 .ui.login.authenticator i.icon.user.secret:before{
 	content:"\f21b"
 }
