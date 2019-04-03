@@ -6,7 +6,7 @@ I am planning to make Udeler 2.0 a big release with a lot of new features and im
 
 
 ### Facing Login Issues?
-Since Udeler v1.7.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
+Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
 
 #### How to use Udeler Authenticator?
 1. Install the extension from [here](https://chrome.google.com/webstore/detail/udeler-authenticator/opfpmfccfeapffpepeldbcpmkieepgib)
