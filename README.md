@@ -6,7 +6,7 @@ I am planning to make Udeler 2.0 a big release with a lot of new features and im
 
 
 ### Facing Login Issues?
-Since Udeler v1.6.3, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
+Since Udeler v1.7.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
 
 #### How to use Udeler Authenticator?
 1. Install the extension from [here](https://chrome.google.com/webstore/detail/udeler-authenticator/opfpmfccfeapffpepeldbcpmkieepgib)
@@ -44,10 +44,10 @@ This software does not magically download any paid course available on Udemy, yo
 
 | Platform | Arch | Version | Link|
 | --- | --- | --- | --- |
-| Windows | x64 | 1.6.3 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.3/Udeler-Setup-1.6.3-windows-x64.exe)|
-| Windows | x86 | 1.6.3 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.3/Udeler-Setup-1.6.3-windows-x86.exe)|
-| Mac | x64 | 1.6.3 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.3/Udeler-1.6.3-mac.zip)|
-| Linux | x86_x64 | 1.6.3 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.6.3/Udeler-1.6.3-linux-x86_x64.AppImage)|
+| Windows | x64 | 1.7.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.7.0/Udeler-Setup-1.7.0-windows-x64.exe)|
+| Windows | x86 | 1.7.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.7.0/Udeler-Setup-1.7.0-windows-x86.exe)|
+| Mac | x64 | 1.7.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.7.0/Udeler-1.7.0-mac.zip)|
+| Linux | x86_x64 | 1.7.0 | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.7.0/Udeler-1.7.0-linux-x86_x64.AppImage)|
 
 ### Note: 
 By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.
