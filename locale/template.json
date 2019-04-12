@@ -8,6 +8,9 @@
 	"Logging in": "",
 	"Loading Courses": "",
 	"You have not enrolled in any course": "",
+	"You do not have permission to access this course": "",
+	"Load More": "",
+	"No Courses Found": "",
 	"Getting Info": "",
 	"Courses": "",
 	"Building Course Data": "",
@@ -37,6 +40,7 @@
 	"Settings Saved": "",
 	"Skip Attachments": "",
 	"About": "",
+	"Logout": "",
 	"Skip Subtitles": "",
 	"Search Courses": "",
 	"Downloads": "",
@@ -52,5 +56,6 @@
 	"Website": "",
 	"Development": "",
 	"Report Bug": "",
+	"Donate": "",
 	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": ""
 }
