@@ -15,23 +15,23 @@ Edit the files you want to and commit the changes.
 
 `2. Make a Pull request`
 
-When you are done editing the file(s) and have commited the changes to the fork, you can now make a pull request to this repository.
+When you are done editing the file(s) and have committed the changes to the fork, you can now make a pull request to this repository.
 You will see a Pull request option alongside compare just above the Latest commit message in your fork. 
-Please beaware making a pull request to your own repository and making a pull request to this repository are two different things.
+Please be aware of making a pull request to your own repository and making a pull request to this repository are two different things.
 You need to click on the `Pull request button` and not the `Pull requests tab`. 
 
 `3. Wait for the changes to get approved`
 
 After making a Pull request you will see your pull request listed in the `Pull requests section` in the original repository.
 Your changes will be reviewed and once the changes are approved they will be merged and hence will get applied to the original repository.
-You might be asked to improve or make further changes, if the the commits you made could not be approved for some reason. In that case, you will need to edit the files again. 
-Please note that, you do not have to make another pull request, just make the changes you are supposed to in the fork and it will get reflected in the already made pull request.
+You might be asked to improve or make further changes if the commits you made could not be approved for some reason. In that case, you will need to edit the files again. 
+Please note that you do not have to make another pull request, just make the changes you are supposed to in the fork and it will get reflected in the already made pull request.
 
 
 ## Adding translation
 
 This application aims to be available in multiple (as many as we can) languages. 
-The task could have been achieved by using a translation tool, but in order to maintain accuracy and context, this repository provides an easy way for the contributors native to different languges to add their language to the application.
+The task could have been achieved by using a translation tool, but in order to maintain accuracy and context, this repository provides an easy way for the contributors native to different languages to add their language to the application.
 
 ### Adding/Updating a language
 
@@ -42,7 +42,7 @@ Once you have your fork ready, you can edit the required files.
 
 `1. Edit meta.json file`
 
-You will find a meta.json file inside `locale` folder in your copy of repository. 
+You will find a meta.json file inside the `locale` folder in your copy of the repository. 
 The file contains language names and corresponding file name which has the actual translation data. In order to add a new language you simply have to add another field (key/value pair) to the file.
 
 Example:
@@ -56,9 +56,9 @@ Example:
 ```
 
 #### Note: 
-LANGUAGE_NAME is the name of the language that will be displayed in the application and LANGUAGE_SHORTNAME is the shortname of the language and it will also be the name of the file that will contain the translation. 
-Please use appropriate shortnames (ISO 639-1 Code) and try not to use more than two alphabets to maintain consistency. 
-Do not add duplicate names, you may add a 3rd alphabet (use ISO 639-2 Code) in LANGUAGE_SHORTNAME to separate it from any existing one. 
+LANGUAGE_NAME is the name of the language that will be displayed in the application and LANGUAGE_SHORTNAME is the short name of the language and it will also be the name of the file that will contain the translation. 
+Please use appropriate short names (ISO 639-1 Code) and try not to use more than two alphabets to maintain consistency. 
+Do not add duplicate names, you may add a 3rd alphabet (use ISO 639-2 Code) in LANGUAGE_SHORTNAME to separate it from an existing one. 
 
 There is no `comma ','` after the last pair in the file however there is one before that. 
 You would have to add a comma yourself since you will be adding the pair to the end of the file.
@@ -79,7 +79,7 @@ https://www.w3schools.com/tags/ref_language_codes.asp
 
 `2. Create a new file "LANGUAGE_SHORTNAME.json"`
 
-Now that you have added the new language name and its corresponding shortname to the `meta.json` file, Next step will be to create the LANGUAGE_SHORTNAME.json file inside the `locale` folder.
+Now that you have added the new language name and its corresponding short name to the `meta.json` file, Next step will be to create the LANGUAGE_SHORTNAME.json file inside the `locale` folder.
 You will also find `template.json` file inside the same `locale` folder, just copy the contents of the template file and put them inside the LANGUAGE_SHORTNAME.json file.
 
 You should have something like this inside your LANGUAGE_SHORTNAME.json file.
@@ -115,7 +115,7 @@ If you want to update an existing translation whether you are the one who create
 
 Edit meta.json file and update the LANGUAGE_NAME or LANGUAGE_SHORTNAME.
 
-Beaware that any change in LANGUAGE_SHORTNAME might also require to rename the actual file in the `locale` folder.
+Beware that any change in LANGUAGE_SHORTNAME might also require to rename the actual file in the `locale` folder.
 
 `2. Commit changes and make Pull request`
 Follow Step 2 of How to Section
@@ -123,15 +123,15 @@ Follow Step 2 of How to Section
 
 ##### Updating the translation
 
-You may want to update a translation file if you notice something is not correctly translated or a translation is missing either because it has missing value of the word was not added at all possibly because the `contributor` didn't add it or the `template.json` file was updated
+You may want to update a translation file if you notice something is not correctly translated or a translation is missing either because it has a missing value of the word was not added at all because the `contributor` didn't add it or the `template.json` file was updated.
 
 `1. Edit the translation file (LANGUAGE_SHORTNAME.json)` 
 
-Make the changes you want to. Do not add a word that is not present in template.json file. If you see a word that is not present in template.json file, you can remove it.
+Make the changes you want to. Do not add a word that is not present in the template.json file. If you see a word that is not present in the template.json file, you can remove it.
 
 `2. Commit changes and make Pull request`
 
-Follow Step 2 of How to Section
+Follow Step 2 of the How to Section.
 
 
 ### Note: 

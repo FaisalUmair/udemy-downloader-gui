@@ -1,5 +1,5 @@
 # Udeler | Udemy Course Downloader (GUI)
-A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
+A cross-platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
 
 ### Udeler 2.0 Feature Requests:
 I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172)
@@ -9,11 +9,11 @@ I am planning to make Udeler 2.0 a big release with a lot of new features and im
 Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
 
 #### How to use Udeler Authenticator?
-1. Install the extension from [here](https://chrome.google.com/webstore/detail/udeler-authenticator/opfpmfccfeapffpepeldbcpmkieepgib)
+1. Install the extension from [here](https://chrome.google.com/webstore/detail/udeler-authenticator/opfpmfccfeapffpepeldbcpmkieepgib).
 
-2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
+2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your Chrome web browser.
 
-3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
+3. Open Udemy website on your Chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
 
 
 ### Udeler Web Announcement:
@@ -21,10 +21,10 @@ In case you only want the download links of videos. You can use the Web version 
 
 [https://www.udeler.com](https://www.udeler.com)
 
-Udeler Web is in Beta and there is room for tons of features. As of now it is just a basic tool which can provide you download links of videos from your courses. You can use the links to download using your favourite download manager.
+Udeler Web is in Beta and there is room for tons of features. As of now, it is just a basic tool which can provide you download links of videos from your courses. You can use the links to download using your favourite download manager.
 
 #### Project Update: 
-__`I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web only version of Udeler.`__
+__`I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web-only version of Udeler.`__
 
 ![](https://i.imgur.com/nsaAgDU.gif)
 
@@ -34,11 +34,11 @@ __`I am currently not able to give this project enough time to fix the current i
 * _`Set Download Start and Download End.`_
 * _`Pause/Resume download at any time.`_
 * _`Choose download directory.`_
-* _`Multilingual (English,Italian,Spanish).`_
+* _`Multilingual (English, Italian, Spanish).`_
 
 ### Disclaimer: 
 This software is intended to help you download Udemy courses for personal use only. Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use. Each and every course on Udemy is subjected to copyright infringement. 
-This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser. 
+This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. Many download managers use the same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser. 
 
 ### Downloads:
 
