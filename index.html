@@ -1,65 +1,70 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Udeler | Udemy Course Downloader</title>
-    <link rel="stylesheet" href="assets/css/semantic.min.css">
-	  <link rel="stylesheet" href="assets/css/style.css">
-  </head>
-  <body>
-<div class="ui basic subtitle modal">
-  <div class="ui icon header">
-    <i class="closed captioning icon"></i>
-    Select Subtitle
-  </div>
-  <div class="content">
-<div class="ui fluid selection dropdown">
-  <input type="hidden" name="subtitle">
-  <i class="dropdown icon"></i>
-  <div class="default text">Subtitle Language</div>
-</div>
-</div>
-</div>
-<div class="ui basic update-available modal">
-  <div class="ui icon header">
-    <i class="gift icon"></i>
-      New Update Available
-  </div>
-  <div class="content">
-    <p><center>A new version of Udeler is available. You can download the latest version from github releases page</center></p>
-  </div>
-  <div class="actions" style="text-align: center;">
-    <div class="ui red cancel inverted button">
-      <i class="remove icon"></i>
-        Cancel
-    </div>
-    <div class="ui green ok inverted download-update button">
-      <i class="checkmark icon"></i>
-       Download
-    </div>
-  </div>
-</div>
-<script>const $ = jQuery = require('jquery');</script>
-<script src="assets/js/semantic.min.js"></script>
-<script type="text/javascript">
-const settings = require('electron-settings');
-const appVersion = require(__dirname+'/package.json').version;
-function translate(text){
-  if(!settings.get('general.language') || settings.get('general.language')=="English"){
-    return text;
- }else{
-    try {
-      var meta = require('./locale/meta.json');
-      var locale = require(`./locale/${meta[settings.get('general.language')]}`);
-      return locale[text] || text;
-    }
-    catch (e) {
-      return text;
-    }
-  }
-}
 
-var template = `
+<head>
+  <meta charset="UTF-8">
+  <title>Udeler | Udemy Course Downloader</title>
+  <link rel="stylesheet" href="assets/css/semantic.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <div class="ui basic subtitle modal">
+    <div class="ui icon header">
+      <i class="closed captioning icon"></i>
+      Select Subtitle
+    </div>
+    <div class="content">
+      <div class="ui fluid selection dropdown">
+        <input type="hidden" name="subtitle">
+        <i class="dropdown icon"></i>
+        <div class="default text">Subtitle Language</div>
+      </div>
+    </div>
+  </div>
+  <div class="ui basic update-available modal">
+    <div class="ui icon header">
+      <i class="gift icon"></i>
+      New Update Available
+    </div>
+    <div class="content">
+      <p>
+        <center>A new version of Udeler is available. You can download the latest version from github releases page
+        </center>
+      </p>
+    </div>
+    <div class="actions" style="text-align: center;">
+      <div class="ui red cancel inverted button">
+        <i class="remove icon"></i>
+        Cancel
+      </div>
+      <div class="ui green ok inverted download-update button">
+        <i class="checkmark icon"></i>
+        Download
+      </div>
+    </div>
+  </div>
+  <script>const $ = jQuery = require('jquery');</script>
+  <script src="assets/js/semantic.min.js"></script>
+  <script type="text/javascript">
+    const settings = require('electron-settings');
+    const appVersion = require(__dirname + '/package.json').version;
+    function translate(text) {
+      if (!settings.get('general.language') || settings.get('general.language') == "English") {
+        return text;
+      } else {
+        try {
+          var meta = require('./locale/meta.json');
+          var locale = require(`./locale/${meta[settings.get('general.language')]}`);
+          return locale[text] || text;
+        }
+        catch (e) {
+          return text;
+        }
+      }
+    }
+
+    var template = `
         <div class="ui center aligned login grid">
             <div class="ui login dimmer">
               <div class="ui big text loader">${translate("Logging in")}</div>
@@ -123,7 +128,7 @@ var template = `
             <div class="ui about dimmer">
               <div class="ui big text loader">${translate("Checking for Updates")}</div>
             </div>
-              <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get('general.language') == "Arabic" ? "right":"left"}">
+              <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get('general.language') == "Arabic" ? "right" : "left"}">
                 <a class="active red courses-sidebar item">
                   <i class="file video icon"></i>
                   ${translate("Courses")}
@@ -317,20 +322,21 @@ var template = `
      </div>
 `;
 
-$('body').prepend(template);
+    $('body').prepend(template);
 
-if(settings.get('general.language')=="Arabic"){
-  $('.ui.dashboard .content').css('margin-left','10px').css('width','80%');
-}
+    if (settings.get('general.language') == "Arabic") {
+      $('.ui.dashboard .content').css('margin-left', '10px').css('width', '80%');
+    }
 
-  var $languageDropdown = $('.language.dropdown .menu');
-  $.getJSON('locale/meta.json', function(data){
-      $.each( data, function(key) {
+    var $languageDropdown = $('.language.dropdown .menu');
+    $.getJSON('locale/meta.json', function (data) {
+      $.each(data, function (key) {
         $languageDropdown.append(`<div class="item" data-value=${key}>${key}</div>`);
-       });
-  });
+      });
+    });
 
-</script>
-<script src="assets/js/app.js"></script>
+  </script>
+  <script src="assets/js/app.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-const {app, BrowserWindow, Menu, ipcMain} = require('electron')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 var downloadsSaved = false;
@@ -6,9 +6,9 @@ var downloadsSaved = false;
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({width: 520, height: 680, icon: __dirname+'/assets/images/build/icon.png', resizable: false});
+  win = new BrowserWindow({ width: 520, height: 680, icon: __dirname + '/assets/images/build/icon.png', resizable: false });
   // and load the index.html of the app.
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -16,13 +16,13 @@ function createWindow () {
     slashes: true
   }))
 
-// Open the DevTools.
-// win.webContents.openDevTools()
+  // Open the DevTools.
+  // win.webContents.openDevTools()
 
   win.on('close', (event) => {
-    if(!downloadsSaved){
-     event.preventDefault();
-     win.webContents.send('saveDownloads');
+    if (!downloadsSaved) {
+      event.preventDefault();
+      win.webContents.send('saveDownloads');
     }
   });
 
@@ -34,52 +34,52 @@ function createWindow () {
     win = null
   })
 
-const template = [
-  {
-    label: 'Edit',
-    submenu: [
-      {role: 'undo'},
-      {role: 'redo'},
-      {type: 'separator'},
-      {role: 'cut'},
-      {role: 'copy'},
-      {role: 'paste'},
-      {role: 'pasteandmatchstyle'},
-      {role: 'delete'},
-      {role: 'selectall'}
-    ]
-  }
-]
-
-if (process.platform === 'darwin') {
-  template.unshift({
-    label: app.getName(),
-    submenu: [
-      {role: 'about'},
-      {type: 'separator'},
-      {role: 'services', submenu: []},
-      {type: 'separator'},
-      {role: 'hide'},
-      {role: 'hideothers'},
-      {role: 'unhide'},
-      {type: 'separator'},
-      {role: 'quit'}
-    ]
-  })
-
-  template[1].submenu.push(
-    {type: 'separator'},
+  const template = [
     {
-      label: 'Speech',
+      label: 'Edit',
       submenu: [
-        {role: 'startspeaking'},
-        {role: 'stopspeaking'}
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'pasteandmatchstyle' },
+        { role: 'delete' },
+        { role: 'selectall' }
       ]
     }
-  )
+  ]
 
-}
-Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  if (process.platform === 'darwin') {
+    template.unshift({
+      label: app.getName(),
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services', submenu: [] },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    })
+
+    template[1].submenu.push(
+      { type: 'separator' },
+      {
+        label: 'Speech',
+        submenu: [
+          { role: 'startspeaking' },
+          { role: 'stopspeaking' }
+        ]
+      }
+    )
+
+  }
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 // This method will be called when Electron has finished
@@ -89,7 +89,7 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    app.quit();
+  app.quit();
 });
 
 app.on('activate', () => {
@@ -100,7 +100,7 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('quitApp',function(){
+ipcMain.on('quitApp', function () {
   downloadsSaved = true;
   app.quit();
 });
