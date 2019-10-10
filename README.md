@@ -15,14 +15,6 @@ Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A 
 
 3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
 
-
-### Udeler Web Announcement:
-In case you only want the download links of videos. You can use the Web version of Udeler.
-
-[https://www.udeler.com](https://www.udeler.com)
-
-Udeler Web is in Beta and there is room for tons of features. As of now it is just a basic tool which can provide you download links of videos from your courses. You can use the links to download using your favourite download manager.
-
 #### Project Update: 
 __`I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web only version of Udeler.`__
 
@@ -99,4 +91,4 @@ npm run build-win -- --ia32
 ## Donate
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
-[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.me/UdelerDonate)
+[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.udeler.com/donate)
