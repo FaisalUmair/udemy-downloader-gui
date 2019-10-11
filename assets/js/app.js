@@ -808,6 +808,7 @@ function endDownload(){
 
 function resetCourse($elem){
   if($elem.hasClass('download-error')&&autoRetry){
+    $course.length = 1;
     initDownload($course,coursedata,subtitle);
     return;
   }
