@@ -12,7 +12,10 @@ function createWindow() {
     width: 550,
     height: 700,
     icon: __dirname + "/assets/images/build/icon.png",
-    resizable: false
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   // and load the index.html of the app.
   win.loadURL(
