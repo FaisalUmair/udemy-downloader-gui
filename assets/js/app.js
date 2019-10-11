@@ -515,6 +515,7 @@ function initDownload($course,coursedata,subtitle=false){
   var downloadStart = settingsCached.download.downloadStart;
   var downloadEnd = settingsCached.download.downloadEnd;
   var enableDownloadStartEnd = settingsCached.download.enableDownloadStartEnd;
+  var autoRetry = settingsCached.download.autoRetry;
   $course.css('cssText','padding-top: 35px !important').css('padding-bottom','25px');
 
 
@@ -634,7 +635,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
                       type: 'HEAD',
                       url: dl.url,
                       error: function(error){
-                        if(error.status==401){
+                        if(error.status==401||error.status==403){
                          fs.unlinkSync(dl.filePath);               
                         }
                          resetCourse($course.find('.download-error'));
@@ -796,12 +797,16 @@ function endDownload(){
 
 }
 
-function resetCourse(Selem){
+function resetCourse($elem){
+  if($elem.hasClass('download-error')&&autoRetry){
+    initDownload($course,coursedata,subtitle);
+    return;
+  }
   $download_speed.hide();
   $download_quality.hide();
   $download_speed_value.html(0);
   $downloadStatus.hide().html(downloadTemplate);
-  Selem.css('display','flex');
+  $elem.css('display','flex');
   $course.css('padding','14px 0px');
 }
 
@@ -865,6 +870,7 @@ $('.ui.settings .form').submit((e)=>{
   var enableDownloadStartEnd = $(e.target).find('input[name="enabledownloadstartend"]')[0].checked;
   var skipAttachments = $(e.target).find('input[name="skipattachments"]')[0].checked;
   var skipSubtitles = $(e.target).find('input[name="skipsubtitles"]')[0].checked;
+  var autoRetry = $(e.target).find('input[name="autoretry"]')[0].checked;
   var downloadStart = parseInt($(e.target).find('input[name="downloadstart"]').val()) || false;
   var downloadEnd = parseInt($(e.target).find('input[name="downloadend"]').val()) || false;
   var videoQuality = $(e.target).find('input[name="videoquality"]').val() || false;
@@ -875,6 +881,7 @@ $('.ui.settings .form').submit((e)=>{
     enableDownloadStartEnd: enableDownloadStartEnd,
     skipAttachments: skipAttachments,
     skipSubtitles: skipSubtitles,
+    autoRetry: autoRetry,
     downloadStart: downloadStart,
     downloadEnd: downloadEnd,
     videoQuality: videoQuality,
@@ -910,6 +917,12 @@ function loadSettings(){
   settingsForm.find('input[name="skipsubtitles"]').prop('checked', true);
   }else{
   settingsForm.find('input[name="skipsubtitles"]').prop('checked', false);
+  }
+
+  if(settingsCached.download.autoRetry){
+    settingsForm.find('input[name="autoretry"]').prop('checked', true);
+    }else{
+    settingsForm.find('input[name="autoretry"]').prop('checked', false);
   }
 
   settingsForm.find('input[name="downloadpath"]').val(settingsCached.download.path || homedir+'/Downloads');
@@ -1118,6 +1131,7 @@ function loadDefaults(){
     enableDownloadStartEnd: false,
     skipAttachments: false,
     skipSubtitles: false,
+    autoRetry: false,
     downloadStart: false,
     downloadEnd: false,
     videoQuality: false,
