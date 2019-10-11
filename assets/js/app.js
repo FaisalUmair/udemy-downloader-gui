@@ -7,6 +7,7 @@ const prompt = require('dialogs')(opts={});
 const mkdirp = require('mkdirp');
 const homedir  = require('os').homedir();
 const sanitize = require("sanitize-filename");
+const vtt2srt =  require('node-vtt-to-srt');
 var Downloader = require('mt-files-downloader');
 var shell = require('electron').shell;
 var https = require('https');
@@ -738,8 +739,16 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
           return;
         }
         var file = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name).on('finish', function(){
-          checkAttachment();
+          var finalSrt = fs.createWriteStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+(lecture_name).replace('.vtt','.srt')).on('finish', function(){
+            fs.unlinkSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name);
+            checkAttachment();
+          });
+          fs.createReadStream(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)
+          .pipe(vtt2srt())
+          .pipe(finalSrt);
         });
+
+
         var request = https.get(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][subtitle] ? coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][subtitle] : coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'][Object.keys(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['caption'])[0]], function(response) {
           response.pipe(file);
         });
