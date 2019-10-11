@@ -734,7 +734,7 @@ function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
         $download_quality.html('Subtitle').removeClass(lastClass).addClass(qualityColorMap['Subtitle'] || 'grey');
         $download_speed_value.html(0);
         var lecture_name = sanitize((lectureindex+1)+'. '+coursedata['chapters'][chapterindex]['lectures'][lectureindex]['name'].trim()+'.vtt');
-        if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+lecture_name)){
+        if(fs.existsSync(download_directory+'/'+course_name+'/'+chapter_name+'/'+(lecture_name).replace('.vtt','.srt'))){
           checkAttachment();
           return;
         }
