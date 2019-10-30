@@ -25,7 +25,7 @@
 	"Enable Download Start/End": "डाउनलोड शेड्यूलिंग",
 	"Download Start": "डाउनलोड शुरू",
 	"Start Download at": "डाउनलोड शुरू करें",
-	"Download End": "डाउनलोड एन्ड",
+	"Download End": "डाउनलोड समाप्त",
 	"End Download at": "डाउनलोड समाप्त करें",
 	"Video Quality": "वीडियो की गुणवत्ता",
 	"Auto": "स्वयं चयन",
@@ -40,9 +40,9 @@
 	"Skip Subtitles": "उपशीर्षक छोड़ें",
 	"Search Courses": "कोर्स खोजें",
 	"Downloads": "डाउनलोड्स",
-	"Udemy Business": "उदमी बिज़नस",
+	"Udemy Business": "उडेमी बिज़नस",
 	"Check for updates": "अद्यतन के लिए जाँच",
-	"Udemy Course Downloader": "उदमी कोर्स डाउनलोडर",
+	"Udemy Course Downloader": "उडेमी कोर्स डाउनलोडर",
 	"New Update Available": "नई अद्यतन उपलब्ध है",
 	"Cancel": "रद्द करें",
 	"Download": "डाउनलोड",
@@ -51,6 +51,6 @@
 	"Developer": "डेवलपर",
 	"Website": "वेबसाइट",
 	"Development": "विकास",
-	"Report Bug": "रिपोर्ट बग",
+	"Report Bug": "त्रुटि की सूचना दें",
 	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "उडेलेर स्वतंत्र और बिना किसी विज्ञापन के है। यदि आप इसकी सराहना करते हैं, तो कृपया डेवलपर को दान करने पर विचार करें।"
 }
