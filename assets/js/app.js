@@ -579,6 +579,7 @@ var chapter_name = sanitize((chapterindex+1)+'. '+coursedata['chapters'][chapter
 function downloadLecture(chapterindex,lectureindex,num_lectures,chapter_name){
   if(downloaded==toDownload){
       resetCourse($course.find('.download-success'));
+	  sendNotification(course_name);
       return;
   }else if(lectureindex==num_lectures){
       downloadChapter(++chapterindex,0);
@@ -820,6 +821,15 @@ function resetCourse($elem){
   $course.css('padding','14px 0px');
 }
 
+}
+
+// The purpose here is to have a notification sent, so the user can understand that the download ended
+// The title of the notification should be translated but since the translate function is in index.html and to avoid code duplication
+// I would like to have your feedback in this
+function sendNotification(course_name){
+    var downloadFinishedNotif = new Notification('Download finished', {
+        body: course_name
+    });
 }
 
 $('.courses-sidebar').click(function(){
