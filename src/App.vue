@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
@@ -12,12 +12,16 @@ body {
 body {
   font-family: "Helvetica Neue", sans-serif;
 }
-.fa-icon{
+.fa-icon {
   width: auto;
   height: 1em;
   box-sizing: content-box;
 }
 button:focus {
-  outline:0;
+  outline: 0;
+}
+.el-main > .el-loading-mask {
+  position: sticky;
+  height: 100%;
 }
 </style>

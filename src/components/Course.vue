@@ -19,7 +19,12 @@
             </el-button>
           </el-col>
           <el-col :span="3" v-if="hasStarted">
-            <el-progress :percentage="overallProgress" type="circle" :width="30" :show-text="false"></el-progress>
+            <el-progress
+              :percentage="(totalDownloaded/toDownload)*100"
+              type="circle"
+              :width="30"
+              :show-text="false"
+            ></el-progress>
           </el-col>
         </el-row>
         <el-row class="pt-3" v-if="hasStarted">
@@ -38,7 +43,7 @@ import fs from "fs";
 import mkdirp from "mkdirp";
 
 let download_directory = "/Users/faisalumair/Downloads";
-import { settings } from "@/db";
+import { settings, downloads } from "@/db";
 export default {
   props: ["image", "name", "id"],
   data() {
@@ -50,14 +55,13 @@ export default {
       isCompleted: false,
       currentProgress: 0,
       overallProgress: 0,
-      lastByte: 0,
-      curriculum: [],
       toDownload: 0,
       totalDownloaded: 0,
       currentIndex: 0,
       lectureIndex: 0,
       chapterIndex: 0,
-      chapterName: ""
+      chapterName: "",
+      stopped: false
     };
   },
   methods: {
@@ -113,6 +117,13 @@ export default {
     },
     getLectureInfo(url) {},
     checkEntity(index) {
+      if (this.stopped) {
+        return;
+      }
+      if (this.totalDownloaded == this.toDownload) {
+        console.log("Download Completed");
+        return;
+      }
       let entity = this.curriculum.results[index];
       if (entity._class == "chapter") {
         this.chapterName = entity.title;
@@ -120,7 +131,7 @@ export default {
           download_directory + "/" + this.name + "/" + this.chapterName,
           () => {
             this.chapterIndex++;
-            this.checkEntity(index + 1);
+            this.checkEntity(++this.currentIndex);
           }
         );
       } else if (
@@ -132,7 +143,7 @@ export default {
       ) {
         this.resolveEntity(this.id, entity.id, entity.asset.asset_type);
       } else {
-        this.checkEntity(index + 1);
+        this.checkEntity(++this.currentIndex);
       }
     },
     resolveEntity(courseId, entityId, entityType) {
@@ -153,6 +164,7 @@ export default {
         });
     },
     downloadEntity(response, entityType) {
+      this.currentProgress = 0;
       this.lectureIndex++;
       let entityName = response.asset.title;
       // Download the entity and see if there is another one to download
@@ -207,7 +219,7 @@ export default {
         }
       }
 
-      let downloader = new Downloader();
+      this.downloader = new Downloader();
 
       const dlStart = dl => {
         // Change retry options to something more forgiving and threads to keep udemy from getting upset
@@ -224,7 +236,10 @@ export default {
         let notStarted = 0;
         let reStarted = 0;
 
-        let timer = setInterval(function() {
+        let timer = setInterval(() => {
+          if (this.stopped) {
+            clearInterval(timer);
+          }
           switch (dl.status) {
             case 0:
               // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
@@ -243,12 +258,14 @@ export default {
               var stats = dl.getStats();
               //$download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
               //$progressElemIndividual.progress('set percent',stats.total.completed);
+              this.currentProgress = stats.total.completed;
               break;
             case 2:
               break;
             case -1:
               var stats = dl.getStats();
               //$download_speed_value.html(parseInt(stats.present.speed/1000) || 0);
+              this.currentProgress = stats.total.completed;
               //$progressElemIndividual.progress('set percent',stats.total.completed);
               if (
                 dl.stats.total.size == 0 &&
@@ -259,6 +276,7 @@ export default {
                 clearInterval(timer);
                 break;
               } else {
+                console.log("here");
                 // $.ajax({
                 //   type: "HEAD",
                 //   url: dl.url,
@@ -290,6 +308,7 @@ export default {
 
         dl.on("end", () => {
           this.totalDownloaded++;
+          this.currentProgress = 100;
           this.checkEntity(++this.currentIndex);
         });
       };
@@ -304,7 +323,10 @@ export default {
             "/" +
             sanitize(this.lectureIndex + ". " + entityName.trim() + ".html"),
           src,
-          function() {
+          () => {
+            this.currentProgress = 100;
+            this.totalDownloaded++;
+            this.checkEntity(++this.currentIndex);
             // if(coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets']){
             //   var total_assets = coursedata['chapters'][chapterindex]['lectures'][lectureindex]['supplementary_assets'].length;
             //   var index = 0;
@@ -341,7 +363,7 @@ export default {
               ".mtd"
           )
         ) {
-          var dl = downloader.resumeDownload(
+          var dl = this.downloader.resumeDownload(
             download_directory +
               "/" +
               this.name +
@@ -362,7 +384,7 @@ export default {
                 ".mtd"
             ).size
           ) {
-            dl = downloader.download(
+            dl = this.downloader.download(
               src,
               download_directory +
                 "/" +
@@ -384,11 +406,12 @@ export default {
               entityName
           )
         ) {
+          this.currentProgress = 100;
           this.totalDownloaded++;
           this.checkEntity(++this.currentIndex);
           return;
         } else {
-          var dl = downloader.download(
+          var dl = this.downloader.download(
             src,
             download_directory +
               "/" +
@@ -402,10 +425,6 @@ export default {
 
         dlStart(dl);
       }
-
-      this.currentProgress = 0;
-
-      this.currentProgress = 100;
     },
     pauseDownload() {
       this.isDownloading = false;
@@ -416,8 +435,29 @@ export default {
       this.isPaused = false;
     }
   },
+  updated() {
+    downloads.update(
+        { id: this.id },
+        { ...this.$data, id: this.id },
+        { upsert: true }
+      );
+  },
+  mounted() {
+    downloads.findOne({ id: this.id }, (err, course) => {
+      if (course) {
+        this.hasStarted = course.hasStarted;
+        this.currentProgress = course.currentProgress;
+        this.overallProgress = course.overallProgress;
+      }
+    });
+  },
   beforeDestroy() {
-    console.log("hi");
+    if (this.downloader) {
+          this.downloader._downloads.forEach(download => {
+            download.stop();
+            this.stopped = true;
+    });
+    }
   }
 };
 </script>
@@ -434,4 +474,3 @@ export default {
   padding: 7px 10px;
 }
 </style>
-
