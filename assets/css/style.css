@@ -1,106 +1,108 @@
-.ui.dimmer{
-	position: fixed;
+.ui.dimmer {
+  position: fixed;
 }
 
-.ui.progress{
-	display: none;
+.ui.progress {
+  display: none;
 }
 
-.ui.login.grid{
-	padding-top: 90px;
+.ui.login.grid {
+  padding-top: 90px;
 }
 
-.ui.login.header{
-	font-family: Verdana;
-	font-weight: normal;
+.ui.login.header {
+  font-family: Verdana;
+  font-weight: normal;
 }
 
-
-body .dialog-widget.background{
-background: rgba(0,0,0,.85);
+body .dialog-widget.background {
+  background: rgba(0, 0, 0, 0.85);
 }
 
-.dialog-widget.alert{
-	text-align: center;
+.dialog-widget.alert {
+  text-align: center;
 }
 
-.dialog-widget.alert button.ok{
-	margin-top: 30px;
-	float: none;
+.dialog-widget.alert button.ok {
+  margin-top: 30px;
+  float: none;
 }
 
-.ui.dashboard{
-	display: none;
+.ui.dashboard {
+  display: none;
 }
 
-.ui.dashboard .sidebar.menu .item{
-	padding-left: 7px;
-	padding-right: 7px;
-	max-width: 84px;
-	word-wrap: break-word;
+.ui.dashboard .sidebar.menu .item {
+  padding-left: 7px;
+  padding-right: 7px;
+  max-width: 84px;
+  word-wrap: break-word;
 }
 
-.ui.dashboard > .content{
-	margin-left: 95px;
-	width: 100%;
+.ui.dashboard > .content {
+  margin-left: 95px;
+  width: 100%;
 }
 
-.ui.dashboard > .content .section{
-	display: none;
-	padding: 8px 10px 0px 0px;
-	margin-bottom: 10px;
+.ui.dashboard > .content .section {
+  display: none;
+  padding: 8px 10px 0px 0px;
+  margin-bottom: 10px;
 }
 
-.ui.dashboard > .content .courses.section{
-	display: block;
+.ui.dashboard > .content .courses.section {
+  display: block;
 }
 
-.ui.dashboard > .content .ui.courses.items, .ui.dashboard > .content .courses.section .load-more.button{
-	margin-bottom: 10px;
+.ui.dashboard > .content .ui.courses.items,
+.ui.dashboard > .content .courses.section .load-more.button {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.ui.dashboard .courses .course .action.buttons .button{
- 	border-radius: 0;
+.ui.dashboard .courses .course .action.buttons .button {
+  border-radius: 0;
 }
 
-.ui.dashboard .courses .course{
-	position: relative;
+.ui.dashboard .courses .course {
+  position: relative;
 }
 
-.ui.dashboard .courses .course .message{
-	display: none;
+.ui.dashboard .courses .course .message {
+  display: none;
 }
 
-.ui.dashboard .courses .course .message:hover{
-	cursor: pointer;
+.ui.dashboard .courses .course .message:hover {
+  cursor: pointer;
 }
 
-.ui.dashboard .courses .course .download-quality, .ui.dashboard .courses .course .download-speed{
-	display: none;
-	position: absolute;
-	top: 3px;
+.ui.dashboard .courses .course .download-quality,
+.ui.dashboard .courses .course .download-speed {
+  display: none;
+  position: absolute;
+  top: 3px;
 }
 
-.ui.dashboard .courses .course .download-quality{
-	left: 0;
+.ui.dashboard .courses .course .download-quality {
+  left: 0;
 }
 
-.ui.dashboard .courses .course .download-speed{
-	right: 0;
+.ui.dashboard .courses .course .download-speed {
+  right: 0;
 }
 
-.ui.dashboard .courses .course .extra .button{
-	padding: 7px 15px;
+.ui.dashboard .courses .course .extra .button {
+  padding: 7px 15px;
 }
 
-.ui.dashboard > .content .about .donate-button{
-	text-align: center;
+.ui.dashboard > .content .about .donate-button {
+  text-align: center;
 }
 
-.ui.dashboard > .content .ui.downloads.section .ui.courses.segment{
-	padding-bottom: 30px;
+.ui.dashboard > .content .ui.downloads.section .ui.courses.segment {
+  padding-bottom: 30px;
 }
 
-.ui.login.authenticator i.icon.user.secret:before{
-	content:"\f21b"
+.ui.login.authenticator i.icon.user.secret:before {
+  content: "\f21b";
 }
