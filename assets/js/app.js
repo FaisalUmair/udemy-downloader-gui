@@ -87,59 +87,6 @@ $(".ui.login #business").change(function() {
 
 checkLogin();
 
-// $('.ui.login .form').submit((e)=>{
-// e.preventDefault();
-// var email = $(e.target).find('input[name="email"]').val();
-// var password = $(e.target).find('input[name="password"]').val();
-// var isBusiness = $(e.target).find('input[name="business"]').is(":checked");
-
-// if(isBusiness){
-//     subDomain = $(e.target).find('input[name="subdomain"]').val() || subDomain;
-// }
-
-// if(!email || !password){
-//    prompt.alert(translate("Type Username/Password"));
-//    return;
-// }
-
-// $.ajax({
-//    type: 'POST',
-//    url:'https://www.udemy.com/api-2.0/auth/udemy-auth/login/?fields[user]=access_token',
-//    data: {email:email,password:password},
-//    headers: {"Authorization": "Basic YWQxMmVjYTljYmUxN2FmYWM2MjU5ZmU1ZDk4NDcxYTY6YTdjNjMwNjQ2MzA4ODI0YjIzMDFmZGI2MGVjZmQ4YTA5NDdlODJkNQ=="},
-//    beforeSend: function(){
-//      $(".ui.login .dimmer").addClass('active');
-//    },
-//     success: function(data, status, xhr){
-//       if(data.access_token){
-//         $('.ui.login').slideUp('fast');
-//         $('.ui.dashboard').fadeIn('fast').css('display','flex');
-//         settings.set('access_token',data.access_token);
-//         headers = {"Authorization": `Bearer ${data.access_token}`};
-//               $.ajax({
-//                type: 'GET',
-//                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
-//                beforeSend: function(){
-//                    $(".ui.dashboard .courses.dimmer").addClass('active');
-//                },
-//                headers: headers,
-//                success: function(response){
-//                   handleResponse(response);
-//                }
-//             });
-//         }
-// },
-//   error:function(response){
-//     if(response.status==400){
-//       prompt.alert(translate('Incorrect Username/Password'));
-//     }else{
-//       prompt.alert(translate('Connection Failed'));
-//     }
-//   }
-// });
-
-// });
-
 $(".ui.dashboard .content").on("click", ".download-success", function() {
   $(this).hide();
   $(this)
@@ -1493,17 +1440,19 @@ settingsForm.find('input[name="enabledownloadstartend"]').change(function() {
 });
 
 function selectDownloadPath() {
-  dialog.showOpenDialog({ properties: ["openDirectory"] }, function(path) {
-    if (path) {
-      fs.access(path[0], fs.R_OK && fs.W_OK, function(err) {
-        if (err) {
-          prompt.alert(translate("Cannot select this folder"));
-        } else {
-          settingsForm.find('input[name="downloadpath"]').val(path[0]);
-        }
-      });
-    }
+  const path = dialog.showOpenDialogSync({
+    properties: ["openDirectory"]
   });
+
+  if (path[0]) {
+    fs.access(path[0], fs.R_OK && fs.W_OK, function(err) {
+      if (err) {
+        prompt.alert(translate("Cannot select this folder"));
+      } else {
+        settingsForm.find('input[name="downloadpath"]').val(path[0]);
+      }
+    });
+  }
 }
 
 function handleResponse(response, keyword = "") {
