@@ -37,7 +37,7 @@
   "dependencies": {
     "dialogs": "^2.0.1",
     "electron-settings": "^3.2.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "mkdirp": "^0.5.1",
     "mt-files-downloader": "git+https://github.com/FaisalUmair/mt-files-downloader-wrapper.git",
     "node-vtt-to-srt": "git+https://github.com/riazXrazor/vtt-to-srt.git",
