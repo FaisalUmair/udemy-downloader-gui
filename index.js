@@ -5,6 +5,8 @@ var downloadsSaved = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let we_are_debugging = process.argv.indexOf("--debug") != -1;
+
 
 function createWindow() {
   // Create the browser window.
@@ -12,7 +14,7 @@ function createWindow() {
     width: 550,
     height: 700,
     icon: __dirname + "/assets/images/build/icon.png",
-    resizable: false,
+    resizable: we_are_debugging,
     webPreferences: {
       nodeIntegration: true
     }
@@ -27,7 +29,10 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  // win.webContents.openDevTools();
+  if ( we_are_debugging ) {
+    win.webContents.openDevTools();
+    win.maximize();
+  }
 
   win.on("close", event => {
     if (!downloadsSaved) {
