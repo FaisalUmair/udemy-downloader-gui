@@ -627,7 +627,8 @@ function initDownload($course, coursedata, subtitle = false) {
   function downloadChapter(chapterindex, lectureindex) {
     var num_lectures = coursedata["chapters"][chapterindex]["lectures"].length;
     var chapter_name = sanitize(
-      chapterindex + 1 + ". " + coursedata["chapters"][chapterindex]["name"]
+      zeroPad(chapterindex + 1, coursedata["chapters"].length) +
+        ". " + coursedata["chapters"][chapterindex]["name"]
     );
     mkdirp(
       download_directory + "/" + course_name + "/" + chapter_name,
@@ -776,8 +777,8 @@ function initDownload($course, coursedata, subtitle = false) {
             chapter_name +
             "/" +
             sanitize(
-              lectureindex +
-                1 +
+              zeroPad(lectureindex + 1,
+                coursedata["chapters"][chapterindex]["lectures"].length) +
                 "." +
                 (index + 1) +
                 " " +
@@ -807,8 +808,8 @@ function initDownload($course, coursedata, subtitle = false) {
         );
       } else {
         var lecture_name = sanitize(
-          lectureindex +
-            1 +
+          zeroPad(lectureindex + 1,
+            coursedata["chapters"][chapterindex]["lectures"].length) +
             "." +
             (index + 1) +
             " " +
@@ -974,8 +975,8 @@ function initDownload($course, coursedata, subtitle = false) {
         .addClass(qualityColorMap["Subtitle"] || "grey");
       $download_speed_value.html(0);
       var lecture_name = sanitize(
-        lectureindex +
-          1 +
+        zeroPad(lectureindex + 1,
+          coursedata["chapters"][chapterindex]["lectures"].length) +
           ". " +
           coursedata["chapters"][chapterindex]["lectures"][lectureindex][
             "name"
@@ -1098,8 +1099,8 @@ function initDownload($course, coursedata, subtitle = false) {
           chapter_name +
           "/" +
           sanitize(
-            lectureindex +
-              1 +
+            zeroPad(lectureindex + 1,
+              coursedata["chapters"][chapterindex]["lectures"].length) +
               ". " +
               coursedata["chapters"][chapterindex]["lectures"][lectureindex][
                 "name"
@@ -1133,8 +1134,8 @@ function initDownload($course, coursedata, subtitle = false) {
       );
     } else {
       var lecture_name = sanitize(
-        lectureindex +
-          1 +
+        zeroPad(lectureindex + 1,
+          coursedata["chapters"][chapterindex]["lectures"].length) +
           ". " +
           coursedata["chapters"][chapterindex]["lectures"][lectureindex][
             "name"
@@ -1801,4 +1802,8 @@ function resetToLogin() {
     .addClass("active red");
   $(".ui.login.grid").slideDown("fast");
   $(".ui.dashboard").fadeOut("fast");
+}
+
+function zeroPad(num, max) {
+  return num.toString().padStart(Math.floor(Math.log10(max) + 1), '0');
 }
