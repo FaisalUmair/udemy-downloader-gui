@@ -30,7 +30,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.0.2",
+    "electron": "^8.2.4",
     "electron-builder": "^22.3.2",
     "electron-download-tf": "^4.3.4"
   },
