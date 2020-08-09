@@ -1,0 +1,9 @@
+.App{
+    display: flex;
+    height: 100vh;
+    font-family: "Helvetica Neue", sans-serif;
+}
+
+.anticon{
+    display: inline-flex;
+}
