@@ -1,120 +1,68 @@
-# Udeler | Udemy Course Downloader (GUI)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
+## Available Scripts
 
-### Udeler 2.0 Feature Requests:
+In the project directory, you can run:
 
-I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172)
+### `yarn start`
 
-### Facing Login Issues?
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
 
-#### How to use Udeler Authenticator?
+### `yarn test`
 
-1. Install the extension from [here](https://www.udeler.com/extension)
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
+### `yarn build`
 
-3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-#### Project Update:
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
 
-**`I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web only version of Udeler.`**
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-![](https://i.imgur.com/nsaAgDU.gif)
+### `yarn eject`
 
-### :fire: Features
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-- _`Choose video quality.`_
-- _`Download multiple courses at once.`_
-- _`Set Download Start and Download End.`_
-- _`Pause/Resume download at any time.`_
-- _`Choose download directory.`_
-- _`Multilingual (English,Italian,Spanish).`_
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-### Disclaimer:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-This software is intended to help you download Udemy courses for personal use only. Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use. Each and every course on Udemy is subjected to copyright infringement.
-This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser.
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-### Downloads:
+## Learn More
 
-| Platform | Arch    | Version | Link                                                                                                                         |
-| -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Windows  | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-Setup-1.8.2-windows-x64.exe)  |
-| Windows  | x86     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-Setup-1.8.2-windows-x86.exe)  |
-| Mac      | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg)                |
-| Linux    | x86_x64 | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage) |
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-### Note:
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.
+### Code Splitting
 
-# For Developers
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Contributing:
+### Analyzing the Bundle Size
 
-Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/FaisalUmair/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
-### Prerequisites:
+### Making a Progressive Web App
 
-```
-You must have npm and nodejs installed.
-```
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### To use the application:
+### Advanced Configuration
 
-```
-1. Clone the project
-2. Run npm install
-3. Run npm start
-```
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Build:
+### Deployment
 
-Detect Platform:
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-```
-npm run dist
-```
+### `yarn build` fails to minify
 
-Windows:
-
-```
-npm run build-win
-```
-
-Mac:
-
-```
-npm run build-mac
-```
-
-Linux:
-
-```
-npm run build-linux
-```
-
-Cross Platform:
-
-```
-npm run build
-```
-
-#### To force 32 bit build:
-
-_Append "-- --ia32" to npm run command_
-
-Example:
-
-```
-npm run build-win -- --ia32
-```
-
-## Donate
-
-Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
-
-[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.udeler.com/donate)
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
