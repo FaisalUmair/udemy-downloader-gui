@@ -96,6 +96,12 @@ $(".ui.dashboard .content").on("click", ".download-success", function() {
     .show();
 });
 
+$(".ui.dashboard .content").on("click", ".open-in-browser",function() {
+  const link = `https://www.udemy.com${$(this).parents(".course.item").attr('course-url')}`;
+  shell.openExternal(link);
+});
+
+
 $(".ui.dashboard .content").on("click", ".load-more.button", function() {
   var $this = $(this);
   var $courses = $this.prev(".courses.items");
@@ -1468,8 +1474,8 @@ function handleResponse(response, keyword = "") {
                   }" course-url="${course.url}">
                   <div class="ui tiny label download-quality grey"></div>
                   <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
-                    <div class="ui tiny image" style="cursor: pointer;">
-                      <img class="open-link" src="${course.image_240x135}" id="${course.url}">
+                    <div class="ui tiny image">
+                      <img src="${course.image_240x135}">
                     </div>
                     <div class="content">
                       <span class="coursename">${course.title}</span>
@@ -1517,15 +1523,7 @@ function handleResponse(response, keyword = "") {
     );
   }
 
-  $('.open-in-browser').click(function() {
-    let link = `https://www.udemy.com${$(this).parentsUntil(".course-item").parent().attr('course-url')}`;
-    shell.openExternal(link);
-  });
-  
-  $('.open-link').click(function () {
-    let link = `https://www.udemy.com${$(this).attr('id')}`;
-    shell.openExternal(link);
-  });
+
 
 }
 
