@@ -297,7 +297,7 @@ $(".ui.dashboard .content").on(
               remaining--;
               if (!remaining) {
                 if (Object.keys(availableSubs).length) {
-                  askforSubtile(
+                  askforSubtitle(
                     availableSubs,
                     initDownload,
                     $course,
@@ -432,7 +432,7 @@ $(".ui.dashboard .content").on(
                             coursedata["totallectures"] += 1;
                             if (!remaining) {
                               if (Object.keys(availableSubs).length) {
-                                askforSubtile(
+                                askforSubtitle(
                                   availableSubs,
                                   initDownload,
                                   $course,
@@ -451,7 +451,7 @@ $(".ui.dashboard .content").on(
                     coursedata["totallectures"] += 1;
                     if (!remaining) {
                       if (Object.keys(availableSubs).length) {
-                        askforSubtile(
+                        askforSubtitle(
                           availableSubs,
                           initDownload,
                           $course,
@@ -480,7 +480,7 @@ $(".ui.dashboard .content").on(
             coursedata["totallectures"] += 1;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askforSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -490,7 +490,7 @@ $(".ui.dashboard .content").on(
             remaining--;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askforSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -510,8 +510,9 @@ $(".ui.dashboard .content").on(
   }
 );
 
-function initDownload($course, coursedata, subtitle = false) {
+function initDownload($course, coursedata, subtitle = "") {
   var $clone = $course.clone();
+  var subtitle = subtitle.split('|');
   var $downloads = $(".ui.downloads.section .ui.courses.items");
   var $courses = $(".ui.courses.section .ui.courses.items");
   if ($course.parents(".courses.section").length) {
@@ -1049,22 +1050,28 @@ function initDownload($course, coursedata, subtitle = false) {
             .pipe(finalSrt);
         });
 
+      var caption = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["caption"];
+      var available = [];
+      $.map(subtitle, function(el) {
+        if ( el in caption ) {
+          available.push(el);
+        }
+      })
+
+      var download_this_sub = available[0] || Object.keys(caption)[0] || "";
+      // Prefer non "[Auto]" subs (likely entered by the creator of the lecture.)
+      if ( available.length > 1 ) {
+        for ( key in available ) {
+          if ( available[key].indexOf("[Auto]") == -1 ) {
+            download_this_sub = available[key];
+            break;
+          }
+        }
+      }
+
+      // Per lecture: download maximum 1 of the language.
       var request = https.get(
-        coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-          "caption"
-        ][subtitle]
-          ? coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "caption"
-            ][subtitle]
-          : coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "caption"
-            ][
-              Object.keys(
-                coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-                  "caption"
-                ]
-              )[0]
-            ],
+        caption[download_this_sub],
         function(response) {
           response.pipe(file);
         }
@@ -1673,16 +1680,40 @@ if (!settings.get("general")) {
   loadDefaults();
 }
 
-function askforSubtile(availableSubs, initDownload, $course, coursedata) {
+function askforSubtitle(availableSubs, initDownload, $course, coursedata) {
   var $subtitleModal = $(".ui.subtitle.modal");
   var $subtitleDropdown = $subtitleModal.find(".ui.dropdown");
   var subtitleLanguages = [];
+
+  var languages = [];
+  var totals = {};
+  var languageKeys = {};
   for (var key in availableSubs) {
+    language = key.replace('[Auto]', '').trim();
+    if ( !(language in totals) ) {
+      languages.push(language);
+      totals[language] = 0;
+      languageKeys[language] = [];
+    }
+
+    totals[language] += availableSubs[key];
+    languageKeys[language].push(key);
+  }  
+
+  for (var language in totals) {
+    totals[language] = Math.min(coursedata['totallectures'], totals[language]);
+  }
+
+  languages.sort();
+
+  for (var key in languages) {
+    var language = languages[key];
     subtitleLanguages.push({
-      name: `<b>${key}</b> <i>${availableSubs[key]} Lectures</i>`,
-      value: key
+      name: `<b>${language}</b> <i>${totals[language]} Lectures</i>`,
+      value: languageKeys[language].join('|')
     });
   }
+
   $subtitleModal.modal({ closable: false }).modal("show");
   $subtitleDropdown.dropdown({
     values: subtitleLanguages,

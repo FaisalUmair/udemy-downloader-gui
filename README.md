@@ -113,6 +113,56 @@ Example:
 npm run build-win -- --ia32
 ```
 
+### Debug
+First run ```npm run install``` to download/setup the required libraries.
+
+Now in Visual Studio Code press ```CTRL-SHIFT-P``` and type "Debug: Open launch.json".
+
+Insert this:
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            
+            "name": "Launch",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/index.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
+            "runtimeArgs": [
+                ".",
+                "--enable-logging",
+                "--debug"
+            ],
+            "env": {},
+            "console": "internalConsole",
+            "sourceMaps": false,
+            "outDir": null
+        },
+        {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "port": 5858,
+            "address": "localhost",
+            "restart": false,
+            "sourceMaps": false,
+            "outDir": null,
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": null
+        }
+    ]
+}
+```
+
+(For MacOS/Linux, remove the .cmd from the runtimeExecutable.)
+
+
 ## Donate
 
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
