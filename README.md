@@ -4,7 +4,7 @@ A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy
 
 ### Udeler 2.0 Feature Requests:
 
-I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172)
+I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172).
 
 ### Facing Login Issues?
 
@@ -12,7 +12,7 @@ Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A 
 
 #### How to use Udeler Authenticator?
 
-1. Install the extension from [here](https://www.udeler.com/extension)
+1. Install the extension from [here](https://www.udeler.com/extension).
 
 2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
 
@@ -24,7 +24,7 @@ Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A 
 
 ![](https://i.imgur.com/nsaAgDU.gif)
 
-### :fire: Features
+### :fire: Features:
 
 - _`Choose video quality.`_
 - _`Download multiple courses at once.`_
