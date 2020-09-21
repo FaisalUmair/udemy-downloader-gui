@@ -630,6 +630,21 @@ function initDownload($course, coursedata, subtitle = false) {
     $download_speed.show();
     $download_quality.show();
 
+
+    function getDownloadSpeed(speedInKB) {
+        var current_download_speed = parseInt(speedInKB) || 0;
+        if (current_download_speed < 1024) {
+            current_download_speed = Math.round(current_download_speed * 10) / 10;
+            return {value: current_download_speed, unit: ' KB/s'};
+        } else if (current_download_speed < 1024 ^ 2) {
+            current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
+            return {value: current_download_speed, unit: ' MB/s'};
+        } else {
+            current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
+            return {value: current_download_speed, unit: ' GB/s'};
+        }
+    }
+
     function downloadChapter(chapterindex, lectureindex) {
         var num_lectures = coursedata["chapters"][chapterindex]["lectures"].length;
         var chapter_name = sanitize(
@@ -689,19 +704,9 @@ function initDownload($course, coursedata, subtitle = false) {
                         break;
                     case 1:
                         var stats = dl.getStats();
-                        var current_download_speed = parseInt(stats.present.speed / 1000) || 0;
-                        var current_download_unit = ' KB/s';
-                        if (current_download_speed < 1024) {
-                            break;
-                        } else if (current_download_speed < 1024 ^ 2) {
-                            current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
-                            current_download_unit = ' MB/s';
-                        } else {
-                            current_download_speed = current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
-                            current_download_unit = ' GB/s';
-                        }
-                        $download_speed_value.html(current_download_speed);
-                        $download_unit_value.html(current_download_unit);
+                        var download_speed_and_unit = getDownloadSpeed(parseInt(stats.present.speed / 1000) || 0);
+                        $download_speed_value.html(download_speed_and_unit.value);
+                        $download_unit_value.html(download_speed_and_unit.unit);
                         $progressElemIndividual.progress(
                             "set percent",
                             stats.total.completed
@@ -711,19 +716,9 @@ function initDownload($course, coursedata, subtitle = false) {
                         break;
                     case -1:
                         var stats = dl.getStats();
-                        var current_download_speed = parseInt(stats.present.speed / 1000) || 0;
-                        var current_download_unit = ' KB/s';
-                        if (current_download_speed < 1024) {
-                            break;
-                        } else if (current_download_speed < 1024 ^ 2) {
-                            current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
-                            current_download_unit = ' MB/s';
-                        } else {
-                            current_download_speed = current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
-                            current_download_unit = ' GB/s';
-                        }
-                        $download_speed_value.html(current_download_speed);
-                        $download_unit_value.html(current_download_unit);
+                        var download_speed_and_unit = getDownloadSpeed(parseInt(stats.present.speed / 1000) || 0);
+                        $download_speed_value.html(download_speed_and_unit.value);
+                        $download_unit_value.html(download_speed_and_unit.unit);
                         $progressElemIndividual.progress(
                             "set percent",
                             stats.total.completed
