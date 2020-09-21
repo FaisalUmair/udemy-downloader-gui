@@ -694,10 +694,10 @@ function initDownload($course, coursedata, subtitle = false) {
                         if (current_download_speed < 1024) {
                             break;
                         } else if (current_download_speed < 1024 ^ 2) {
-                            current_download_speed = current_download_speed / 1024;
+                            current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
                             current_download_unit = ' MB/s';
                         } else {
-                            current_download_speed = current_download_speed / 1024 ^ 2;
+                            current_download_speed = current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
                             current_download_unit = ' GB/s';
                         }
                         $download_speed_value.html(current_download_speed);
@@ -716,10 +716,10 @@ function initDownload($course, coursedata, subtitle = false) {
                         if (current_download_speed < 1024) {
                             break;
                         } else if (current_download_speed < 1024 ^ 2) {
-                            current_download_speed = current_download_speed / 1024;
+                            current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
                             current_download_unit = ' MB/s';
                         } else {
-                            current_download_speed = current_download_speed / 1024 ^ 2;
+                            current_download_speed = current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
                             current_download_unit = ' GB/s';
                         }
                         $download_speed_value.html(current_download_speed);
