@@ -297,7 +297,7 @@ $(".ui.dashboard .content").on(
               remaining--;
               if (!remaining) {
                 if (Object.keys(availableSubs).length) {
-                  askforSubtile(
+                  askForSubtitle(
                     availableSubs,
                     initDownload,
                     $course,
@@ -432,7 +432,7 @@ $(".ui.dashboard .content").on(
                             coursedata["totallectures"] += 1;
                             if (!remaining) {
                               if (Object.keys(availableSubs).length) {
-                                askforSubtile(
+                                askForSubtitle(
                                   availableSubs,
                                   initDownload,
                                   $course,
@@ -451,7 +451,7 @@ $(".ui.dashboard .content").on(
                     coursedata["totallectures"] += 1;
                     if (!remaining) {
                       if (Object.keys(availableSubs).length) {
-                        askforSubtile(
+                        askForSubtitle(
                           availableSubs,
                           initDownload,
                           $course,
@@ -480,7 +480,7 @@ $(".ui.dashboard .content").on(
             coursedata["totallectures"] += 1;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askForSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -490,7 +490,7 @@ $(".ui.dashboard .content").on(
             remaining--;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askForSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -1673,7 +1673,7 @@ if (!settings.get("general")) {
   loadDefaults();
 }
 
-function askforSubtile(availableSubs, initDownload, $course, coursedata) {
+function askForSubtitle(availableSubs, initDownload, $course, coursedata) {
   var $subtitleModal = $(".ui.subtitle.modal");
   var $subtitleDropdown = $subtitleModal.find(".ui.dropdown");
   var subtitleLanguages = [];
