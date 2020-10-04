@@ -1,7 +1,6 @@
-
 {
 	"Udemy Login": "Đăng nhập vào Udemy",
-        "Email": "Email",
+	"Email": "Email",
 	"Password": "Mật khẩu",
 	"Login": "Đăng nhập",
 	"Type Username/Password": "Nhập vào tên đăng nhập/mật khẩu",
@@ -40,5 +39,19 @@
 	"About": "Về tôi",
 	"Skip Subtitles": "Bỏ qua phụ đề",
 	"Search Courses": "Tìm kiếm khoá học",
-	"Downloads": "Các khoá học đã tải về"
+	"Downloads": "Các khoá học đã tải về",
+	"Udemy Business": "Udemy Business",
+	"Check for updates": "Kiểm tra update",
+	"Udemy Course Downloader": "Udemy Course Downloader",
+	"New Update Available": "Có bản cập nhật mới",
+	"Cancel": "Hủy",
+	"Download": "Tải xuống",
+	"Links": "Links",
+	"Repository": "Repository",
+	"Developer": "Developer",
+	"Website": "Website",
+	"Development": "Development",
+	"Report Bug": "Báo cáo lỗi",
+	"Donate": "Quyên góp",
+	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "Udeler miễn phí và không có bất kỳ quảng cáo nào. Nếu bạn đánh giá cao điều đó, vui lòng xem xét tặng cho Nhà phát triển."
 }
