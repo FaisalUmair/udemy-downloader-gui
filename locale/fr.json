@@ -1,6 +1,6 @@
 {
 	"Udemy Login": "Connectez-vous à votre compte Udemy !",
-  "Email": "E-mail",
+	"Email": "E-mail",
 	"Password": "Mot de passe",
 	"Login": "Se connecter",
 	"Type Username/Password": "Entrez votre email et mot de passe",
@@ -39,5 +39,19 @@
 	"About": "À propos",
 	"Skip Subtitles": "Sauter les sous-titres",
 	"Search Courses": "Rechercher des cours",
-	"Downloads": "Téléchargements"
+	"Downloads": "Téléchargements",
+	"Udemy Business": "Udemy Business",
+	"Check for updates": "Consultez les mises à jour",
+	"Udemy Course Downloader": "Udemy Course Downloader",
+	"New Update Available": "Nouvelle mise à jour disponible",
+	"Cancel": "Annuler",
+	"Download": "Télécharger",
+	"Links": "Links",
+	"Repository": "Dépôt",
+	"Developer": "Développeur",
+	"Website": "Site web",
+	"Development": "Développement",
+	"Report Bug": "Signaler un bogue",
+	"Donate": "Faire un don",
+	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "Udeler est gratuit et sans publicité. Si vous appréciez cela, veuillez envisager de faire un don au développeur."
 }
