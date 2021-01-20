@@ -209,6 +209,7 @@ export function downloadCourse(course, setLoading, settings) {
     setLoading(true)
     dispatch(showLoading())
     getCurriculum(getState().user.accessToken, course.id).then((response) => {
+
       setLoading(false)
       dispatch(hideLoading())
 
@@ -272,7 +273,6 @@ export function downloadCourse(course, setLoading, settings) {
         return false
       })
 
-      console.log(curriculum)
 
       dispatch({
         type: NEW_COURSE_DOWNLOAD,

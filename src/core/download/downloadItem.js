@@ -25,24 +25,19 @@ export default function downloadItem(dispatch, getState, courseId, item) {
 
   switch (type) {
     case "Video":
+      console.log('hit')
       return downloadVideo(item, dispatch, getState, courseId, isLecture)
-      break
     case "Article":
       console.log("article", isLecture)
       return downloadArticle(item, dispatch, getState, courseId, isLecture)
-      break
     case "E-Book":
       return downloadEBook(item, dispatch, getState, courseId, isLecture)
-      break
     case "ExternalLink":
       return downloadExternalLink(item, dispatch, getState, courseId)
-      break
     case "File":
       return downloadFile(item, dispatch, getState, courseId)
-      break
     case "caption":
       return downloadCaption(item, dispatch, getState, courseId)
-      break
   }
 
   // dispatch({

@@ -42,7 +42,6 @@ export default function handleItem(getState, dispatch, course) {
       return handleChapter(dispatch, getState, course.id, item)
     case "asset":
       return handleAsset(dispatch, getState, course.id, item)
-      break
     case "lecture":
       dispatch(updateLectureNumber(course.id, course.lectureNumber))
       return handleLecture(dispatch, getState, course.id, item)

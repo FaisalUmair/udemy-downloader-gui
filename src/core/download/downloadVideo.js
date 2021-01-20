@@ -75,10 +75,13 @@ export default async function downloadVideo(
     //   courseid: course.id,
     //   videoQuality: video.label,
     // })
+    
     dispatch(updateFileData(course.id, "Video", filename, video.label))
-    // return download(downloadLink, fn, path, dispatch, getState, courseId)
-    console.log(fn)
-    dispatch(fileDownloadFinished(course.id))
+
+    return download(downloadLink, fn, path, dispatch, getState, courseId)
+
+    //console.log(fn)
+    //dispatch(fileDownloadFinished(course.id))
     // dispatch({
     //   type: FILE_DOWNLOAD_FINISHED,
     //   courseid: courseId,
@@ -88,7 +91,7 @@ export default async function downloadVideo(
     //   courseid: courseId,
     //   visitedFiles: course.visitedFiles + 1,
     // })
-    dispatch(updateCourseVisitedFiles(course.id, course.visitedFiles))
-    return downloadHandler(dispatch, getState, courseId)
+    // dispatch(updateCourseVisitedFiles(course.id, course.visitedFiles))
+    // return downloadHandler(dispatch, getState, courseId)
   }
 }

@@ -23,10 +23,17 @@ function Course(props) {
   const [isLoading, setLoading] = useState(false)
   const dispatch = useDispatch()
 
-  const isDownloadDisabled = () => {}
 
   const isPauseDisabled = () => {
+
+
     if (props.downloadInfo) {
+
+      if(props.downloadInfo.status === "waiting"){
+        return true;
+      }
+  
+
       if (props.downloadInfo.downloadInstance) {
         if (
           props.downloadInfo.status === "waiting" ||
@@ -43,7 +50,14 @@ function Course(props) {
   }
 
   const isResumeDisabled = () => {
+
     if (props.downloadInfo) {
+
+      if(props.downloadInfo.status === "waiting"){
+        return true;
+      }
+
+
       if (props.downloadInfo.downloadInstance) {
         if (
           props.downloadInfo.status === "waiting" ||

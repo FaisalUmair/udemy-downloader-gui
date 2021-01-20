@@ -1,6 +1,7 @@
 import Downloader from "mt-files-downloader"
 import fs from "fs"
 import vtt2srt from "node-vtt-to-srt"
+import mkdirp from "mkdirp";
 import {
   downloaderStarted,
   DOWNLOAD_PAUSED,
@@ -30,19 +31,26 @@ export default function download(
 
   const retryCount = 5
 
-  let downloader
+  let downloader;
+
   if (fs.existsSync(`${path}/${fileName}.mtd`)) {
     downloader = new Downloader().resumeDownload(`${path}/${fileName}`)
     downloader.setUrl(url)
   } else {
+
     const file = `${path}/${fileName}`
-    console.log(file)
+
+    if(!fs.existsSync(path)){
+      mkdirp.sync(path);
+    }
+
     downloader = new Downloader().download(url, file)
   }
 
   downloader.start()
 
   const interval = setInterval(() => {
+    console.log(downloader.status)
     if (!course) {
       return clearInterval(interval)
     }
@@ -119,6 +127,7 @@ export default function download(
 
         // dispatch({ type: DOWNLOAD_PAUSED, courseid: courseId })
         dispatch(updateDownloaderStatus(courseId, "paused"))
+        clearInterval(interval);
         break
       case 3:
         // dispatch({

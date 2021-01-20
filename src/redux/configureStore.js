@@ -44,6 +44,6 @@ let store = createStore(persistedReducer, applyMiddleware(thunk))
 
 let persistor = persistStore(store)
 
-persistor.purge()
+//persistor.purge()
 
 export { store, persistor }

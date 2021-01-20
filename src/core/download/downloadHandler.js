@@ -19,6 +19,7 @@ export default function downloadHandler(dispatch, getState, courseId) {
     if (!hasStarted) {
       return initializeDownload(dispatch, getState, courseId)
     }
+
     // console.log(getState().downloads[courseId])
     handleItem(getState, dispatch, courseInfo)
   } catch (e) {
