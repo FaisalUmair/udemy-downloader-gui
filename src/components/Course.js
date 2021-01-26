@@ -26,54 +26,82 @@ function Course(props) {
 
   const isPauseDisabled = () => {
 
-
-    if (props.downloadInfo) {
-
-      if(props.downloadInfo.status === "waiting"){
+    if(props.downloadInfo){
+        if(props.downloadInfo.status==="downloading"){
+          return false;
+        }
         return true;
-      }
+    }
+
+    return true;
+
+
+
+    // if (props.downloadInfo) {
+
+    //   if(props.downloadInfo.status === "waiting"){
+    //     return true;
+    //   }
   
 
-      if (props.downloadInfo.downloadInstance) {
-        if (
-          props.downloadInfo.status === "waiting" ||
-          props.downloadInfo.status === "paused"
-        ) {
-          return true
-        }
-      } else {
-        return true
-      }
-    } else {
-      return true
-    }
+    //   if (props.downloadInfo.downloadInstance) {
+    //     if (
+    //       props.downloadInfo.status === "waiting" ||
+    //       props.downloadInfo.status === "paused"
+    //     ) {
+    //       return true
+    //     }
+    //   } else {
+    //     return true
+    //   }
+    // } else {
+    //   return true
+    // }
+
+
+
+
+
   }
 
   const isResumeDisabled = () => {
 
-    if (props.downloadInfo) {
 
-      if(props.downloadInfo.status === "waiting"){
-        return true;
+    if(props.downloadInfo){
+      const status = props.downloadInfo.status;
+      if(status!=='waiting'&&isPauseDisabled()){
+        return false;
       }
 
-
-      if (props.downloadInfo.downloadInstance) {
-        if (
-          props.downloadInfo.status === "waiting" ||
-          props.downloadInfo.status === "downloading"
-        ) {
-          return true
-        }
-        if (props.downloadInfo.status === "paused") {
-          return false
-        }
-      } else {
-        return props.downloadInfo.status === "waiting" ? true : false
-      }
-    } else {
-      return true
+      return true;
     }
+
+    return true;
+
+
+    // if (props.downloadInfo) {
+
+    //   if(props.downloadInfo.status === "waiting"){
+    //     return true;
+    //   }
+
+
+    //   if (props.downloadInfo.downloadInstance) {
+    //     if (
+    //       props.downloadInfo.status === "waiting" ||
+    //       props.downloadInfo.status === "downloading"
+    //     ) {
+    //       return true
+    //     }
+    //     if (props.downloadInfo.status === "paused") {
+    //       return false
+    //     }
+    //   } else {
+    //     return props.downloadInfo.status === "waiting" ? true : false
+    //   }
+    // } else {
+    //   return true
+    // }
   }
 
   return (
@@ -144,7 +172,7 @@ function Course(props) {
               <Col offset={8}>
                 <Progress
                   type="circle"
-                  percent={20}
+                  percent={(props.downloadInfo.downloaded/props.downloadInfo.total)*100}
                   width={35}
                   showInfo={false}
                   strokeWidth={15}

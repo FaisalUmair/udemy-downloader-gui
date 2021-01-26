@@ -20,6 +20,9 @@ export default function handleChapter(dispatch, getState, courseId, item) {
   //   chapter: chapterName,
   //   courseid: courseId,
   // })
+
+
+  console.log('We are here', directory)
   dispatch(updateChapterName(course.id, `${chapterNumber} ${chapterName}`))
 
   return mkdirp(directory).then((res) => {

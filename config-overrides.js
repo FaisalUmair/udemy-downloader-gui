@@ -1,4 +1,6 @@
-module.exports = function override(config, env) {
-    config.target = 'electron-renderer';
-    return config;
+module.exports = function override(config) {
+    return {
+        ...config,
+        target: "electron-renderer"
+    };
 }

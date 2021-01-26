@@ -282,6 +282,7 @@ export function downloadCourse(course, setLoading, settings) {
         settings: settings,
       })
       if (settings.lectureOption == "downloadAll") {
+        console.log('hit me')
         dispatch(startDownload(course.id))
         return
       }
@@ -297,6 +298,15 @@ export function pauseDownload(courseid) {
     if (downloader) {
       downloader.stop()
     }
+  }
+}
+
+
+export function clearDownloadInstance(courseid) {
+  return (dispatch) => {
+    dispatch({ type: UPDATE_INFO, courseid, payload: {
+      downloadInstance : null
+    } })
   }
 }
 
@@ -412,6 +422,7 @@ export function fileDownloadFinished(courseId) {
       courseid: courseId,
       payload: {
         downloaded: course.downloaded + 1,
+        status: "waiting",
         downloadInstance: null,
       },
     })

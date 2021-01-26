@@ -26,6 +26,9 @@ export default function handleItem(getState, dispatch, course) {
 
   const item = getDownloadItem(course)
 
+
+  console.log(item)
+
   switch (item._class) {
     case "chapter":
       // dispatch({
@@ -38,7 +41,7 @@ export default function handleItem(getState, dispatch, course) {
       //   courseid: course.id,
       //   lectureNumber: 0,
       // })
-      dispatch(updateChapterNumber(course.id, course.chapterNumber))
+      //dispatch(updateChapterNumber(course.id, course.chapterNumber))
       return handleChapter(dispatch, getState, course.id, item)
     case "asset":
       return handleAsset(dispatch, getState, course.id, item)

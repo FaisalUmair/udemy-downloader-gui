@@ -19,9 +19,7 @@ const transform = createTransform(
     const downloads = JSON.parse(JSON.stringify(inboundState))
     for (var courseid in downloads) {
       downloads[courseid].downloadInstance = null
-      if (downloads[courseid].status === "waiting") {
-        downloads[courseid].status = null
-      }
+      downloads[courseid].status = null
     }
     return downloads
   },

@@ -48,7 +48,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^9.0.0",
+    "electron": "^11.2.0",
     "react-app-rewired": "^2.1.6",
     "tailwindcss": "^1.4.6"
   }

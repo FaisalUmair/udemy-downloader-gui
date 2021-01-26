@@ -20,7 +20,7 @@ export default function downloadHandler(dispatch, getState, courseId) {
       return initializeDownload(dispatch, getState, courseId)
     }
 
-    // console.log(getState().downloads[courseId])
+    console.log(getState().downloads[courseId])
     handleItem(getState, dispatch, courseInfo)
   } catch (e) {
     return
