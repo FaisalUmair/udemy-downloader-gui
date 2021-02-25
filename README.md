@@ -47,6 +47,23 @@ This software does not magically download any paid course available on Udemy, yo
 | Mac      | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg)                |
 | Linux    | x86_x64 | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage) |
 
+#### Installation on Arch Linux from the AUR
+
+With your preferred helper:
+
+```bash
+paru -Sy udeler-bin
+```
+
+Manual installation:
+
+```bash
+sudo pacman -S --needed base-devel
+git clone https://aur.archlinux.org/udeler-bin
+cd udeler-bin
+makepkg -si
+```
+
 ### Note:
 
 By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.
