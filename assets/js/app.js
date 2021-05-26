@@ -334,6 +334,10 @@ $(".ui.dashboard .content").on(
                   } else {
                     var type = "Video";
                     var lecture = response.asset.stream_urls;
+                    if (lecture === null) {
+						          lecture = JSON.parse('{"Video":[{"file":"","type":"video/mp4","label":"720"},{"file":"","type":"video/mp4","label":"360"}]}')
+						          $(".ui.dashboard .ui.courses.section .ui.courses.items").append(`<div class="ui yellow message disposable">${v.asset.title} ${translate(" skipped because DRM encrypted")}</div>`);
+					          } ;
                     var qualities = [];
                     var qualitySrcMap = {};
                     lecture.Video.forEach(function(val) {
