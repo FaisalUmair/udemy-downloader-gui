@@ -97,10 +97,14 @@ $(".ui.dashboard .content").on("click", ".download-success", function() {
 });
 
 $(".ui.dashboard .content").on("click", ".open-in-browser",function() {
-  const link = `https://www.udemy.com${$(this).parents(".course.item").attr('course-url')}`;
+  const link = `https://${subDomain}.udemy.com${$(this).parents(".course.item").attr('course-url')}`;
   shell.openExternal(link);
 });
 
+$(".ui.dashboard .content").on("click", ".remove-download", function () {
+   const courseId = $(this).parents(".course.item").attr('course-id');
+   removeCurseDownloads(courseId);
+});
 
 $(".ui.dashboard .content").on("click", ".load-more.button", function() {
   var $this = $(this);
@@ -119,7 +123,10 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function() {
           course.url
         }">
                                 <div class="ui tiny label download-quality grey"></div>
-                                <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
+                                <div class="ui tiny grey label download-speed">
+                                    <span class="value">0</span>
+                                    <span class="download-unit"> KB/s</span>
+                                </div>
                                   <div class="ui tiny image">
                                     <img src="${course.image_240x135}">
                                   </div>
@@ -297,7 +304,7 @@ $(".ui.dashboard .content").on(
               remaining--;
               if (!remaining) {
                 if (Object.keys(availableSubs).length) {
-                  askforSubtile(
+                  askforSubtitle(
                     availableSubs,
                     initDownload,
                     $course,
@@ -312,7 +319,7 @@ $(".ui.dashboard .content").on(
             function getLecture(lecturename, chapterindex, lectureindex) {
               $.ajax({
                 type: "GET",
-                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data,body&fields[lecture]=asset,supplementary_assets`,
+                url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token&fields[lecture]=asset,supplementary_assets`,
                 headers: headers,
                 success: function(response) {
                   if (v.asset.asset_type == "Article") {
@@ -332,21 +339,32 @@ $(".ui.dashboard .content").on(
                     var videoQuality = v.asset.asset_type;
                     var type = "File";
                   } else {
-                    var type = "Video";
-                    var lecture = response.asset.stream_urls;
+                    var type = "Video";                    
                     var qualities = [];
                     var qualitySrcMap = {};
-                    lecture.Video.forEach(function(val) {
-                      if (val.label == "Auto") return;
+
+                    var lecture = response.asset;
+                    var medias = lecture.media_sources; 
+                    lecture.media_sources.forEach(function (val) {
+                      if (val.label.toLowerCase() == "auto") return;
                       qualities.push(val.label);
-                      qualitySrcMap[val.label] = val.file;
+                      qualitySrcMap[val.label] = val.src;
                     });
+                    
+                    // var lecture = response.asset.stream_urls ?? response.asset.media_sources;
+                    // var medias = lecture.Video;
+                    // medias.forEach(function(val) {
+                    //   if (val.label == "Auto") return;
+                    //   qualities.push(val.label);
+                    //   qualitySrcMap[val.label] = val.file;
+                    // });
+
                     var lowest = Math.min(...qualities);
                     var highest = Math.max(...qualities);
                     var videoQuality = settingsCached.download.videoQuality;
-                    if (!videoQuality || videoQuality == "Auto") {
-                      var src = lecture.Video[0].file;
-                      videoQuality = lecture.Video[0].label;
+                    if (!videoQuality || videoQuality.toLowerCase() == "auto") {
+                      var src = medias[0].src ?? medias[0].file;
+                      videoQuality = medias[0].label;
                     } else {
                       switch (videoQuality) {
                         case "Highest":
@@ -362,8 +380,8 @@ $(".ui.dashboard .content").on(
                           if (qualitySrcMap[videoQuality]) {
                             var src = qualitySrcMap[videoQuality];
                           } else {
-                            var src = lecture.Video[0].file;
-                            videoQuality = lecture.Video[0].label;
+                            var src = medias[0].src ?? medias[0].file;
+                            videoQuality = medias[0].label;
                           }
                       }
                     }
@@ -432,7 +450,7 @@ $(".ui.dashboard .content").on(
                             coursedata["totallectures"] += 1;
                             if (!remaining) {
                               if (Object.keys(availableSubs).length) {
-                                askforSubtile(
+                                askforSubtitle(
                                   availableSubs,
                                   initDownload,
                                   $course,
@@ -451,7 +469,7 @@ $(".ui.dashboard .content").on(
                     coursedata["totallectures"] += 1;
                     if (!remaining) {
                       if (Object.keys(availableSubs).length) {
-                        askforSubtile(
+                        askforSubtitle(
                           availableSubs,
                           initDownload,
                           $course,
@@ -480,7 +498,7 @@ $(".ui.dashboard .content").on(
             coursedata["totallectures"] += 1;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askforSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -490,7 +508,7 @@ $(".ui.dashboard .content").on(
             remaining--;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtile(availableSubs, initDownload, $course, coursedata);
+                askforSubtitle(availableSubs, initDownload, $course, coursedata);
               } else {
                 initDownload($course, coursedata);
               }
@@ -510,8 +528,9 @@ $(".ui.dashboard .content").on(
   }
 );
 
-function initDownload($course, coursedata, subtitle = false) {
+function initDownload($course, coursedata, subtitle = "") {
   var $clone = $course.clone();
+  var subtitle = subtitle.split('|');
   var $downloads = $(".ui.downloads.section .ui.courses.items");
   var $courses = $(".ui.courses.section .ui.courses.items");
   if ($course.parents(".courses.section").length) {
@@ -541,12 +560,12 @@ function initDownload($course, coursedata, subtitle = false) {
   var $resumeButton = $actionButtons.find(".resume.button");
   var lectureChaperMap = {};
   var qualityColorMap = {
-    "144": "red",
-    "240": "orange",
-    "360": "blue",
-    "480": "teal",
-    "720": "olive",
-    "1080": "green",
+    144: "red",
+    240: "orange",
+    360: "blue",
+    480: "teal",
+    720: "olive",
+    1080: "green",
     Attachment: "pink",
     Subtitle: "black"
   };
@@ -635,6 +654,7 @@ function initDownload($course, coursedata, subtitle = false) {
     var num_lectures = coursedata["chapters"][chapterindex]["lectures"].length;
     var chapter_name = sanitize(
       chapterindex + 1 + ". " + coursedata["chapters"][chapterindex]["name"]
+      //zeroPad(chapterindex + 1, coursedata["chapters"].length) + ". " + coursedata["chapters"][chapterindex]["name"]
     );
     mkdirp(
       download_directory + "/" + course_name + "/" + chapter_name,
@@ -652,6 +672,7 @@ function initDownload($course, coursedata, subtitle = false) {
   ) {
     if (downloaded == toDownload) {
       resetCourse($course.find(".download-success"));
+      sendNotification(course_name);
       return;
     } else if (lectureindex == num_lectures) {
       downloadChapter(++chapterindex, 0);
@@ -690,9 +711,12 @@ function initDownload($course, coursedata, subtitle = false) {
             break;
           case 1:
             var stats = dl.getStats();
-            $download_speed_value.html(
-              parseInt(stats.present.speed / 1000) || 0
-            );
+            var download_speed_and_unit = getDownloadSpeed(parseInt(stats.present.speed / 1000) || 0);
+            $download_speed_value.html(download_speed_and_unit.value);
+            $download_unit_value.html(download_speed_and_unit.unit);
+            // $download_speed_value.html(
+            //   parseInt(stats.present.speed / 1000) || 0
+            // );
             $progressElemIndividual.progress(
               "set percent",
               stats.total.completed
@@ -702,9 +726,12 @@ function initDownload($course, coursedata, subtitle = false) {
             break;
           case -1:
             var stats = dl.getStats();
-            $download_speed_value.html(
-              parseInt(stats.present.speed / 1000) || 0
-            );
+            var download_speed_and_unit = getDownloadSpeed(parseInt(stats.present.speed / 1000) || 0);
+            $download_speed_value.html(download_speed_and_unit.value);
+            $download_unit_value.html(download_speed_and_unit.unit);
+            // $download_speed_value.html(
+            //   parseInt(stats.present.speed / 1000) || 0
+            // );
             $progressElemIndividual.progress(
               "set percent",
               stats.total.completed
@@ -783,15 +810,11 @@ function initDownload($course, coursedata, subtitle = false) {
             chapter_name +
             "/" +
             sanitize(
-              lectureindex +
-                1 +
-                "." +
-                (index + 1) +
-                " " +
-                coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-                  "supplementary_assets"
-                ][index]["name"].trim() +
-                ".html"
+              lectureindex + 1
+              //zeroPad(lectureindex + 1, coursedata["chapters"][chapterindex]["lectures"].length)
+              + "." + (index + 1) + " "
+              + coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"][index]["name"].trim()
+              + ".html"
             ),
           coursedata["chapters"][chapterindex]["lectures"][lectureindex][
             "supplementary_assets"
@@ -814,22 +837,14 @@ function initDownload($course, coursedata, subtitle = false) {
         );
       } else {
         var lecture_name = sanitize(
-          lectureindex +
-            1 +
-            "." +
-            (index + 1) +
-            " " +
-            coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "supplementary_assets"
-            ][index]["name"].trim() +
-            (coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "supplementary_assets"
-            ][index]["name"]
+          lectureindex + 1
+          //zeroPad(lectureindex + 1, coursedata["chapters"][chapterindex]["lectures"].length)
+          + "." + (index + 1)
+          + " "
+          + coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"][index]["name"].trim()
+          + (coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"][index]["name"]
               .split(".")
-              .pop() ==
-            coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "supplementary_assets"
-            ][index]["src"]
+              .pop() == coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"][index]["src"]
               .split("/")
               .pop()
               .split(".")
@@ -981,13 +996,11 @@ function initDownload($course, coursedata, subtitle = false) {
         .addClass(qualityColorMap["Subtitle"] || "grey");
       $download_speed_value.html(0);
       var lecture_name = sanitize(
-        lectureindex +
-          1 +
-          ". " +
-          coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-            "name"
-          ].trim() +
-          ".vtt"
+        lectureindex + 1
+        //zeroPad(lectureindex + 1, coursedata["chapters"][chapterindex]["lectures"].length) 
+        + ". "
+        + coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim()
+        + ".vtt"
       );
       if (
         fs.existsSync(
@@ -1049,22 +1062,43 @@ function initDownload($course, coursedata, subtitle = false) {
             .pipe(finalSrt);
         });
 
+      var caption = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["caption"];
+      var available = [];
+      $.map(subtitle, function(el) {
+        if ( el in caption ) {
+          available.push(el);
+        }
+      })
+
+      var download_this_sub = available[0] || Object.keys(caption)[0] || "";
+      // Prefer non "[Auto]" subs (likely entered by the creator of the lecture.)
+      if ( available.length > 1 ) {
+        for ( key in available ) {
+          if ( available[key].indexOf("[Auto]") == -1 ) {
+            download_this_sub = available[key];
+            break;
+          }
+        }
+      }
+
+      // Per lecture: download maximum 1 of the language.        
       var request = https.get(
-        coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-          "caption"
-        ][subtitle]
-          ? coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "caption"
-            ][subtitle]
-          : coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-              "caption"
-            ][
-              Object.keys(
-                coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-                  "caption"
-                ]
-              )[0]
-            ],
+        // coursedata["chapters"][chapterindex]["lectures"][lectureindex][
+        //   "caption"
+        // ][subtitle]
+        //   ? coursedata["chapters"][chapterindex]["lectures"][lectureindex][
+        //       "caption"
+        //     ][subtitle]
+        //   : coursedata["chapters"][chapterindex]["lectures"][lectureindex][
+        //       "caption"
+        //     ][
+        //       Object.keys(
+        //         coursedata["chapters"][chapterindex]["lectures"][lectureindex][
+        //           "caption"
+        //         ]
+        //       )[0]
+        //     ],
+        caption[download_this_sub],
         function(response) {
           response.pipe(file);
         }
@@ -1105,13 +1139,11 @@ function initDownload($course, coursedata, subtitle = false) {
           chapter_name +
           "/" +
           sanitize(
-            lectureindex +
-              1 +
-              ". " +
-              coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-                "name"
-              ].trim() +
-              ".html"
+            lectureindex + 1
+            //zeroPad(lectureindex + 1, coursedata["chapters"][chapterindex]["lectures"].length) 
+            + ". "
+            + coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim()
+            + ".html"
           ),
         coursedata["chapters"][chapterindex]["lectures"][lectureindex]["src"],
         function() {
@@ -1140,18 +1172,12 @@ function initDownload($course, coursedata, subtitle = false) {
       );
     } else {
       var lecture_name = sanitize(
-        lectureindex +
-          1 +
-          ". " +
-          coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-            "name"
-          ].trim() +
-          "." +
-          (coursedata["chapters"][chapterindex]["lectures"][lectureindex][
-            "type"
-          ] == "File"
-            ? "pdf"
-            : "mp4")
+        lectureindex + 1
+        //zeroPad(lectureindex + 1, coursedata["chapters"][chapterindex]["lectures"].length) 
+        + ". "
+        + coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim()
+        + "."
+        + (coursedata["chapters"][chapterindex]["lectures"][lectureindex]["type"] == "File" ? "pdf" : "mp4")
       );
       if (
         fs.existsSync(
@@ -1473,7 +1499,11 @@ function handleResponse(response, keyword = "") {
                     course.id
                   }" course-url="${course.url}">
                   <div class="ui tiny label download-quality grey"></div>
-                  <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
+                  <!-- <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div> -->
+                  <div class="ui tiny grey label download-speed">
+                    <span class="value">0</span>
+                    <span class="download-unit"> KB/s</span>
+                  </div>
                     <div class="ui tiny image">
                       <img src="${course.image_240x135}">
                     </div>
@@ -1523,11 +1553,10 @@ function handleResponse(response, keyword = "") {
     );
   }
 
-
-
 }
 
 function saveDownloads(quit) {
+  debugger;
   var downloadedCourses = [];
   var $downloads = $(
     ".ui.downloads.section .ui.courses.items .ui.course.item"
@@ -1566,6 +1595,25 @@ function saveDownloads(quit) {
     electron.ipcRenderer.send("quitApp");
   }
 }
+function removeCurseDownloads(courseId) {
+  // $(".ui.downloads.section .ui.courses.items .ui.course.item").forEach(
+  //   function () {
+  //     if ($(this).attr('course-id') == courseId) {
+  //       $(this).remove();
+  //     }
+  //   });
+
+  var $downloads = $(".ui.downloads.section .ui.courses.items .ui.course.item").slice(0);
+  
+  if ($downloads.length) {
+    $downloads.each(function (index, elem) {
+      $elem = $(elem);
+      if ($elem.attr("course-id") == courseId) {
+        $elem.remove();
+      }
+    });
+  }
+}
 
 function loadDownloads() {
   if ($(".ui.downloads.section .ui.courses.items .ui.course.item").length) {
@@ -1573,18 +1621,21 @@ function loadDownloads() {
   }
   if ((downloadedCourses = settings.get("downloadedCourses"))) {
     downloadedCourses.forEach(function(course) {
-      $course = $(`<div class="ui course item" course-id="${
-        course.id
-      }" course-url="${course.url}">
+      $course = $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
                   <div class="ui tiny label download-quality grey"></div>
-                  <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div>
-                    <div class="ui tiny image">
-                      <img src="${course.image}">
-                    </div>
+                  <div class="ui tiny grey label download-speed">
+                    <span class="value">0</span>
+                    <span class="download-unit"> KB/s</span>
+                  </div>
+                  <div class="ui tiny image">
+                    <img src="${course.image}" />                  
+                    <a class="ui basic red remove-download">${translate("Dismiss")}</a>
+                  </div>
+                  
                     <div class="content">
                       <span class="coursename">${course.title}</span>
 
-                    <div class="ui tiny icon green download-success message">
+                      <div class="ui tiny icon green download-success message">
                            <i class="check icon"></i>
                             <div class="content">
                               <div class="headers">
@@ -1673,20 +1724,51 @@ if (!settings.get("general")) {
   loadDefaults();
 }
 
-function askforSubtile(availableSubs, initDownload, $course, coursedata) {
+function askforSubtitle(availableSubs, initDownload, $course, coursedata) {
   var $subtitleModal = $(".ui.subtitle.modal");
   var $subtitleDropdown = $subtitleModal.find(".ui.dropdown");
   var subtitleLanguages = [];
+  // for (var key in availableSubs) {
+  //   subtitleLanguages.push({
+  //     name: `<b>${key}</b> <i>${availableSubs[key]} Lectures</i>`,
+  //     value: key
+  //   });
+  // }
+  
+  var languages = [];
+  var totals = {};
+  var languageKeys = {};
   for (var key in availableSubs) {
+    language = key.replace('[Auto]', '').trim();
+    if ( !(language in totals) ) {
+      languages.push(language);
+      totals[language] = 0;
+      languageKeys[language] = [];
+    }
+
+    totals[language] += availableSubs[key];
+    languageKeys[language].push(key);
+  }  
+
+  for (var language in totals) {
+    totals[language] = Math.min(coursedata['totallectures'], totals[language]);
+  }
+
+  languages.sort();
+
+  for (var key in languages) {
+    var language = languages[key];
     subtitleLanguages.push({
-      name: `<b>${key}</b> <i>${availableSubs[key]} Lectures</i>`,
-      value: key
+      name: `<b>${language}</b> <i>${totals[language]} Lectures</i>`,
+      value: languageKeys[language].join('|')
     });
   }
+
   $subtitleModal.modal({ closable: false }).modal("show");
+
   $subtitleDropdown.dropdown({
     values: subtitleLanguages,
-    onChange: function(subtitle) {
+    onChange: function (subtitle) {
       $subtitleModal.modal("hide");
       $subtitleDropdown.dropdown({ values: [] });
       initDownload($course, coursedata, subtitle);
@@ -1811,4 +1893,31 @@ function resetToLogin() {
     .addClass("active red");
   $(".ui.login.grid").slideDown("fast");
   $(".ui.dashboard").fadeOut("fast");
+}
+
+// The purpose here is to have a notification sent, so the user can understand that the download ended
+// The title of the notification should be translated but since the translate function is in index.html and to avoid code duplication
+// I would like to have your feedback in this
+function sendNotification(course_name){
+  var downloadFinishedNotif = new Notification('Download finished', {
+      body: course_name
+  });
+}
+
+function zeroPad(num, max) {
+  return num.toString().padStart(Math.floor(Math.log10(max) + 1), '0');
+}
+
+function getDownloadSpeed(speedInKB) {
+  var current_download_speed = parseInt(speedInKB) || 0;
+  if (current_download_speed < 1024) {
+      current_download_speed = Math.round(current_download_speed * 10) / 10;
+      return {value: current_download_speed, unit: ' KB/s'};
+  } else if (current_download_speed < 1024 ^ 2) {
+      current_download_speed = Math.round(current_download_speed / 1024 * 10) / 10;
+      return {value: current_download_speed, unit: ' MB/s'};
+  } else {
+      current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
+      return {value: current_download_speed, unit: ' GB/s'};
+  }
 }
