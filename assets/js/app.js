@@ -333,7 +333,7 @@ $(".ui.dashboard .content").on(
                     var type = "File";
                   } else {
                     var type = "Video";
-                    var lecture = response.asset.stream_urls;
+                    var lecture = response.asset.media_sources;
                     var qualities = [];
                     var qualitySrcMap = {};
                     lecture.Video.forEach(function(val) {
