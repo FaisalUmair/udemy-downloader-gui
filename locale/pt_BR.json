@@ -34,12 +34,14 @@
 	"Lowest": "Mais baixa",
 	"Highest": "Mais alta",
 	"Application Settings": "Configurações da aplicação",
-	"Language (Requires App Restart)": "Idioma (Será necessário realizar o logout)",
+	"Language (Requires App Restart)": "Idioma (Necessário reiniciar)",
 	"Save": "Salvar",
 	"Settings Saved": "Configurações Salvas",
 	"Skip Attachments": "Baixar somente as vídeo aulas (ignorar anexos)",
 	"About": "Sobre",
 	"Skip Subtitles": "Ignorar legendas",
+	"Select Subtitle": "Selecione a legenda",
+	"Subtitle Language": "Idioma da legenda",
 	"Search Courses": "Procurar Cursos",
 	"Downloads": "Transferências",
 	"Udemy Business": "Udemy para empresas",
@@ -59,5 +61,8 @@
 	"Report Bug": "Reportar um erro",
 	"Contribute": "Contribuir",
 	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "Udeler é gratuito e não contém anúncios. Se você gostou, por favor considere realizar uma doação para o desenvolvedor.",
-	"Dismiss": "Dispensar"
+	"A new version of Udeler is available. You can download the latest version from github releases page": "Uma nova versão do Udeler está disponível. Você pode baixar o mais recente versão da página de lançamentos do github ",
+	"Dismiss": "Dispensar",
+	"Lectures": "Aulas",
+	"Default Subtitle for download": "Legenda padrão para baixar"
 }

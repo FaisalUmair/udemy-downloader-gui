@@ -5,49 +5,7 @@
     <title>Udeler | Udemy Course Downloader</title>
     <link rel="stylesheet" href="assets/css/semantic.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
-  </head>
-  <body>
-    <div class="ui basic subtitle modal">
-      <div class="ui icon header">
-        <i class="closed captioning icon"></i>
-        Select Subtitle
-      </div>
-      <div class="content">
-        <div class="ui fluid selection dropdown">
-          <input type="hidden" name="subtitle" />
-          <i class="dropdown icon"></i>
-          <div class="default text">Subtitle Language</div>
-        </div>
-      </div>
-    </div>
-    <div class="ui basic update-available modal">
-      <div class="ui icon header">
-        <i class="gift icon"></i>
-        New Update Available
-      </div>
-      <div class="content">
-        <p>
-          <center>
-            A new version of Udeler is available. You can download the latest
-            version from github releases page
-          </center>
-        </p>
-      </div>
-      <div class="actions" style="text-align: center;">
-        <div class="ui red cancel inverted button">
-          <i class="remove icon"></i>
-          Cancel
-        </div>
-        <div class="ui green ok inverted download-update button">
-          <i class="checkmark icon"></i>
-          Download
-        </div>
-      </div>
-    </div>
-    <script>
-      const $ = (jQuery = require("jquery"));
-    </script>
-    <script src="assets/js/semantic.min.js"></script>
+
     <script type="text/javascript">
       const settings = require("electron-settings");
       const appVersion = require(__dirname + "/package.json").version;
@@ -69,6 +27,56 @@
           }
         }
       }
+
+      function translateWrite(text) {
+        document.write(translate(text));
+      }
+    </script>
+  </head>
+  <body>
+    <div class="ui basic subtitle modal">
+      <div class="ui icon header">
+        <i class="closed captioning icon"></i>
+        <script>translateWrite("Select Subtitle")</script>
+      </div>
+      <div class="content">
+        <div class="ui fluid selection dropdown">
+          <input type="hidden" name="subtitle" />
+          <i class="dropdown icon"></i>
+          <div class="default text">
+            Subtitle Language
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui basic update-available modal">
+      <div class="ui icon header">
+        <i class="gift icon"></i>        
+        <script>translateWrite("New Update Available")</script>
+      </div>
+      <div class="content">
+        <p>
+          <center>
+            <script>translateWrite("A new version of Udeler is available. You can download the latest version from github releases page")</script>
+          </center>
+        </p>
+      </div>
+      <div class="actions" style="text-align: center;">
+        <div class="ui red cancel inverted button">
+          <i class="remove icon"></i>
+          <script>translateWrite("Cancel")</script>
+        </div>
+        <div class="ui green ok inverted download-update button">
+          <i class="checkmark icon"></i>
+          <script>translateWrite("Download")</script>
+        </div>
+      </div>
+    </div>
+    <script>
+      const $ = (jQuery = require("jquery"));
+    </script>
+    <script src="assets/js/semantic.min.js"></script>
+    <script type="text/javascript">
 
       var template = `
         <div class="ui center aligned login grid">
@@ -291,32 +299,43 @@
 
                               </div>
                           <h5 class="ui top attached  header">
-                              <i class="ui setting icon"></i> ${translate(
-                                "Application Settings"
-                              )}
+                              <i class="ui setting icon"></i> ${translate("Application Settings")}
                           </h5>
 
-                          <div class="ui attached segment">
-                             <div class="field">
-                                      <label>${translate(
-                                        "Language (Requires App Restart)"
-                                      )}</label>
-                                      <div class="ui fluid search selection language dropdown">
-                                          <input type="hidden" name="language">
-                                          <i class="dropdown icon"></i>
-                                          <div class="default text"></div>
-                                          <div class="menu">
-                                          <div class="item" data-value="English">English</div>
-                                        </div>
-                                      </div>
+                            <div class="ui attached segment">
+                              <div class="field">
+                                <label>${translate("Language (Requires App Restart)")}</label>
+                                <div class="ui fluid search selection language dropdown">
+                                    <input type="hidden" name="language">
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text"></div>
+                                    <div class="menu">
+                                      <div class="item" data-value="English">English</div>
+                                    </div>
                                 </div>
+                              </div>
                             </div>
 
-                              <div class="ui horizontal divider"></div>
-                              <button class="ui fluid green button" type="submit">${translate(
-                                "Save"
-                              )}</button>
-                          </form>
+                            <div class="ui attached segment">
+                              <div class="field">
+                                <label>${translate("Default Subtitle for download")}</label>
+                                <div class="ui fluid search selection defaultSubtitle dropdown">
+                                    <input type="hidden" name="defaultSubtitle">
+                                    <i class="dropdown icon"></i>
+                                    <div class="defaultSubtitle text"></div>
+                                    <div class="menu">
+                                      <div class="item" data-value=""></div>
+                                      <div class="item" data-value="English">English</div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="ui horizontal divider"></div>
+                            <button class="ui fluid green button" type="submit">
+                              ${translate("Save")}
+                            </button>
+                        </form>
 
                       </div>
 
@@ -410,6 +429,15 @@
       $.getJSON("locale/meta.json", function(data) {
         $.each(data, function(key) {
           $languageDropdown.append(
+            `<div class="item" data-value=${key}>${key}</div>`
+          );
+        });
+      });
+
+      var $defaultSubtitleDropdown = $(".defaultSubtitle.dropdown .menu");
+      $.getJSON("locale/meta.json", function(data) {
+        $.each(data, function(key) {
+          $defaultSubtitleDropdown.append(
             `<div class="item" data-value=${key}>${key}</div>`
           );
         });

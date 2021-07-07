@@ -42,6 +42,8 @@
   "About": "",
   "Logout": "",
   "Skip Subtitles": "",
+  "Select Subtitle": "",
+  "Subtitle Language": "",
   "Auto Retry on Error (Experimental)": "",
   "Search Courses": "",
   "Downloads": "",
@@ -59,5 +61,8 @@
   "Report Bug": "",
   "Donate": "",
   "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "",
-  "Dismiss": ""
+  "A new version of Udeler is available. You can download the latest version from github releases page": "",
+  "Dismiss": "",
+  "Lectures": "",
+  "Default Subtitle for download": ""
 }
