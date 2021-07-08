@@ -80,48 +80,46 @@
 
       var template = `
         <div class="ui center aligned login grid">
-            <div class="ui login dimmer">
-              <div class="ui big text loader">${translate("Logging in")}</div>
-            </div>
+          <div class="ui login dimmer">
+            <div class="ui big text loader">${translate("Logging in")}</div>
+          </div>
 
-            <div class="ui authenticator dimmer">
-              <div class="ui big text loader">
-                ${translate("Awaiting Login Request")}
-              </div>
+          <div class="ui authenticator dimmer">
+            <div class="ui big text loader">
+              ${translate("Awaiting Login Request")}
             </div>
+          </div>
     
           <div class="row">
             <div class="ten wide column">
-                    <h2 class="ui icon grey login header">
-                      <i class="circular green user icon"></i>
-                      ${translate("Udemy Login")}
-                    </h2>
+              <h2 class="ui icon grey login header">
+                <i class="circular green user icon"></i>
+                ${translate("Udemy Login")}
+              </h2>
             </div>
           </div>
 
           <div class="row">
-              <div class="ten wide column">
-                <form class="ui form">
+            <div class="ten wide column">
+              <form class="ui form">
                 <div class="field">                   
-                   <div class="ui fluid label checkbox">
+                  <div class="ui fluid label checkbox">
                     <input type="checkbox" name="business" id="business">
-                    <label for="business">${translate(
-                      "Udemy Business"
-                    )} ?</label>
+                    <label for="business">${translate("Udemy Business")} ?</label>
                   </div>
                 </div>
                 <div class="field">
-                  <input type="text" id="subdomain" name="subdomain" placeholder="${translate(
-                    "Udemy Business Name"
-                  )}" style="display: none">
+                  <input type="text" id="subdomain" name="subdomain" 
+                         placeholder="${translate("Udemy Business Name")}" 
+                         style="display: none">
                 </div>
               </form>
               <div class="ui horizontal divider">
-                Choose Login Method
+                ${translate("Choose Login Method")}
               </div>
-              <button class="ui fluid green button" type="button" onclick="loginWithUdemy()">${translate(
-                "Login Using Credentials"
-              )}</button>
+              <button class="ui fluid green button" type="button" onclick="loginWithUdemy()">
+                ${translate("Login Using Credentials")}
+              </button>
               <div class="ui horizontal divider">
                 Or
               </div>
@@ -140,21 +138,16 @@
               <div class="ui big text loader">${translate("Logging Out")}</div>
             </div>  
             <div class="ui courses dimmer">
-              <div class="ui big text loader">${translate(
-                "Loading Courses"
-              )}</div>
+              <div class="ui big text loader">${translate("Loading Courses")}</div>
             </div>
              <div class="ui course dimmer">
               <div class="ui big text loader">${translate("Getting Info")}</div>
             </div>
             <div class="ui about dimmer">
-              <div class="ui big text loader">${translate(
-                "Checking for Updates"
-              )}</div>
+              <div class="ui big text loader">${translate("Checking for Updates")}</div>
             </div>
               <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${
-                settings.get("general.language") == "Arabic" ? "right" : "left"
-              }">
+                settings.get("general.language") == "Arabic" ? "right" : "left"}">
                 <a class="active red courses-sidebar item">
                   <i class="file video icon"></i>
                   ${translate("Courses")}
@@ -182,9 +175,7 @@
                         <form class="ui search form">
                         <div class="ui fluid search">
                           <div class="ui fluid icon input">
-                            <input class="prompt" type="text" placeholder="${translate(
-                              "Search Courses"
-                            )}">
+                            <input class="prompt" type="text" placeholder="${translate("Search Courses")}">
                             <i class="search icon"></i>
                           </div>
                         </div>
@@ -195,9 +186,7 @@
 
                     <div class="ui downloads section">
                         <h5 class="ui top attached header">
-                              <i class="ui download icon"></i> ${translate(
-                                "Downloads"
-                              )}
+                              <i class="ui download icon"></i> ${translate("Downloads")}
                         </h5>
                         <div class="ui divided unstackable courses items attached segment">
                         </div>
@@ -206,15 +195,11 @@
                       <div class="ui settings section"> 
                       <form class="ui form">
                         <h5 class="ui top attached  header">
-                              <i class="ui download icon"></i> ${translate(
-                                "Download Settings"
-                              )}
+                              <i class="ui download icon"></i> ${translate("Download Settings")}
                           </h5>
                             <div class="ui attached  segment">
                                 <div class="field">
-                                      <label>${translate(
-                                        "Download Path"
-                                      )}</label>
+                                      <label>${translate("Download Path")}</label>
                                     <div class="ui action input">
                                         <input type="text" readonly name="downloadpath">
                                         <label class="ui icon button btn-file" onclick="selectDownloadPath()">
@@ -225,75 +210,53 @@
                               <div class="field">
                                 <div class="ui checkbox">
                                     <input type="checkbox" name="enabledownloadstartend">
-                                    <label>${translate(
-                                      "Enable Download Start/End"
-                                    )}</label>
+                                    <label>${translate("Enable Download Start/End")}</label>
                                   </div>
                                 </div>
                               <div class="two unstackable fields">
                                   <div class="field">
-                                    <label>${translate(
-                                      "Download Start"
-                                    )}</label>
-                                    <input placeholder="${translate(
-                                      "Start Download at"
-                                    )}" type="number" min="1" name="downloadstart">
+                                    <label>${translate("Download Start")}</label>
+                                    <input placeholder="${translate("Start Download at")}" type="number" min="1" name="downloadstart">
                                   </div>
                                   <div class="field">
                                     <label>${translate("Download End")}</label>
-                                    <input placeholder="${translate(
-                                      "End Download at"
-                                    )}" type="number" min="1" name="downloadend">
+                                    <input placeholder="${translate("End Download at")}" type="number" min="1" name="downloadend">
                                   </div>
                                 </div>
                                   <div class="ui  divider"></div>
                                     <div class="field">
                                       <div class="ui checkbox">
                                           <input type="checkbox" name="skipattachments">
-                                          <label>${translate(
-                                            "Skip Attachments"
-                                          )}</label>
+                                          <label>${translate("Skip Attachments")}</label>
                                         </div>
                                       </div>
                                     <div class="field">
-                                      <label>${translate(
-                                        "Video Quality"
-                                      )}</label>
+                                      <label>${translate("Video Quality")}</label>
                                       <div class="ui fluid search selection dropdown">
                                           <input type="hidden" name="videoquality">
                                           <i class="dropdown icon"></i>
                                           <div class="default text"></div>
                                           <div class="menu">
-                                          <div class="item" data-value="Auto">${translate(
-                                            "Auto"
-                                          )}</div>
-                                          <div class="item" data-value="Lowest">${translate(
-                                            "Lowest"
-                                          )}</div>
+                                          <div class="item" data-value="Auto">${translate("Auto")}</div>
+                                          <div class="item" data-value="Lowest">${translate("Lowest")}</div>
                                           <div class="item" data-value="360p">360p</div>
                                           <div class="item" data-value="480p">480p</div>
                                           <div class="item" data-value="720p">720p</div>
                                           <div class="item" data-value="1080p">1080p</div>
-                                          <div class="item" data-value="Highest">${translate(
-                                            "Highest"
-                                          )}</div>
+                                          <div class="item" data-value="Highest">${translate("Highest")}</div>
                                         </div>
-                                         </div>
+                                      </div>
                                     </div>
                                     <div class="field">
                                       <div class="ui checkbox">
                                           <input type="checkbox" name="skipsubtitles">
-                                          <label>${translate(
-                                            "Skip Subtitles"
-                                          )}</label>
+                                          <label>${translate("Skip Subtitles")}</label>
                                         </div>
                                       </div>
                                       <div class="field">
                                       <div class="ui checkbox">
                                           <input type="checkbox" name="autoretry">
-                                          <label>${translate(
-                                            "Auto Retry on Error (Experimental)"
-                                          )}</label>
+                                          <label>${translate("Auto Retry on Error (Experimental)")}</label>
                                         </div>
                                       </div>
 
@@ -345,9 +308,9 @@
                               <i class="grey file code outline icon"></i>
                               Udeler v${appVersion}
                             </h4>
-                            <button class="ui tiny fluid basic check-updates button">${translate(
-                              "Check for updates"
-                            )}</button>
+                            <button class="ui tiny fluid basic check-updates button">
+                              ${translate("Check for updates")}
+                            </button>
                             <h3 class="ui header">${translate("Links")}</h3>
                             <div class="ui relaxed divided list">
                               <div class="item">
@@ -363,54 +326,44 @@
                                 <i class="large github middle aligned icon"></i>
                                 <div class="content">
                                   <a class="header" href="https://github.com/FaisalUmair">FaisalUmair</a>
-                                  <div class="description">${translate(
-                                    "Developer"
-                                  )}</div>
+                                  <div class="description">${translate("Developer")}</div>
                                 </div>
                               </div>
                               <div class="item">
                                 <i class="large world middle aligned icon"></i>
                                 <div class="content">
                                   <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
-                                  <div class="description">${translate(
-                                    "Website"
-                                  )}</div>
+                                  <div class="description">${translate("Website")}</div>
                                 </div>
                               </div>
                             </div>
-                            <h3 class="ui header">${translate(
-                              "Development"
-                            )}</h3>
+                            <h3 class="ui header">${translate("Development")}</h3>
                               <div class="ui relaxed divided list">
                                 <div class="item">
                                   <i class="large github middle aligned icon"></i>
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
-                                    <div class="description">${translate(
-                                      "Report Bug"
-                                    )}</div>
+                                    <div class="description">${translate("Report Bug")}</div>
                                   </div>
                                 </div>
                                 <div class="item">
                                   <i class="large github middle aligned icon"></i>
                                   <div class="content">
                                     <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
-                                    <div class="description">${translate(
-                                      "Contribute"
-                                    )}</div>
+                                    <div class="description">${translate("Contribute")}</div>
                                   </div>
                                 </div>
                               </div>
                             <h3 class="ui header">${translate("Donate")}</h3>
-                              <p>
+                            <p>
                               ${translate(
                                 "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
                               )}
-                              </p>
-                              <br>
-                              <a href="https://www.udeler.com/donate" class="ui centered donate grid">
-                                <img src="assets/images/donate.png" alt="Donate"/>
-                              </a>
+                            </p>
+                            <br>
+                            <a href="https://www.udeler.com/donate" class="ui centered donate grid">
+                              <img src="assets/images/donate.png" alt="Donate"/>
+                            </a>
                           </div>
                       </div>
                 </div>

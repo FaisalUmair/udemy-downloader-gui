@@ -64,5 +64,8 @@
 	"A new version of Udeler is available. You can download the latest version from github releases page": "Uma nova versão do Udeler está disponível. Você pode baixar o mais recente versão da página de lançamentos do github ",
 	"Dismiss": "Dispensar",
 	"Lectures": "Aulas",
-	"Default Subtitle for download": "Legenda padrão para baixar"
+	"Default Subtitle for download": "Legenda padrão para baixar",
+	"Choose Login Method": "Escolha o método de Entrada",
+	"In the download list since": "Na lista de transferência desde",
+	"Download completed in": "Transferência concluído em"
 }

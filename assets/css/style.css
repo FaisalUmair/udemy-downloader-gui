@@ -92,7 +92,7 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .courses .course .extra .button {
-  padding: 7px 15px;
+  padding: 5px 10px;
 }
 
 .ui.dashboard > .content .about .donate-button {
@@ -105,4 +105,10 @@ body .dialog-widget.background {
 
 .ui.login.authenticator i.icon.user.secret:before {
   content: "\f21b";
+}
+
+.info {
+  font-size: 12px;
+  font-weight: normal !important;
+  color: #bbb;
 }

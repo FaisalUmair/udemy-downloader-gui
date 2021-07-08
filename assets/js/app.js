@@ -62,9 +62,13 @@ $(document).ajaxError(function(event, request) {
 var downloadTemplate = `
 <div class="ui tiny icon action buttons">
   <button class="ui basic blue download button"><i class="download icon"></i></button>
-  <button class="ui disabled basic red pause button"><i class="pause icon"></i></button>
-  <button class="ui disabled basic green resume button"><i class="play icon"></i></button>
-  <button class="ui basic yellow browser button open-in-browser"><i class="desktop icon"></i></button>
+  <button class="ui basic red disabled pause button"><i class="pause icon"></i></button>
+  <button class="ui basic green disabled resume button"><i class="play icon"></i></button>
+  <button class="ui basic yellow open-in-browser button"><i class="desktop icon"></i></button>
+  <!--
+  <button class="ui basic teal dismiss-card button" style="margin-left: 3px;"><i class="ban icon"></i></button>
+  <button class="ui basic teal open-dir button"><i class="folder open icon"></i></button>
+  -->
 </div>
 <div class="ui horizontal divider"></div>
 <div class="ui tiny indicating individual progress">
@@ -75,9 +79,69 @@ var downloadTemplate = `
   <div class="bar">
     <div class="progress"></div>
   </div>
-<div class="label">${translate("Building Course Data")}</div>
+  <div class="label">${translate("Building Course Data")}</div>
 </div>
 `;
+
+function tagCourseCard(course, showDismiss = false) {
+  debugger;
+  var tagHistory = ''
+
+  if (!showDismiss) {
+    const history = getDownloadHistory(course.id);
+    tagHistory =
+      !history
+      ? ''
+      : `<div class="info">
+          ${translate((history?.completed ? "Download completed in" : "In the download list since"))} ${history?.date}
+        </div>`;
+  }
+  const tagDismiss = `<a class="ui basic red remove-download">${translate("Dismiss")}</a>`;
+
+  return `
+    <div class="ui course item" course-id="${course.id}" course-url="${course.url}">
+      <div class="ui tiny label download-quality grey"></div>
+      <div class="ui tiny grey label download-speed">
+        <span class="value">0</span>
+        <span class="download-unit"> KB/s</span>
+      </div>
+      
+      <div class="ui tiny image">
+        <img src="${(course.image ?? course.image_240x135)}" />
+        ${(showDismiss ? tagDismiss : '')}
+      </div>
+
+      <div class="content">
+        <span class="coursename">${course.title}</span>
+
+        <div class="ui tiny icon green download-success message">
+          <i class="check icon"></i>
+          <div class="content">
+            <div class="headers">
+              ${translate("Download Completed")}
+            </div>
+            <p>${translate("Click to dismiss")}</p>
+          </div>
+        </div>
+
+        <div class="ui tiny icon red download-error message">
+          <i class="power icon"></i>
+          <div class="content">
+            <div class="headers">
+              ${translate("Download Failed")}
+            </div>
+            <p>${translate("Click to retry")}</p>
+          </div>
+        </div>
+
+        <div class="extra download-status">
+          ${downloadTemplate}
+          ${tagHistory}
+        </div>
+
+      </div>
+    </div>`;
+}
 
 $(".ui.login #business").change(function() {
   if ($(this).is(":checked")) {
@@ -120,55 +184,7 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function() {
     success: function(response) {
       $(".ui.dashboard .courses.dimmer").removeClass("active");
       $.each(response.results, function(index, course) {
-        $(`<div class="ui course item" course-id="${course.id}" course-url="${
-          course.url
-        }">
-                                <div class="ui tiny label download-quality grey"></div>
-                                <div class="ui tiny grey label download-speed">
-                                    <span class="value">0</span>
-                                    <span class="download-unit"> KB/s</span>
-                                </div>
-                                  <div class="ui tiny image">
-                                    <img src="${course.image_240x135}">
-                                  </div>
-                                  <div class="content">
-                                    <span class="coursename">${
-                                      course.title
-                                    }</span>
-
-                                  <div class="ui tiny icon green download-success message">
-                                         <i class="check icon"></i>
-                                          <div class="content">
-                                            <div class="headers">
-                                               ${translate(
-                                                 "Download Completed"
-                                               )}
-                                             </div>
-                                             <p>${translate(
-                                               "Click to dismiss"
-                                             )}</p>
-                                           </div>
-                                    </div>
-
-                                  <div class="ui tiny icon  red download-error message">
-                                         <i class="power icon"></i>
-                                          <div class="content">
-                                            <div class="headers">
-                                               ${translate("Download Failed")}
-                                             </div>
-                                             <p>${translate(
-                                               "Click to retry"
-                                             )}</p>
-                                           </div>
-                                    </div>
-
-                                    <div class="extra download-status">
-                                      ${downloadTemplate}
-                                    </div>
-
-                                  </div>
-                                </div>
-                        `).appendTo($courses);
+        $(tagCourseCard(course)).appendTo($courses);
       });
       if (!response.next) {
         $this.remove();
@@ -244,10 +260,7 @@ $(".ui.dashboard .content .courses.section .search.form").submit(function(e) {
   }
 });
 
-$(".ui.dashboard .content").on(
-  "click",
-  ".download.button, .download-error",
-  function(e) {
+$(".ui.dashboard .content").on("click", ".download.button, .download-error", function(e) {
     e.stopImmediatePropagation();
     var $course = $(this).parents(".course");
     var courseid = $course.attr("course-id");
@@ -306,7 +319,7 @@ $(".ui.dashboard .content").on(
               remaining--;
               if (!remaining) {
                 if (Object.keys(availableSubs).length) {
-                  askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
+                  askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
                 } else {
                   initDownload($course, coursedata);
                 }
@@ -387,21 +400,18 @@ $(".ui.dashboard .content").on(
                   };
 
                   if (!skipSubtitles && response.asset.captions.length) {
-                    coursedata["chapters"][chapterindex]["lectures"][lectureindex]
-                      .caption = [];
+                    coursedata["chapters"][chapterindex]["lectures"][lectureindex].caption = [];
 
                     response.asset.captions.forEach(function(caption) {
                       caption.video_label in availableSubs
                         ? (availableSubs[caption.video_label] = availableSubs[caption.video_label] + 1)
                         : (availableSubs[caption.video_label] = 1);
                       
-                      coursedata["chapters"][chapterindex]["lectures"][lectureindex]
-                        .caption[caption.video_label] = caption.url;
+                      coursedata["chapters"][chapterindex]["lectures"][lectureindex].caption[caption.video_label] = caption.url;
                     });
                   }
 
                   if (response.supplementary_assets.length && !skipAttachments) {
-                    debugger;
                     coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"] = [];
                     var supplementary_assets_remaining = response.supplementary_assets.length;
 
@@ -411,7 +421,6 @@ $(".ui.dashboard .content").on(
                         url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
                         headers: headers,
                         success: function(response) {
-                          debugger;
                           if (response.download_urls) {
                             coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"]
                               .push({
@@ -436,7 +445,7 @@ $(".ui.dashboard .content").on(
                             
                             if (!remaining) {
                               if (Object.keys(availableSubs).length) {
-                                askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
+                                askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
                               } else {
                                 initDownload($course, coursedata);
                               }
@@ -452,7 +461,7 @@ $(".ui.dashboard .content").on(
                     
                     if (!remaining) {
                       if (Object.keys(availableSubs).length) {
-                        askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
+                        askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
                       } else {
                         initDownload($course, coursedata);
                       }
@@ -466,8 +475,9 @@ $(".ui.dashboard .content").on(
           }
           else if (!skipAttachments) {
             coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
-              src: `<script type="text/javascript">window.location = "https://${subDomain}.udemy.com${$course.attr(
-                "course-url")}t/${v._class}/${v.id}";</script>`,
+              src: `<script type="text/javascript">
+                      window.location = "https://${subDomain}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}";
+                    </script>`,
               name: v.title,
               quality: "Attachment",
               type: "Url"
@@ -477,7 +487,7 @@ $(".ui.dashboard .content").on(
             
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
+                askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
               } else {
                 initDownload($course, coursedata);
               }
@@ -488,7 +498,7 @@ $(".ui.dashboard .content").on(
             
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
-                askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
+                askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
               } else {
                 initDownload($course, coursedata);
               }
@@ -542,6 +552,7 @@ function initDownload($course, coursedata, subtitle = "") {
     480: "teal",
     720: "olive",
     1080: "green",
+    auto: "purple",
     Attachment: "pink",
     Subtitle: "black"
   };
@@ -670,7 +681,7 @@ function initDownload($course, coursedata, subtitle = "") {
       let reStarted = 0;
 
       timer = setInterval(function() {
-        debugger;
+        //debugger;
         switch (dl.status) {
           case 0:
             // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
@@ -782,7 +793,7 @@ function initDownload($course, coursedata, subtitle = "") {
         );
       }
       else {
-        debugger;
+
         var fileExtension = attachment.src.split("/").pop().split("?").shift().split(".").pop();
         var lecture_name = sanitize(
           lectureindex + 1
@@ -795,7 +806,7 @@ function initDownload($course, coursedata, subtitle = "") {
         
         const pathFileName = `${download_directory}/${course_name}/${chapter_name}/${lecture_name}`;
         console.log(pathFileName);
-        debugger;
+        //debugger;
 
         if (fs.existsSync(pathFileName + ".mtd") &&
            !fs.statSync(pathFileName + ".mtd").size
@@ -989,8 +1000,6 @@ function initDownload($course, coursedata, subtitle = "") {
       );
 
       const pathFileName = `${download_directory}/${course_name}/${chapter_name}/${lecture_name}`;
-      console.log(pathFileName);
-      debugger;
 
       if (fs.existsSync(pathFileName + ".mtd") && 
          !fs.statSync(pathFileName + ".mtd").size
@@ -1223,8 +1232,7 @@ function loadSettings() {
     .html(defaultSubtitle || "");    
 }
 
-settingsForm.find('input[name="enabledownloadstartend"]')
-  .change(function () {
+settingsForm.find('input[name="enabledownloadstartend"]').change(function () {
     if (this.checked) {
       settingsForm.find('input[name="downloadstart"], input[name="downloadend"]')
         .prop("readonly", false);
@@ -1232,7 +1240,7 @@ settingsForm.find('input[name="enabledownloadstartend"]')
       settingsForm.find('input[name="downloadstart"], input[name="downloadend"]')
         .prop("readonly", true);
     }
-  });
+});
 
 function selectDownloadPath() {
   const path = dialog.showOpenDialogSync({
@@ -1256,69 +1264,72 @@ function handleResponse(response, keyword = "") {
   $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
   if (response.results.length) {
     $.each(response.results, function(index, course) {
-      $(".ui.dashboard .ui.courses.section .ui.courses.items").append(`
-                  <div class="ui course item course-item" course-id="${
-                    course.id
-                  }" course-url="${course.url}">
-                  <div class="ui tiny label download-quality grey"></div>
-                  <!-- <div class="ui tiny grey label download-speed"><span class="value">0</span> KB/s</div> -->
-                  <div class="ui tiny grey label download-speed">
-                    <span class="value">0</span>
-                    <span class="download-unit"> KB/s</span>
-                  </div>
-                    <div class="ui tiny image">
-                      <img src="${course.image_240x135}">
-                    </div>
-                    <div class="content">
-                      <span class="coursename">${course.title}</span>
-
-                    <div class="ui tiny icon green download-success message">
-                           <i class="check icon"></i>
-                            <div class="content">
-                              <div class="headers">
-                                 ${translate("Download Completed")}
-                               </div>
-                               <p>${translate("Click to dismiss")}</p>
-                             </div>
-                      </div>
-
-                    <div class="ui tiny icon  red download-error message">
-                           <i class="power icon"></i>
-                            <div class="content">
-                              <div class="headers">
-                                 ${translate("Download Failed")}
-                               </div>
-                               <p>${translate("Click to retry")}</p>
-                             </div>
-                      </div>
-
-                      <div class="extra download-status">
-                        ${downloadTemplate}
-                      </div>
-
-                    </div>
-                  </div>
-          `);
+      $(".ui.dashboard .ui.courses.section .ui.courses.items")
+        .append(tagCourseCard(course));
     });
     if (response.next) {
       $(".ui.courses.section").append(
-        `<button class="ui basic blue fluid load-more button disposable" data-url=${
-          response.next
-        }>${translate("Load More")}</button>`
+        `<button class="ui basic blue fluid load-more button disposable" data-url=${response.next}>
+          ${translate("Load More")}
+        </button>`
       );
     }
   } else {
     $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
-      `<div class="ui yellow message disposable">${translate(
-        "No Courses Found"
-      )}</div>`
+      `<div class="ui yellow message disposable">
+        ${translate("No Courses Found")}
+      </div>`
     );
   }
 
 }
 
+function addDownloadHistory(courseId, completed) {
+  var item = undefined;
+  const items = getAllDownloadsHistory() ?? [];
+
+  if (items.length > 0) {
+    item = items.find(x => x.id == courseId);
+  }
+
+  if (item) {
+    debugger;
+    item.completed = completed;
+    item.date = completed ? new Date(Date.now()).toLocaleDateString() : item.date
+  }
+  else {
+    item = {
+      id: courseId,
+      completed: completed,
+      date: new Date(Date.now()).toLocaleDateString()
+    }
+    items.push(item)
+  }
+
+  settings.set("downloadedHistory", items);
+}
+
+function getAllDownloadsHistory() {
+  return settings.get("downloadedHistory");
+}
+
+function getDownloadHistory(courseId) {
+  try {
+    const items = getAllDownloadsHistory() ?? [];
+
+    if (items.length > 0) {
+      return items.find(x => x.id == courseId);
+    }
+
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }  
+}
+
 function saveDownloads(quit) {
-  var downloadedCourses = [];
+  var downloadedCourses = [];  
+   
   var $downloads = $(".ui.downloads.section .ui.courses.items .ui.course.item").slice(0);
   if ($downloads.length) {
     $downloads.each(function(index, elem) {
@@ -1346,14 +1357,19 @@ function saveDownloads(quit) {
         completed: completed,
         progressStatus: $elem.find(".download-status .label").text()
       };
+
       downloadedCourses.push(course);
+
+      addDownloadHistory(course.id, completed);
     });
+
     settings.set("downloadedCourses", downloadedCourses);
   }
   if (quit) {
     electron.ipcRenderer.send("quitApp");
   }
 }
+
 function removeCurseDownloads(courseId) {
   // $(".ui.downloads.section .ui.courses.items .ui.course.item").forEach(
   //   function () {
@@ -1379,48 +1395,9 @@ function loadDownloads() {
     return;
   }
   if ((downloadedCourses = settings.get("downloadedCourses"))) {
-    downloadedCourses.forEach(function(course) {
-      $course = $(`<div class="ui course item" course-id="${course.id}" course-url="${course.url}">
-                  <div class="ui tiny label download-quality grey"></div>
-                  <div class="ui tiny grey label download-speed">
-                    <span class="value">0</span>
-                    <span class="download-unit"> KB/s</span>
-                  </div>
-                  <div class="ui tiny image">
-                    <img src="${course.image}" />                  
-                    <a class="ui basic red remove-download">${translate("Dismiss")}</a>
-                  </div>
-                  
-                    <div class="content">
-                      <span class="coursename">${course.title}</span>
-
-                      <div class="ui tiny icon green download-success message">
-                           <i class="check icon"></i>
-                            <div class="content">
-                              <div class="headers">
-                                 ${translate("Download Completed")}
-                               </div>
-                               <p>${translate("Click to dismiss")}</p>
-                             </div>
-                      </div>
-
-                    <div class="ui tiny icon  red download-error message">
-                           <i class="power icon"></i>
-                            <div class="content">
-                              <div class="headers">
-                                 ${translate("Download Failed")}
-                               </div>
-                               <p>${translate("Click to retry")}</p>
-                             </div>
-                      </div>
-
-                      <div class="extra download-status">
-                        ${downloadTemplate}
-                      </div>
-
-                    </div>
-                  </div>
-          `);
+    downloadedCourses.forEach(function (course) {
+      console.log('loadDownloads', course)
+      $course = $(tagCourseCard(course, true));
       $(".ui.downloads.section .ui.courses.items").append($course);
       if (!course.completed) {
         $course
@@ -1484,7 +1461,7 @@ if (!settings.get("general")) {
   loadDefaults();
 }
 
-function askforSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle = "") {
+function askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle = "") {
   var $subtitleModal = $(".ui.subtitle.modal");
   var $subtitleDropdown = $subtitleModal.find(".ui.dropdown");
   var subtitleLanguages = [];
@@ -1502,6 +1479,7 @@ function askforSubtitle(availableSubs, initDownload, $course, coursedata, defaul
   for (var key in availableSubs) {
     language = key.replace('[Auto]', '').replace(`[${translate("Auto")}]`,'').trim();
 
+    // default subtitle exists 
     if (language === defaultSubtitle) {
       initDownload($course, coursedata, key);
       return;
@@ -1517,10 +1495,15 @@ function askforSubtitle(availableSubs, initDownload, $course, coursedata, defaul
     languageKeys[language].push(key);
   }  
 
+  // only a subtitle
+  if (languages.length == 1) {
+    initDownload($course, coursedata, languageKeys[0]);
+    return;
+  }
+
   for (var language in totals) {
     totals[language] = Math.min(coursedata['totallectures'], totals[language]);
   }
-
   languages.sort();
 
   for (var key in languages) {
@@ -1586,11 +1569,8 @@ function loginWithUdemy() {
       callback({ requestHeaders: request.requestHeaders });
     }
   );
-  if (
-    $(".ui.login .form")
-      .find('input[name="business"]')
-      .is(":checked") &&
-    $subDomain.val()
+  if ($(".ui.login .form").find('input[name="business"]').is(":checked")
+    && $subDomain.val()
   ) {
     udemyLoginWindow.loadURL(`https://${$subDomain.val()}.udemy.com`);
   } else {
@@ -1601,15 +1581,11 @@ function loginWithUdemy() {
 function checkLogin() {
   if (settings.get("access_token")) {
     $(".ui.login.grid").slideUp("fast");
-    $(".ui.dashboard")
-      .fadeIn("fast")
-      .css("display", "flex");
+    $(".ui.dashboard").fadeIn("fast").css("display", "flex");
     headers = { Authorization: `Bearer ${settings.get("access_token")}` };
     $.ajax({
       type: "GET",
-      url: `https://${settings.get(
-        "subdomain"
-      )}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
+      url: `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=50`,
       beforeSend: function() {
         $(".ui.dashboard .courses.dimmer").addClass("active");
       },
