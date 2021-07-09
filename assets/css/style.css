@@ -107,8 +107,8 @@ body .dialog-widget.background {
   content: "\f21b";
 }
 
-.info {
-  font-size: 12px;
+.info-downloaded {
+  font-size: 13px;
   font-weight: normal !important;
-  color: #bbb;
+  color: #a8a8aa;
 }

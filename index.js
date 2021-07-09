@@ -12,7 +12,7 @@ let win;
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 550,
+    width: 588,
     height: 700,
     icon: __dirname + "/assets/images/build/icon.png",
     resizable: isDebug,
@@ -53,45 +53,52 @@ function createWindow() {
 
   const template = [
     {
-      label: "Edit",
-      submenu: [
-        { role: "undo" },
-        { role: "redo" },
-        { type: "separator" },
-        { role: "cut" },
-        { role: "copy" },
-        { role: "paste" },
-        { role: "pasteandmatchstyle" },
-        { role: "delete" },
-        { role: "selectall" }
-      ]
-    }
-  ];
-
-  if (process.platform === "darwin") {
-    template.unshift({
       label: app.name,
       submenu: [
         { role: "about" },
         { type: "separator" },
-        { role: "services", submenu: [] },
-        { type: "separator" },
-        { role: "hide" },
-        { role: "hideothers" },
-        { role: "unhide" },
-        { type: "separator" },
-        { role: "quit" }
+        { role: "quit" }        
       ]
-    });
+    },
+    {
+      label: "View",
+      submenu: [
+        { role: "reload" },
+        { role: "forcereload" },
+        { type: "separator" },
+        { role: "resetZoom" },
+        { role: "zoomin" },
+        { role: "zoomout" },
+        { type: "separator" },
+        { role: "togglefullscreen" }
+      ]
+    }
+  ];
 
-    template[1].submenu.push(
-      { type: "separator" },
-      {
-        label: "Speech",
-        submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }]
-      }
-    );
-  }
+  //if (process.platform === "darwin") {
+    // template.unshift({
+    //   label: app.name,
+    //   submenu: [
+    //     { role: "about" },
+    //     { type: "separator" },
+    //     { role: "services", submenu: [] },
+    //     { type: "separator" },
+    //     { role: "hide" },
+    //     { role: "hideothers" },
+    //     { role: "unhide" },
+    //     { type: "separator" },
+    //     { role: "quit" }
+    //   ]
+    // });
+
+    // template[1].submenu.push(
+    //   { type: "separator" },
+    //   {
+    //     label: "Speech",
+    //     submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }]
+    //   }
+    // );
+  //}
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 

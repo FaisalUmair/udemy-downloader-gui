@@ -21,6 +21,8 @@ var awaitingLogin = false;
 
 app.listen(50490);
 
+console.table(getAllDownloadsHistory());
+
 io.on("connect", function(socket) {
   $loginAuthenticator.removeClass("disabled");
 
@@ -81,21 +83,21 @@ var downloadTemplate = `
   </div>
   <div class="label">${translate("Building Course Data")}</div>
 </div>
+<div class="info-downloaded"></div>
 `;
 
 function tagCourseCard(course, showDismiss = false) {
-  debugger;
-  var tagHistory = ''
+  const history = getDownloadHistory(course.id);
+  const infoDownloaded = !history
+      ? ""
+      : translate((history?.completed ? "Download completed in" : "In the download list since")) + " " + history?.date
 
-  if (!showDismiss) {
-    const history = getDownloadHistory(course.id);
-    tagHistory =
-      !history
-      ? ''
-      : `<div class="info">
-          ${translate((history?.completed ? "Download completed in" : "In the download list since"))} ${history?.date}
-        </div>`;
+  course.infoDownloaded = infoDownloaded;
+  if (!course.completed) {
+    course.completed = false;
   }
+  course.completed = history?.completed ? true : course.completed;
+  
   const tagDismiss = `<a class="ui basic red remove-download">${translate("Dismiss")}</a>`;
 
   return `
@@ -136,7 +138,6 @@ function tagCourseCard(course, showDismiss = false) {
 
         <div class="extra download-status">
           ${downloadTemplate}
-          ${tagHistory}
         </div>
 
       </div>
@@ -184,7 +185,13 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function() {
     success: function(response) {
       $(".ui.dashboard .courses.dimmer").removeClass("active");
       $.each(response.results, function(index, course) {
-        $(tagCourseCard(course)).appendTo($courses);
+        $course = $(tagCourseCard(course))
+        $course.appendTo($courses);
+        if (course.completed) {
+          resetCourse($course, $course.find(".download-success"), false);
+        } else {
+          $course.find(".info-downloaded").html(course.infoDownloaded);          
+        }
       });
       if (!response.next) {
         $this.remove();
@@ -238,9 +245,7 @@ $(".ui.dashboard .content .courses.section .search.form").submit(function(e) {
           $(".ui.dashboard .ui.courses.section .disposable").remove();
           $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
           $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
-            `<div class="ui yellow message disposable">${translate(
-              "No Courses Found"
-            )}</div>`
+            `<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`
           );
         }
       },
@@ -249,9 +254,7 @@ $(".ui.dashboard .content .courses.section .search.form").submit(function(e) {
         $(".ui.dashboard .ui.courses.section .disposable").remove();
         $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
         $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
-          `<div class="ui yellow message disposable">${translate(
-            "No Courses Found"
-          )}</div>`
+          `<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`
         );
       }
     });
@@ -266,6 +269,7 @@ $(".ui.dashboard .content").on("click", ".download.button, .download-error", fun
     var courseid = $course.attr("course-id");
     $course.find(".download-error").hide();
     $course.find(".download-status").show();
+    $course.find(".info-downloaded").hide();
     var settingsCached = settings.getAll();
     var skipAttachments = settingsCached.download.skipAttachments;
     var skipSubtitles = settingsCached.download.skipSubtitles;
@@ -539,9 +543,9 @@ function initDownload($course, coursedata, subtitle = "") {
   $course.push($clone[0]);
   var timer;
   var downloader = new Downloader();
-  var $downloadStatus = $course.find(".download-status");
+  // var $downloadStatus = $course.find(".download-status");
   var $actionButtons = $course.find(".action.buttons");
-  var $downloadButton = $actionButtons.find(".download.button");
+  // var $downloadButton = $actionButtons.find(".download.button");
   var $pauseButton = $actionButtons.find(".pause.button");
   var $resumeButton = $actionButtons.find(".resume.button");
   var lectureChaperMap = {};
@@ -568,7 +572,7 @@ function initDownload($course, coursedata, subtitle = "") {
   });
 
   var course_name = sanitize(coursedata["name"]);
-  var totalchapters = coursedata["chapters"].length;
+  // var totalchapters = coursedata["chapters"].length;
   var totallectures = coursedata["totallectures"];
   var $progressElemCombined = $course.find(".combined.progress");
   var $progressElemIndividual = $course.find(".individual.progress");
@@ -634,6 +638,7 @@ function initDownload($course, coursedata, subtitle = "") {
   $progressElemCombined.progress("reset");
   $download_speed.show();
   $download_quality.show();
+  $course.find(".info-downloaded").hide();
 
   function downloadChapter(chapterindex, lectureindex) {
     var num_lectures = coursedata["chapters"][chapterindex]["lectures"].length;
@@ -657,7 +662,7 @@ function initDownload($course, coursedata, subtitle = "") {
   ) {
     
     if (downloaded == toDownload) {
-      resetCourse($course.find(".download-success"));
+      resetCourse($course, $course.find(".download-success"), autoRetry);
       sendNotification(course_name);
       return;
     } else if (lectureindex == num_lectures) {
@@ -723,10 +728,10 @@ function initDownload($course, coursedata, subtitle = "") {
                   if (error.status == 401 || error.status == 403) {
                     fs.unlinkSync(dl.filePath);
                   }
-                  resetCourse($course.find(".download-error"));
+                  resetCourse($course, $course.find(".download-error"), autoRetry);
                 },
                 success: function() {
-                  resetCourse($course.find(".download-error"));
+                  resetCourse($course, $course.find(".download-error"), autoRetry);
                 }
               });
               clearInterval(timer);              
@@ -1029,20 +1034,20 @@ function initDownload($course, coursedata, subtitle = "") {
       }
     }
   }
+}
 
-  function resetCourse($elem) {
-    if ($elem.hasClass("download-error") && autoRetry) {
-      $course.length = 1;
-      initDownload($course, coursedata, subtitle);
-      return;
-    }
-    $download_speed.hide();
-    $download_quality.hide();
-    $download_speed_value.html(0);
-    $downloadStatus.hide().html(downloadTemplate);
-    $elem.css("display", "flex");
-    $course.css("padding", "14px 0px");
+function resetCourse($course, $elem, autoRetry) {
+  if ($elem.hasClass("download-error") && autoRetry) {
+    $course.length = 1;
+    initDownload($course, coursedata, subtitle);
+    return;
   }
+  
+  $course.find(".download-quality").hide();
+  $course.find(".download-speed").hide().find(".value").html(0);
+  $course.find(".download-status").hide().html(downloadTemplate);
+  $elem.css("display", "flex");
+  $course.css("padding", "14px 0px");
 }
 
 $(".courses-sidebar").click(function() {
@@ -1263,9 +1268,14 @@ function handleResponse(response, keyword = "") {
   $(".ui.dashboard .ui.courses.section .disposable").remove();
   $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
   if (response.results.length) {
-    $.each(response.results, function(index, course) {
-      $(".ui.dashboard .ui.courses.section .ui.courses.items")
-        .append(tagCourseCard(course));
+    $.each(response.results, function (index, course) {
+      $course = $(tagCourseCard(course));
+      $(".ui.dashboard .ui.courses.section .ui.courses.items").append($course);  
+      if (course.completed) {
+        resetCourse($course, $course.find(".download-success"), false);
+      } else {
+        $course.find(".info-downloaded").html(course.infoDownloaded);          
+      }
     });
     if (response.next) {
       $(".ui.courses.section").append(
@@ -1400,20 +1410,14 @@ function loadDownloads() {
       $course = $(tagCourseCard(course, true));
       $(".ui.downloads.section .ui.courses.items").append($course);
       if (!course.completed) {
-        $course
-          .find(".individual.progress")
-          .progress({
-            percent: course.individualProgress
-          })
-          .show();
-        $course
-          .find(".combined.progress")
-          .progress({
-            percent: course.combinedProgress
-          })
-          .show();
+        $course.find(".individual.progress").progress({percent: course.individualProgress}).show();
+        $course.find(".combined.progress").progress({ percent: course.combinedProgress }).show();
         $course.find(".download-status .label").html(course.progressStatus);
+        $course.find(".info-downloaded").hide();
         $course.css("padding-bottom", "25px");
+      }
+      else {
+        $course.find(".info-downloaded").html(course.infoDownloaded).show(); 
       }
     });
   }
@@ -1590,8 +1594,11 @@ function checkLogin() {
         $(".ui.dashboard .courses.dimmer").addClass("active");
       },
       headers: headers,
-      success: function(response) {
+      success: function (response) {
         handleResponse(response);
+        if (settings.get("downloadedCourses")) {
+          loadDownloads()
+        }
       },
       error: function(response) {
         if (response.status == 403) {
