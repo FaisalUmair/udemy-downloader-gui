@@ -112,3 +112,7 @@ body .dialog-widget.background {
   font-weight: normal !important;
   color: #a8a8aa;
 }
+
+.border-radius {
+  border-radius: 8px !important;
+}

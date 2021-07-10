@@ -108,8 +108,8 @@ function tagCourseCard(course, showDismiss = false) {
         <span class="download-unit"> KB/s</span>
       </div>
       
-      <div class="ui tiny image">
-        <img src="${(course.image ?? course.image_240x135)}" />
+      <div class="ui tiny image border-radius">
+        <img src="${(course.image ?? course.image_240x135)}" class="border-radius" />
         ${(showDismiss ? tagDismiss : '')}
       </div>
 
@@ -654,13 +654,7 @@ function initDownload($course, coursedata, subtitle = "") {
     );
   }
 
-  function downloadLecture(
-    chapterindex,
-    lectureindex,
-    num_lectures,
-    chapter_name
-  ) {
-    
+  function downloadLecture(chapterindex, lectureindex, num_lectures, chapter_name) {    
     if (downloaded == toDownload) {
       resetCourse($course, $course.find(".download-success"), autoRetry);
       sendNotification(course_name);
@@ -848,6 +842,9 @@ function initDownload($course, coursedata, subtitle = "") {
       const attachment = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"]
       
       if (attachment) {
+        // order by name
+        coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"].sort(dynamicSort("name"));
+
         var total_assets = attachment.length;
         var index = 0;
         downloadAttachments(index, total_assets);
@@ -981,8 +978,8 @@ function initDownload($course, coursedata, subtitle = "") {
           if (
             coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"]
           ) {
-            var total_assets = 
-              coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"].length;
+            coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"].sort(dynamicSort("name"));
+            var total_assets = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"].length;
             var index = 0;
             downloadAttachments(index, total_assets);
           }
@@ -1303,7 +1300,6 @@ function addDownloadHistory(courseId, completed) {
   }
 
   if (item) {
-    debugger;
     item.completed = completed;
     item.date = completed ? new Date(Date.now()).toLocaleDateString() : item.date
   }
@@ -1669,5 +1665,25 @@ function getDownloadSpeed(speedInKB) {
   } else {
       current_download_speed = Math.round(current_download_speed / (1024 ^ 2) * 10) / 10;
       return {value: current_download_speed, unit: ' GB/s'};
+  }
+}
+
+// example:
+//  MyData.sort(dynamicSort("name"));
+//  MyData.sort(dynamicSort("-name"));
+function dynamicSort(property) {
+  var sortOrder = 1;
+
+  if(property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+  }
+
+  return function (a,b) {
+      if(sortOrder == -1){
+          return b[property].localeCompare(a[property]);
+      }else{
+          return a[property].localeCompare(b[property]);
+      }        
   }
 }

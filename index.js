@@ -35,12 +35,13 @@ function createWindow() {
     win.webContents.openDevTools();
     win.maximize();
   }
+  
+  // win.webContents.on('did-start-loading', (e) => {
+  //   saveOnClose(e);
+  // });
 
   win.on("close", event => {
-    if (!downloadsSaved) {
-      event.preventDefault();
-      win.webContents.send("saveDownloads");
-    }
+    saveOnClose(event);
   });
 
   // Emitted when the window is closed.
@@ -55,22 +56,48 @@ function createWindow() {
     {
       label: app.name,
       submenu: [
-        { role: "about" },
-        { type: "separator" },
+        // { role: "about" },
+        // { type: "separator" },
         { role: "quit" }        
       ]
     },
     {
       label: "View",
       submenu: [
-        { role: "reload" },
+        // { role: "reload" },
         { role: "forcereload" },
+        // {
+        //   label: 'Refresh',
+        //   click: async () => {
+        //     saveOnClose(null);
+        //   }
+        // },
         { type: "separator" },
         { role: "resetZoom" },
         { role: "zoomin" },
         { role: "zoomout" },
         { type: "separator" },
         { role: "togglefullscreen" }
+      ]
+    },
+    {
+      label: 'GitHub Repo',
+      submenu: [
+        {
+          label: 'This Version',
+          click: async () => {
+            const { shell } = require('electron')
+            await shell.openExternal('https://github.com/heliomarpm/udemy-downloader-gui/releases')
+          }
+        },
+        { type: "separator" },
+        {
+          label: 'Official (Archived)',
+          click: async () => {
+            const { shell } = require('electron')
+            await shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases')
+          }
+        }
       ]
     }
   ];
@@ -100,6 +127,16 @@ function createWindow() {
     // );
   //}
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+
+  function saveOnClose(event = null) {
+    console.log("downloadsSaved", downloadsSaved)
+    if (!downloadsSaved) {
+      downloadsSaved = true;
+      if (event != null) { event.preventDefault(); }
+      win.webContents.send("saveDownloads");      
+    }
+    console.log("saveOnClose", downloadsSaved)
+  }
 }
 
 // This method will be called when Electron has finished
@@ -121,7 +158,6 @@ app.on("activate", () => {
 });
 
 ipcMain.on("quitApp", function() {
-  downloadsSaved = true;
   app.quit();
 });
 

@@ -307,11 +307,14 @@
             <div class="ui about section">   
               <div class="ui segment">
                 <h4 class="ui center aligned icon header">
-                  <i class="grey file code outline icon"></i>
-                  Udeler v${appVersion}
+                  <!-- <i class="grey file code outline icon"></i> -->
+                  <!-- <i class="grey download icon"></i> -->                  
+                  <img src="./assets/images/logo64.png" style="height: 64px; width: 64px"/>
+                  <br>
+                  v${appVersion}
                 </h4>
                 <button class="ui tiny fluid basic check-updates button">
-                  ${translate("Check for updates")}
+                  ${translate("Check for updates")} - (official version)
                 </button>
 
                 <h3 class="ui header">${translate("Links")}</h3>
@@ -319,8 +322,25 @@
                   <div class="item">
                     <i class="large github middle aligned icon"></i>
                     <div class="content">
+                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui">heliomarpm/udemy-downloader-gui</a>
+                      <div class="description">${translate("Repository")} </div>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <i class="large world middle aligned icon"></i>
+                    <div class="content">
+                      <a class="header" href="https://steemkr.com/utopian-io/@moenawar/my-new-logo-design-proposal-for-udeler">@Moenawar</a>
+                      <div class="description">${translate("New Icon")}</div>
+                    </div>
+                  </div>
+                  <div class="ui horizontal divider"></div>
+
+                  <div class="item">
+                    <i class="large github middle aligned icon"></i>
+                    <div class="content">
                       <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui">FaisalUmair/udemy-downloader-gui</a>
-                      <div class="description">${translate("Repository")}</div>
+                      <div class="description">${translate("Repository")} (${translate("Archived")})</div>
                     </div>
                   </div>
                   <div class="item">
