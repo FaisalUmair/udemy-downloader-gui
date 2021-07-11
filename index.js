@@ -14,7 +14,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 588,
     height: 700,
-    icon: __dirname + "/assets/images/build/icon.png",
+    //icon: __dirname + "/assets/images/build/icon.png",
     resizable: isDebug,
     webPreferences: {
       nodeIntegration: true
