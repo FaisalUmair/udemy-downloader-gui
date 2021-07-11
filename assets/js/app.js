@@ -109,11 +109,11 @@ function htmlCourseCard(course, showDismiss = false) {
         <span class="download-unit"> KB/s</span>
       </div>
      
-      <div class="ui tiny image border-radius">
+      <div class="ui tiny image">
         <div class="ui red left corner label icon-encrypted">
           <i class="lock icon"></i>
         </div>
-        <img src="${(course.image ?? course.image_240x135)}" class="border-radius" />
+        <img src="${(course.image ?? course.image_240x135)}" class="course-image border-radius" />
         ${(showDismiss ? tagDismiss : '')}
       </div>
 
@@ -297,6 +297,7 @@ $(".ui.dashboard .content").on("click", ".download.button, .download-error", fun
         $course.css("padding-bottom", "25px");
         $course.find(".ui.progress").show();
 
+        debugger;
         var coursedata = [];
         coursedata["chapters"] = [];
         coursedata["name"] = $course.find(".coursename").text();
@@ -670,8 +671,9 @@ function initDownload($course, coursedata, subtitle = "") {
 
   function downloadLecture(chapterindex, lectureindex, num_lectures, chapter_name) {    
     if (downloaded == toDownload) {
+      debugger;
       resetCourse($course, $course.find(".download-success"), autoRetry);
-      sendNotification(course_name);
+      sendNotification(course_name, $course.find(".ui.tiny.image").find(".course-image").attr("src"));
       return;
     } else if (lectureindex == num_lectures) {
       downloadChapter(++chapterindex, 0);
@@ -697,6 +699,14 @@ function initDownload($course, coursedata, subtitle = "") {
 
       timer = setInterval(function() {
         
+        // Status:
+        //   -3 = destroyed
+        //   -2 = stopped
+        //   -1 = error
+        //   0 = not started
+        //   1 = started (downloading)
+        //   2 = error, retrying
+        //   3 = finished
         switch (dl.status) {
           case 0:
             // Wait a reasonable amount of time for the download to start and if it doesn't then start another one.
@@ -1679,9 +1689,10 @@ function resetToLogin() {
 // The purpose here is to have a notification sent, so the user can understand that the download ended
 // The title of the notification should be translated but since the translate function is in index.html and to avoid code duplication
 // I would like to have your feedback in this
-function sendNotification(course_name){
-  var downloadFinishedNotif = new Notification('Download finished', {
-      body: course_name
+function sendNotification(course_name, urlImage = null){
+  var downloadFinishedNotif = new Notification(course_name, {
+      body: 'Download finished',
+      icon: urlImage ?? __dirname + "/assets/images/build/icon.png"
   });
 }
 

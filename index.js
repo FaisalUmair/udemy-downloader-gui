@@ -129,13 +129,13 @@ function createWindow() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   function saveOnClose(event = null) {
-    console.log("downloadsSaved", downloadsSaved)
     if (!downloadsSaved) {
       downloadsSaved = true;
       if (event != null) { event.preventDefault(); }
-      win.webContents.send("saveDownloads");      
-    }
-    console.log("saveOnClose", downloadsSaved)
+      win.webContents.send("saveDownloads");
+      
+      console.log("saveOnClose", downloadsSaved)
+    }    
   }
 }
 
