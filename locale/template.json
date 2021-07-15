@@ -1,4 +1,5 @@
 {
+  "The great creator for this project": "",
   "Udemy Login": "",
   "Email": "",
   "Password": "",
@@ -55,6 +56,7 @@
   "Download": "",
   "Links": "",
   "Repository": "",
+  "Active": "",
   "Archived": "",
   "Developer": "",
   "Website": "",
@@ -70,5 +72,10 @@
   "In the download list since": "",
   "Download completed in": "",
   "Icon Designer": "",
-  "Contains encrypted videos": ""
+  "Contains encrypted videos": "",
+  "Check for a new version on startup": "",
+	"Start pending downloads at startup" : "",
+  "Keep downloading if the course is encrypted": "",
+  "If course is encrypted, keep downloading attachments and videos not encrypted": "",
+  "Collaborate": ""
 }

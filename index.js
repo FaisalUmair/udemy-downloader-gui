@@ -92,7 +92,7 @@ function createWindow() {
         },
         { type: "separator" },
         {
-          label: 'Official (Archived)',
+          label: 'Original (Archived)',
           click: async () => {
             const { shell } = require('electron')
             await shell.openExternal('https://github.com/FaisalUmair/udemy-downloader-gui/releases')

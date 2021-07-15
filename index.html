@@ -11,18 +11,16 @@
     const settings = require("electron-settings");
     const appVersion = require(__dirname + "/package.json").version;
     function translate(text) {
-      if (
-        !settings.get("general.language") ||
-        settings.get("general.language") == "English"
-      ) {
+      if (!settings.get("general.language") || settings.get("general.language") == "English") {
         return text;
-      } else {
+      } 
+      else {
         try {
           var meta = require("./locale/meta.json");
-          var locale = require(`./locale/${meta[settings.get("general.language")]
-            }`);
+          var locale = require(`./locale/${meta[settings.get("general.language")]}`);
           return locale[text] || text;
-        } catch (e) {
+        } 
+        catch (e) {
           return text;
         }
       }
@@ -95,7 +93,7 @@
           <div class="row">
             <div class="ten wide column">
               <h2 class="ui icon grey login header">
-                <i class="circular green user icon"></i>
+                <i class="circular purple user icon"></i>
                 ${translate("Udemy Login")}
               </h2>
             </div>
@@ -119,16 +117,20 @@
               <div class="ui horizontal divider">
                 ${translate("Choose Login Method")}
               </div>
-              <button class="ui fluid green button" type="button" onclick="loginWithUdemy()">
+              <button class="ui fluid purple button" type="button" onclick="loginWithUdemy()">
                 ${translate("Login Using Credentials")}
               </button>
               <div class="ui horizontal divider">
-                Or
+                <i class="exchange icon"></i>
               </div>
               <div class="ui fluid icon buttons">
-                <button class="ui teal login disabled authenticator button"><i class="user secret icon"></i> Authenticator</button>
+                <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
+                  <i class="user secret icon"></i> Authenticator
+                </button>
                 <div class="or"></div>
-                <button class="ui blue button" onclick="loginWithAccessToken()"><i class="key icon"></i> Access Token</button>
+                <button class="ui violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
+                  <i class="key icon"></i> Access Token
+                </button>
               </div>
               </div>
           </div>
@@ -149,7 +151,7 @@
             <div class="ui big text loader">${translate("Checking for Updates")}</div>
           </div>
           <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get("general.language") == "Arabic" ? "right" : "left"}">
-            <a class="active red courses-sidebar item">
+            <a class="active purple courses-sidebar item">
               <i class="file video icon"></i>
               ${translate("Courses")}
             </a>
@@ -193,10 +195,16 @@
 
             <div class="ui settings section"> 
               <form class="ui form">
-                <h5 class="ui top attached  header">
+                <h5 class="ui top attached header">
                   <i class="ui download icon"></i> ${translate("Download Settings")}
                 </h5>
-                <div class="ui attached  segment">
+                <div class="ui attached segment">
+                  <div class="field">
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="check-new-version">
+                      <label>${translate("Check for a new version on startup")}</label>
+                    </div>
+                  </div>
                   <div class="field">
                     <label>${translate("Download Path")}</label>
                     <div class="ui action input">
@@ -205,7 +213,19 @@
                         <i class="folder icon"></i>
                       </label>
                     </div>
-                  </div>         
+                  </div>  
+                  <div class="field">
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="auto-start-download">
+                      <label>${translate("Start pending downloads at startup")}</label>
+                    </div>
+                  </div>   
+                  <div class="field">
+                    <div class="ui checkbox">
+                      <input type="checkbox" name="keep-downloading-encrypted">
+                      <label>${translate("Keep downloading if the course is encrypted")}</label>
+                    </div>
+                  </div> 
                   <div class="field">
                     <div class="ui checkbox">
                       <input type="checkbox" name="enabledownloadstartend">
@@ -313,20 +333,51 @@
                   <br>
                   v${appVersion}
                 </h4>
-                <button class="ui tiny fluid basic check-updates button">
-                  ${translate("Check for updates")} - (official version)
-                </button>
 
-                <h3 class="ui header">${translate("Links")}</h3>
+                <!-- <div class="ui clearing divider"></div> -->
+                <h4 class="ui header">
+                  <i class="cloud download icon"></i></i>${translate("Check for updates")}
+                </h4>                
+                <div class="ui fluid buttons">
+                  <button class="ui primary button check-updates" style="margin-right: 1px">
+                    ${translate("Active")} ${translate("Repository")}
+                  </button>
+                  <div class="or"></div>
+                  <button class="ui button check-updates-original" style="margin-left: 1px">
+                    ${translate("Archived")} ${translate("Repository")}
+                  </button>
+                </div>
+
+                <div class="ui horizontal divider"></div>
+                <div class="ui clearing divider"></div>
+                <h4 class="ui header">
+                  <i class="heart icon"></i>${translate("Donate")}
+                </h4>
+                <p>
+                  ${translate(
+                    "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
+                  )}
+                </p>
+                <br>
+                <a href="https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0
+                         &item_name={translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.")}
+                         &currency_code=USD" class="ui centered donate grid">
+                  <img src="assets/images/donate-qrcode.png" alt="{translate("Donate")} (for mantenedor)"/>
+                </a>
+
+                <div class="ui horizontal divider"></div>                
+                <div class="ui clearing divider"></div>
+                <h3 class="ui header">
+                  <i class="linkify icon"></i>${translate("Links")}
+                </h3>                
                 <div class="ui relaxed divided list">
                   <div class="item">
                     <i class="large github middle aligned icon"></i>
                     <div class="content">
                       <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui">heliomarpm/udemy-downloader-gui</a>
-                      <div class="description">${translate("Repository")} </div>
+                      <div class="description">${translate("Repository")} (${translate("Active")})</div>
                     </div>
                   </div>
-
                   <div class="item">
                     <i class="large world middle aligned icon"></i>
                     <div class="content">
@@ -334,8 +385,34 @@
                       <div class="description">${translate("Icon Designer")}</div>
                     </div>
                   </div>
+                  
                   <div class="ui horizontal divider"></div>
+                  <!-- <div class="ui clearing divider"></div> -->
+                  <h3 class="ui header">
+                    <i class="connectdevelop icon"></i>${translate("Collaborate")}
+                  </h3>                
+                  <div class="item">
+                    <i class="large github middle aligned icon"></i>
+                    <div class="content">
+                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
+                      <div class="description">${translate("Report Bug")}</div>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <i class="large github middle aligned icon"></i>
+                    <div class="content">
+                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
+                      <div class="description">${translate("Contribute")}</div>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="ui horizontal divider"></div>
+                <div class="ui clearing divider"></div>
+                <h3 class="ui header">
+                  <i class="user secret icon"></i>FaisalUmair - ${translate("The great creator of this project")}
+                </h3>
+                <div class="ui relaxed divided list">
                   <div class="item">
                     <i class="large github middle aligned icon"></i>
                     <div class="content">
@@ -356,37 +433,16 @@
                       <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
                       <div class="description">${translate("Website")}</div>
                     </div>
-                  </div>
+                  </div>                
+                
+                  <h4 class="ui header">
+                    <i class="heart icon"></i>${translate("Donate")}
+                  </h4>
+                  <br>
+                  <a href="https://www.udeler.com/donate" class="ui centered donate grid">
+                    <img src="assets/images/donate.png" alt="${translate("Donate")}"/>
+                  </a>
                 </div>
-                            
-                <h3 class="ui header">${translate("Development")}</h3>
-                <div class="ui relaxed divided list">
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
-                      <div class="description">${translate("Report Bug")}</div>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
-                      <div class="description">${translate("Contribute")}</div>
-                    </div>
-                  </div>
-                </div>
-                            
-                <h3 class="ui header">${translate("Donate")}</h3>                            
-                <p>
-                  ${translate(
-                    "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
-                  )}
-                </p>
-                <br>
-                <a href="https://www.udeler.com/donate" class="ui centered donate grid">
-                  <img src="assets/images/donate.png" alt="Donate"/>
-                </a>
               </div>
             </div>
           </div>

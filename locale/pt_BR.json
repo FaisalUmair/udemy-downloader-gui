@@ -1,4 +1,5 @@
 {
+	"The great creator of this project": "O grande criador deste projeto",
 	"Udemy Login": "Acessar Udemy",
   	"Email": "E-mail",
 	"Password": "Senha",
@@ -55,11 +56,13 @@
 	"You do not have permission to access this course": "Você não tem permissão para acessar este curso",
 	"Links": "Links Úteis",
 	"Repository": "Repositório",
+	"Active": "Ativo",
 	"Archived": "Arquivado",
 	"Developer": "Desenvolvedor",
 	"Website": "Site",
 	"Development": "Desenvolvimento",
 	"Report Bug": "Reportar um erro",
+	"Donate": "Faça uma doação",
 	"Contribute": "Contribuir",
 	"Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.": "Udeler é gratuito e não contém anúncios. Se você gostou, por favor considere realizar uma doação para o desenvolvedor.",
 	"A new version of Udeler is available. You can download the latest version from github releases page": "Uma nova versão do Udeler está disponível. Você pode baixar o mais recente versão da página de lançamentos do github ",
@@ -67,8 +70,12 @@
 	"Lectures": "Aulas",
 	"Default Subtitle for download": "Legenda padrão para baixar",
 	"Choose Login Method": "Escolha o método de Entrada",
-	"In the download list since": "Na lista de transferência desde",
-	"Download completed in": "Transferência concluído em",
+	"In the download list since": "Na lista de downloads desde",
+	"Download completed in": "Download concluído em",
 	"Icon Designer": "Designer do Icone",
-	"Contains encrypted videos": "Contém videos encriptados"
+	"Contains encrypted videos": "Contém videos criptografados",	
+	"Check for a new version on startup": "Verifique se há uma nova versão na inicialização",
+	"Start pending downloads at startup": "Inicie as transferências pendentes na inicialização",
+	"Keep downloading if the course is encrypted": "Continue a baixar se o curso estiver criptografado",
+	"Collaborate": "Colaborar"
 }
