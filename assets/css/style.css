@@ -1,3 +1,7 @@
+body .dialog-widget.background {
+  background: rgba(0, 0, 0, 0.85);
+}
+
 .ui.dimmer {
   position: fixed;
 }
@@ -18,9 +22,6 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-}
-body .dialog-widget.background {
-  background: rgba(0, 0, 0, 0.85);
 }
 
 .dialog-widget.alert {
@@ -121,21 +122,25 @@ body .dialog-widget.background {
   border-radius: 10px !important;
 }
 
-.wrapper {
+.dismiss-download {
   text-transform: uppercase;
+  text-align: left !important;
+}
+.wrapper {
   background: #ececec;
   color: #555;
-  cursor: help;
+  /* cursor: help; */
   /* font-size: 20px;
   margin: 0 auto;
   padding: 15px 20px;
   position: relative; */
-  text-align: center;
   /* width: 230px; */
   /* -webkit-transform: translateZ(0); */ /* webkit flicker fix */
   -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
 }
 .wrapper .tooltip {
+  text-transform: uppercase;
+  text-align: center;
   background: rgba(250, 5, 5, 0.75);
   bottom: 100%;
   color: #fff;

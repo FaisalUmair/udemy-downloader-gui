@@ -3,10 +3,10 @@ const path = require("path");
 const url = require("url");
 
 const isDebug = process.argv.indexOf("--debug") != -1;
-const env = process.env.NODE_ENV || 'production';
+// const env = process.env.NODE_ENV || 'production';
   
 // If development environment
-if (env === 'development') {
+if (isDebug) {
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
         hardResetMethod: 'exit'

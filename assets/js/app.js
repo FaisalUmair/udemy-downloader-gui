@@ -22,8 +22,10 @@ var headers;
 var repoAccount = 'heliomarpm';
 var awaitingLogin = false;
 
-var subDomain = settings.get("subdomain") || "www";
+
+var $divSubDomain = $(".ui.login #divsubdomain");
 var $subDomain = $(".ui.login #subdomain");
+var subDomain = settings.get("subdomain") || "www";
 var settingsCached = null;
 
 app.listen(50490);
@@ -134,7 +136,7 @@ function htmlCourseCard(course, downloadSection = false) {
     course.encryptedVideos = history?.encryptedVideos ?? 0;
   }
   
-  const tagDismiss = `<a class="ui basic red remove-download">${translate("Dismiss")}</a>`;
+  const tagDismiss = `<a class="ui basic dismiss-download">${translate("Dismiss")}</a>`;
 
   var $course = $(`
     <div class="ui course item" course-id="${course.id}" course-url="${course.url}">
@@ -227,11 +229,11 @@ function htmlCourseCard(course, downloadSection = false) {
 $(".ui.login #business").change(function () {
   if ($(this).is(":checked")) {
     $subDomain.val(subDomain);
-    $subDomain.show();
+    $divSubDomain.show();
   }
   else {
     $subDomain.val(null);
-    $subDomain.hide();
+    $divSubDomain.hide();
   }
 });
 
@@ -243,7 +245,7 @@ $(".ui.dashboard .content").on("click", ".open-in-browser",function() {
   shell.openExternal(link);
 });
 
-$(".ui.dashboard .content").on("click", ".remove-download", function () {
+$(".ui.dashboard .content").on("click", ".dismiss-download", function () {
    const courseId = $(this).parents(".course.item").attr('course-id');
    removeCurseDownloads(courseId);
 });

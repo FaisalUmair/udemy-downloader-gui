@@ -7,7 +7,7 @@
   },
   "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
   "scripts": {
-    "dev": "set NODE_ENV = development && electron .",
+    "dev": "electron . --debug",
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder -wml",
