@@ -139,7 +139,7 @@
 
         <div class="ui dashboard">    
           <div class="ui logout dimmer">
-            <div class="ui big text loader">${translate("Logging Out")}</div>
+            <div class="ui big text loader"></div>
           </div>  
           <div class="ui courses dimmer">
             <div class="ui big text loader">${translate("Loading Courses")}</div>
@@ -167,10 +167,13 @@
               <i class="info icon"></i>
               ${translate("About")}
             </a>
-            <a class="logout-sidebar item">
-              <i class="power off icon"></i>
-              ${translate("Logout")}
-            </a>
+            
+            <div class="ui footer">
+              <a class="logout-sidebar item">
+                <i class="power off icon"></i>
+                ${translate("Logout")}
+              </a>
+            </div>
           </div>
 
           <div class="content">
@@ -298,9 +301,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div class="ui attached segment">
+                
                   <div class="field">
                     <label>${translate("Default Subtitle for download")}</label>
                     <div class="ui fluid search selection defaultSubtitle dropdown">

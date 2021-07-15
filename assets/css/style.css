@@ -14,7 +14,11 @@
   font-family: Verdana;
   font-weight: normal;
 }
-
+.ui.footer { /* Increased specificity for SO snippet priority */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
 body .dialog-widget.background {
   background: rgba(0, 0, 0, 0.85);
 }
@@ -33,14 +37,14 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .sidebar.menu .item {
-  padding-left: 7px;
-  padding-right: 7px;
-  max-width: 84px;
+  padding: 15px 5px;
+  max-width: 90px;
   word-wrap: break-word;
+  font-size: 2vw;
 }
 
 .ui.dashboard > .content {
-  margin-left: 95px;
+  margin-left: 100px;
   width: 100%;
 }
 

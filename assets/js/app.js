@@ -394,7 +394,6 @@ function downloadButtonClick($course) {
       $course.css("padding-bottom", "25px");
       $course.find(".ui.progress").show();
 
-      debugger;
       var coursedata = [];
       coursedata["chapters"] = [];
       coursedata["name"] = $course.find(".coursename").text();
@@ -880,6 +879,10 @@ function initDownload($course, coursedata, subTitle = "") {
         $pauseButton.removeClass("disabled");
       });
 
+      dl.on("stop", function () {
+        $pauseButton.removeClass("disabled");
+      });
+
       dl.on("end", function () {        
         if (typeVideo && dl.meta.size < corruptedMP4Size) {
           $course.find('input[name="encryptedvideos"]').val(++coursedata.encryptedVideos);
@@ -967,7 +970,7 @@ function initDownload($course, coursedata, subTitle = "") {
 
         function endDownload() {
           index++;
-          $pauseButton.addClass("disabled");
+          // $pauseButton.addClass("disabled");
           clearInterval(timer);
           if (index == total_assets) {
             $progressElemCombined.progress("increment");
@@ -1155,7 +1158,7 @@ function initDownload($course, coursedata, subTitle = "") {
       dlStart(dl, lectureType == "video", endDownloadAttachment);
 
       function endDownloadAttachment() {
-        $pauseButton.addClass("disabled");
+        // $pauseButton.addClass("disabled");
         clearInterval(timer);
         if (
           coursedata["chapters"][chapterindex]["lectures"][lectureindex].caption
@@ -1341,7 +1344,7 @@ function rendererCourse(response, keyword = "") {
   $(".ui.dashboard .ui.courses.section .disposable").remove();
   $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
   if (response.results.length) {
-
+    debugger;
     $.each(response.results, function (index, course) {
       $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
         htmlCourseCard(course)
@@ -1374,6 +1377,8 @@ function redererDownloads() {
       $(".ui.downloads.section .ui.courses.items").append($course);
       if (!course.completed && settingsCached.download.autoStartDownload) {
         downloadButtonClick($course);
+        var $pauseButton = $course.find(".action.buttons").find(".pause.button");
+        $pauseButton.removeClass("disabled");
       }
     });
   }
