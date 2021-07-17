@@ -2,7 +2,7 @@
 # Udeler | Udemy Course Downloader (GUI)
 
 A cross-platform app to download your purchased courses (paid or free) from Udemy.
-Project originally conceived and maintained by @FaisalUmair is archived.
+Project originally conceived and maintained by [@FaisalUmair](https://github.com/FaisalUmair/udemy-downloader-gui) is archived.
 Since then, I've kept it active, providing fixes and small features.
 
 ### Warning
