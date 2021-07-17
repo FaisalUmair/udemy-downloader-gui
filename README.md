@@ -7,7 +7,8 @@ Since then, I've kept it active, providing fixes and small features.
 
 ### Warning
 
-**Udemy has started to encrypt many of the course videos, so downloading them may be impossible/illegal because it involves decrypting DRM'd videos which opens up the author to DMCA takedowns/lawsuits.  If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.**
+**Udemy has started to encrypt many of the course videos, so downloading them may be impossible/illegal because it involves decrypting DRM'd videos which opens up the author to DMCA takedowns/lawsuits.
+If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.**
 
 If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609).
 
