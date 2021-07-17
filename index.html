@@ -257,8 +257,8 @@
                   </div>   
                   <div class="field">
                     <div class="ui checkbox">
-                      <input type="checkbox" name="keep-downloading-encrypted">
-                      <label>${translate("Keep downloading if the course is encrypted")}</label>
+                      <input type="checkbox" name="continue-downloading-encrypted">
+                      <label>${translate("Continue if course is encrypted")}</label>
                     </div>
                   </div> 
                   <div class="field">
@@ -362,10 +362,11 @@
                   )}
                 </p>
                 <br>
+                
                 <a href="https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0
-                         &item_name=${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.")}
+                         &item_name=${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.").replace(" ","+")}
                          &currency_code=USD" class="ui centered donate grid">
-                  <img src="assets/images/donate-qrcode.png" alt="${translate("Donate")} (for mantenedor)"/>
+                  <img src="assets/images/donate-qrcode.png" alt="${translate("Donate")} (for maintainer)"/>
                 </a>
 
                 <div class="ui horizontal divider"></div>                

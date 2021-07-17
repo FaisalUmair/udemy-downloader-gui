@@ -12,6 +12,7 @@
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder -wml",
     "build-win": "electron-builder -w",
+    "build-win32": "electron-builder -w \"--ia32\"",
     "build-mac": "electron-builder -m",
     "build-linux": "electron-builder -l",
     "dist": "build"

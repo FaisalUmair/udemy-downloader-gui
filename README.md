@@ -1,10 +1,50 @@
+
 # Udeler | Udemy Course Downloader (GUI)
 
-A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.
+A cross-platform app to download your purchased courses (paid or free) from Udemy.
+Project originally conceived and maintained by @FaisalUmair is archived.
+Since then, I've kept it active, providing fixes and small features.
 
-### Udeler 2.0 Feature Requests:
 
-I am planning to make Udeler 2.0 a big release with a lot of new features and improvements. For requesting a feature, Click [here](https://github.com/FaisalUmair/udemy-downloader-gui/issues/172)
+# Disclaimer:
+
+This software is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
+
+This software is intended to help you download Udemy courses for personal use only. Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use. Each and every course on Udemy is subjected to copyright infringement.
+This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser.
+
+# License
+
+All code is licensed under the MIT license
+
+# For Developers
+
+## Contributing:
+
+Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
+
+if you want help using the program, use [github issues](https://github.com/heliomarpm/udemy-downloader-gui/issues).
+This version is currently only available on the Windows platform (x86, x64).
+Waiting for volunteers to compile for Linux and Mac platforms. 
+
+# Release Versions
+### Download for Windows [Last Release](https://github.com/heliomarpm/udemy-downloader-gui/releases/latest)
+
+1. Added link to update active repository
+2. New option: Check for a new version on startup
+2. New option: Start downloads at startup
+2. New option: If course is encrypted, keep downloading attachments and videos not encrypted 
+2. Added description in flag for DRM-encrypted video
+
+* Fix: When resuming paused download
+
+### Downloads:
+
+| Platform | Arch    | Version | Link                                                                                                                         |
+| -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Windows  | x64     | 1.8.7   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.8.7/Udeler-Setup-1.8.7-windows-x64.exe)  |
+| Windows  | x86     | 1.8.7   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.7/Udeler-Setup-1.8.7-windows-x86.exe)  |
+
 
 ### Facing Login Issues?
 
@@ -16,27 +56,13 @@ Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A 
 
 2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
 
-3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.
+3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.  
+  
+ 
+### Download Previous Version for Windows, Mac and Linux
 
-#### Project Update:
-
-**`I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web only version of Udeler.`**
-
-![](https://i.imgur.com/nsaAgDU.gif)
-
-### :fire: Features
-
-- _`Choose video quality.`_
-- _`Download multiple courses at once.`_
-- _`Set Download Start and Download End.`_
-- _`Pause/Resume download at any time.`_
-- _`Choose download directory.`_
-- _`Multilingual (English,Italian,Spanish).`_
-
-### Disclaimer:
-
-This software is intended to help you download Udemy courses for personal use only. Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use. Each and every course on Udemy is subjected to copyright infringement.
-This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser.
+<details><summary>Expand</summary>
+<p>
 
 ### Downloads:
 
@@ -47,23 +73,23 @@ This software does not magically download any paid course available on Udemy, yo
 | Mac      | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg)                |
 | Linux    | x86_x64 | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage) |
 
-### Note:
 
-By default the courses will be downloaded to the user's Download folder. The structure of course content will be preserved.
 
-# For Developers
+</p></details>
 
-### Contributing:
-
-Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/FaisalUmair/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
-
-### Prerequisites:
+### Prerequisites
+<details><summary>Expand</summary>
+<p>
 
 ```
 You must have npm and nodejs installed.
 ```
 
-### To use the application:
+</p></details>
+
+### To use the application
+<details><summary>Expand</summary>
+<p>
 
 ```
 1. Clone the project
@@ -71,7 +97,11 @@ You must have npm and nodejs installed.
 3. Run npm start
 ```
 
-### Build:
+</p></details>
+
+### Build
+<details><summary>Expand</summary>
+<p>
 
 Detect Platform:
 
@@ -113,7 +143,11 @@ Example:
 npm run build-win -- --ia32
 ```
 
+</p></details>
+
 ### Debug
+<details><summary>Expand</summary>
+<p>
 First run ```npm run install``` to download/setup the required libraries.
 
 Now in Visual Studio Code press ```CTRL-SHIFT-P``` and type "Debug: Open launch.json".
@@ -162,8 +196,12 @@ Insert this:
 
 (For MacOS/Linux, remove the .cmd from the runtimeExecutable.)
 
+</p></details>
+
+
 ## Donate
 
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
 [![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.udeler.com/donate)
+

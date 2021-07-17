@@ -72,12 +72,12 @@
 	"Lectures": "Aulas",
 	"Default Subtitle for download": "Legenda padrão para baixar",
 	"Choose Login Method": "Escolha o método de Entrada",
-	"In the download list since": "Na lista de downloads desde",
-	"Download completed in": "Download concluído em",
+	"Download started since": "Transferência iniciada desde",
+	"Download completed on": "Transferência concluído em",
 	"Icon Designer": "Designer do Icone",
 	"Contains encrypted videos": "Contém videos criptografados",	
 	"Check for a new version on startup": "Verifique se há uma nova versão na inicialização",
-	"Start pending downloads at startup": "Inicie as transferências pendentes na inicialização",
-	"Keep downloading if the course is encrypted": "Continue a baixar se o curso estiver criptografado",
+	"Start pending downloads at startup": "Comece as transferências pendentes na inicialização",
+	"Continue if course is encrypted": "Continue baixando se o curso estiver criptografado",
 	"Collaborate": "Colaborar"
 }
