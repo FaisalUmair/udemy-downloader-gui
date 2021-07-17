@@ -42,9 +42,17 @@ Waiting for volunteers to compile for Linux and Mac platforms.
 
 1. Added link to update active repository
 2. New option: Check for a new version on startup
-2. New option: Start downloads at startup
-2. New option: If course is encrypted, keep downloading attachments and videos not encrypted 
-2. Added description in flag for DRM-encrypted video
+4. New option: Start downloads at startup
+5. New option: If course is encrypted, keep downloading attachments and videos not encrypted
+6. Added description in flag for DRM-encrypted video
+7. Allows you to resize the window size.
+8. Keeps track of which courses you have previously downloaded.
+9. Manually hide courses already downloaded 
+10. A button for open course in browser
+11. When there is only one subtitle, it will not ask you to select the language.
+12. You can configure which default subtitle language should be downloaded.
+13. Allows you to automatically start downloading the unfinished course.
+14. Download speed displaying in Kbps or Mbps units
 
 * Fix: When resuming paused download
 
