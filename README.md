@@ -48,8 +48,8 @@ Waiting for volunteers to compile for Linux and Mac platforms.
 
 | Platform | Arch    | Version | Link                                                                                                                         |
 | -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Windows  | x64     | 1.8.7   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.8.7/Udeler-Setup-1.8.7-windows-x64.exe)  |
-| Windows  | x86     | 1.8.7   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.7/Udeler-Setup-1.8.7-windows-x86.exe)  |
+| Windows  | x64     | 1.8.7   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.8.7/Udeler.Setup.1.8.7.windows.x64.exe)  |
+| Windows  | x86     | 1.8.7   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.7/Udeler.Setup.1.8.7.windows.x86.exe)  |
 
 
 ### Facing Login Issues?
