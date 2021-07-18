@@ -39,7 +39,8 @@ All code is licensed under the MIT license
 
 ![v187](https://user-images.githubusercontent.com/13087389/126054264-48caf1f5-472f-44b0-991a-145c9169a2c3.png)
 ![v187-down](https://user-images.githubusercontent.com/13087389/126054265-4a343a67-803a-4400-b196-090864fbc1eb.png)
-![v187-config](https://user-images.githubusercontent.com/13087389/126054266-cdbfe771-a0de-4ac3-bd8b-4afadf38667e.png)
+![v187-config](https://user-images.githubusercontent.com/13087389/126076966-57f318ae-c9ee-4948-862f-87fae4502290.png)
+
 
 # Contributing:
 
