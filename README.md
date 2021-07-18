@@ -35,9 +35,13 @@ Many download managers use same method to download videos on a web page. This ap
 
 All code is licensed under the MIT license
 
-# For Developers
+#Screenshots
 
-## Contributing:
+![v187](https://user-images.githubusercontent.com/13087389/126054264-48caf1f5-472f-44b0-991a-145c9169a2c3.png)
+![v187-down](https://user-images.githubusercontent.com/13087389/126054265-4a343a67-803a-4400-b196-090864fbc1eb.png)
+![v187-config](https://user-images.githubusercontent.com/13087389/126054266-cdbfe771-a0de-4ac3-bd8b-4afadf38667e.png)
+
+# Contributing:
 
 Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
 
