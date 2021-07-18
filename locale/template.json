@@ -57,8 +57,9 @@
   "Download": "",
   "Links": "",
   "Repository": "",
-  "Active": "",
   "Archived": "",
+  "Active Repository": "",
+  "Archived Repository": "",
   "Developer": "",
   "Website": "",
   "Development": "",
@@ -78,5 +79,6 @@
 	"Start pending downloads at startup" : "",
   "Continue if course is encrypted": "",
   "If course is encrypted, keep downloading attachments and videos not encrypted": "",
-  "Collaborate": ""
+  "Collaborate": "",
+  "Confirm Log Out": ""
 }

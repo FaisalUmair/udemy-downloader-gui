@@ -198,11 +198,13 @@ function htmlCourseCard(course, downloadSection = false) {
       
     </div>`);
 
-  if (!downloadSection) {
+  if (!downloadSection) {    
     if (course.completed) {
       resetCourse($course, $course.find(".download-success"));
     }
-    else {
+    else if (course.encryptedVideos > 0) {
+      resetCourse($course, $course.find(".course-encrypted"));
+    } else {
       $course.find(".info-downloaded").html(course.infoDownloaded).show();
     }
   }
@@ -913,7 +915,7 @@ function initDownload($course, coursedata, subTitle = "") {
           $course.find('input[name="encryptedvideos"]').val(++coursedata.encryptedVideos);
           console.warn(`${coursedata.encryptedVideos} - encryptedVideos`, dl.filePath)
 
-          if (settingsCached.download.continueDonwloadingEncrypted) {
+          if (!settingsCached.download.continueDonwloadingEncrypted) {
             stopDownload(translate("Contains encrypted videos"));
             dl.destroy();
             return;
@@ -1253,7 +1255,7 @@ $(".about-sidebar").click(function () {
 });
 
 $(".logout-sidebar").click(function () {
-  prompt.confirm("Confirm Log Out?", function (ok) {
+  prompt.confirm(translate("Confirm Log Out?"), function (ok) {
     if (ok) {
       $(".ui.logout.dimmer").addClass("active");
       saveDownloads(false);

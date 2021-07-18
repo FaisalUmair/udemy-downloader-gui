@@ -58,8 +58,9 @@
 	"You do not have permission to access this course": "Você não tem permissão para acessar este curso",
 	"Links": "Links Úteis",
 	"Repository": "Repositório",
-	"Active": "Ativo",
 	"Archived": "Arquivado",
+	"Active Repository": "Repositório Ativo",
+	"Archived Repository": "Repositório Arquivado",
 	"Developer": "Desenvolvedor",
 	"Website": "Site",
 	"Development": "Desenvolvimento",
@@ -79,5 +80,6 @@
 	"Check for a new version on startup": "Verifique se há uma nova versão na inicialização",
 	"Start pending downloads at startup": "Comece as transferências pendentes na inicialização",
 	"Continue if course is encrypted": "Continue baixando se o curso estiver criptografado",
-	"Collaborate": "Colaborar"
+	"Collaborate": "Colaborar",
+	"Confirm Log Out": "Deseja desconectar?"
 }
