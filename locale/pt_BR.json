@@ -81,5 +81,5 @@
 	"Start pending downloads at startup": "Comece as transferências pendentes na inicialização",
 	"Continue if course is encrypted": "Continue baixando se o curso estiver criptografado",
 	"Collaborate": "Colaborar",
-	"Confirm Log Out": "Deseja desconectar?"
+	"Confirm Log Out?": "Deseja desconectar?"
 }
