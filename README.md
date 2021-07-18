@@ -2,12 +2,12 @@
 
 <table border=0 cellspacing=5 celspadding=5>
   <tr>
-    <td width=150px>
-      <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width=128px height=128px/>
+    <td width="150px">
+      <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width="128px" height="128px"/>
     </td>
     <td>
-      A cross-platform app to download your purchased courses (paid or free) from Udemy.  
-      Project originally conceived and maintained by [@FaisalUmair](https://github.com/FaisalUmair/udemy-downloader-gui) is archived.
+      A cross-platform app to download your purchased courses (paid or free) from Udemy.<br>
+      Project originally conceived and maintained by [@FaisalUmair](https://github.com/FaisalUmair/udemy-downloader-gui) is archived.<br>
       Since then, I've kept it active, providing fixes and small features.
     </td>
   </tr>
