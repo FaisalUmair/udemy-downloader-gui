@@ -42,7 +42,7 @@
     "electron-settings": "^3.2.0",
     "jquery": "^3.6.0",
     "mkdirp": "^0.5.5",
-    "mt-files-downloader": "git+https://github.com/FaisalUmair/mt-files-downloader-wrapper.git",
+    "mt-files-downloader": "github:heliomarpm/mt-files-downloader-wrapper",
     "node-vtt-to-srt": "git+https://github.com/riazXrazor/vtt-to-srt.git",
     "sanitize-filename": "^1.6.3",
     "socket.io": "^4.1.3"
