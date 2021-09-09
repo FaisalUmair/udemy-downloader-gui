@@ -38,10 +38,9 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .sidebar.menu .item {
-  padding: 15px 5px;
-  max-width: 90px;
+  padding: 15px 3px;
+  max-width: 96px;
   word-wrap: break-word;
-  font-size: 2vw;
 }
 
 .ui.dashboard > .content {

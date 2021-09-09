@@ -141,7 +141,7 @@ function htmlCourseCard(course, downloadSection = false) {
   const tagDismiss = `<a class="ui basic dismiss-download">${translate("Dismiss")}</a>`;
 
   var $course = $(`
-    <div class="ui course item" course-id="${course.id}" course-url="${course.url}">
+    <div class="ui course item" course-id="${course.id}" course-url="${course.url}" course-completed="${course.completed}">
       <input type="hidden" name="encryptedvideos" value="${course.encryptedVideos}">
       <input type="hidden" name="selectedSubtitle" value="${course.selectedSubtitle}">
       <div class="ui tiny label download-quality grey"></div>
@@ -293,7 +293,7 @@ $(".download-update.button").click(function () {
   );
 });
 
-function checkUpdate(account) {
+function checkUpdate(account, noAlert = false) {
   $(".ui.dashboard .about.dimmer").addClass("active");
   $.getJSON(
     `https://api.github.com/repos/${account}/udemy-downloader-gui/releases/latest`,
@@ -303,7 +303,9 @@ function checkUpdate(account) {
         repoAccount = account;
         $(".ui.update-available.modal").modal("show");
       } else {
-        prompt.alert(translate("No updates available"));
+        if (noAlert == false) {
+          prompt.alert(translate("No updates available"));
+        }
       }
     }
   );
@@ -387,11 +389,10 @@ function downloadButtonClick($course, subtitle) {
   var skipSubtitles = settingsCached.download.skipSubtitles;
   var defaultSubtitle = subtitle ? subtitle : settingsCached.download.defaultSubtitle;
 
-  // click do botão iniciar download
-  debugger;  
+  // clique do botão iniciar download
   $.ajax({
     type: "GET",
-    url: `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=200000`,
+    url: `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=10000`,
     beforeSend: function () {
       $(".ui.dashboard .course.dimmer").addClass("active");
     },
@@ -425,7 +426,7 @@ function downloadButtonClick($course, subtitle) {
       }
 
       $.each(response.results, function (i, v) {
-        if (v._class == "chapter") {
+        if (v._class.toLowerCase() == "chapter") {
           chapterindex++;
           lectureindex = 0;
           coursedata["chapters"][chapterindex] = [];
@@ -433,13 +434,13 @@ function downloadButtonClick($course, subtitle) {
           coursedata["chapters"][chapterindex]["lectures"] = [];
           remaining--;
         } else if (
-          v._class == "lecture" &&
-          (v.asset.asset_type == "Video" ||
-            v.asset.asset_type == "Article" ||
-            v.asset.asset_type == "File" ||
-            v.asset.asset_type == "E-Book")
+          v._class.toLowerCase() == "lecture" &&
+          (v.asset.asset_type.toLowerCase() == "video" ||
+            v.asset.asset_type.toLowerCase() == "article" ||
+            v.asset.asset_type.toLowerCase() == "file" ||
+            v.asset.asset_type.toLowerCase() == "e-book")
         ) {
-          if (v.asset.asset_type != "Video" && skipAttachments) {
+          if (v.asset.asset_type.toLowerCase() != "video" && skipAttachments) {
             remaining--;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
@@ -456,7 +457,8 @@ function downloadButtonClick($course, subtitle) {
               url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token&fields[lecture]=asset,supplementary_assets`,
               headers: headers,
               success: function (response) {
-                if (v.asset.asset_type == "Article") {
+                
+                if (v.asset.asset_type.toLowerCase() == "article") {
                   if (response.asset.data) {
                     var src = response.asset.data.body;
                   }
@@ -467,8 +469,8 @@ function downloadButtonClick($course, subtitle) {
                   var type = "Article";
                 }
                 else if (
-                  v.asset.asset_type == "File" ||
-                  v.asset.asset_type == "E-Book"
+                  v.asset.asset_type.toLowerCase() == "file" ||
+                  v.asset.asset_type.toLowerCase() == "e-book"
                 ) {
                   var src = response.asset.download_urls[v.asset.asset_type][0].file;
                   var videoQuality = v.asset.asset_type;
@@ -495,12 +497,12 @@ function downloadButtonClick($course, subtitle) {
                     var src = medias[0].src ?? medias[0].file;
                     videoQuality = medias[0].label;
                   } else {
-                    switch (videoQuality) {
-                      case "Highest":
+                    switch (videoQuality.toLowerCase()) {
+                      case "highest":
                         var src = qualitySrcMap[highest];
                         videoQuality = highest;
                         break;
-                      case "Lowest":
+                      case "lowest":
                         var src = qualitySrcMap[lowest];
                         videoQuality = lowest;
                         break;
@@ -777,6 +779,7 @@ function initDownload($course, coursedata, subTitle = "") {
       chapterindex + 1 + ". " + coursedata["chapters"][chapterindex]["name"]
       //zeroPad(chapterindex + 1, coursedata["chapters"].length) + ". " + coursedata["chapters"][chapterindex]["name"]
     );
+    
     mkdirp(
       download_directory + "/" + course_name + "/" + chapter_name,
       function () {
@@ -1206,11 +1209,18 @@ function initDownload($course, coursedata, subTitle = "") {
 }
 
 function resetCourse($course, $elMessage, autoRetry, coursedata, subtitle) {
-  if ($elMessage.hasClass("download-error") && autoRetry) {
-    if (coursedata.errorCount++ < 5) {
-      $course.length = 1;
-      initDownload($course, coursedata, subtitle);
-      return;
+  if ($elMessage.hasClass("download-success")) {
+    $course.attr('course-completed', true);
+  }
+  else {
+    $course.attr('course-completed', '');
+
+    if ($elMessage.hasClass("download-error")) {
+      if (autoRetry && coursedata.errorCount++ < 5) {
+        $course.length = 1;
+        initDownload($course, coursedata, subtitle);
+        return;
+      }      
     }
   }
 
@@ -1423,13 +1433,17 @@ function addDownloadHistory(courseId, completed = false, encryptedVideos = 0, se
   var item = undefined;
   const items = getAllDownloadsHistory() ?? [];
 
+  completed = Boolean(completed);
+
   if (items.length > 0) {
     item = items.find(x => x.id == courseId);
   }
 
-  if (item) {
-    item.completed = completed;
-    item.date = completed ? new Date(Date.now()).toLocaleDateString() : item.date;
+  if (item) {    
+    if (completed !== item.completed) {
+      item.completed = completed;
+      item.date = new Date(Date.now()).toLocaleDateString();
+    } 
     item.encryptedVideos = encryptedVideos;
     item.selectedSubtitle = selectedSubtitle;
   }
@@ -1466,24 +1480,20 @@ function getDownloadHistory(courseId) {
 }
 
 function saveDownloads(quit) {
-  var downloadedCourses = [];
-
+  var downloadedCourses = [];  
   var $downloads = $(".ui.downloads.section .ui.courses.items .ui.course.item").slice(0);
+
   if ($downloads.length) {
     $downloads.each(function (index, elem) {
       $elem = $(elem);
       if ($elem.find(".progress.active").length) {
-        var individualProgress = $elem
-          .find(".download-status .individual.progress")
-          .attr("data-percent");
-        var combinedProgress = $elem
-          .find(".download-status .combined.progress")
-          .attr("data-percent");
+        var individualProgress = $elem.find(".download-status .individual.progress").attr("data-percent");
+        var combinedProgress = $elem.find(".download-status .combined.progress").attr("data-percent");   
         var completed = false;
       } else {
         var individualProgress = 0;
-        var combinedProgress = 0;
-        var completed = true;
+        var combinedProgress = 0; 
+        var completed = Boolean($elem.attr("course-completed"));
       }
 
       var course = {
@@ -1493,7 +1503,7 @@ function saveDownloads(quit) {
         image: $elem.find(".image img").attr("src"),
         individualProgress: individualProgress,
         combinedProgress: combinedProgress,
-        completed: completed,
+        completed,
         progressStatus: $elem.find(".download-status .label").text(),
         encryptedVideos: $elem.find('input[name="encryptedvideos"]').val(),
         selectedSubtitle: $elem.find('input[name="selectedSubtitle"]').val()
@@ -1681,7 +1691,7 @@ function checkLogin() {
       headers: headers,
       success: function (response) {
         if (settingsCached.download.checkNewVersion ?? false) {
-          checkUpdate(repoAccount);
+          checkUpdate(repoAccount, true);
         }
         rendererCourse(response);
         if (settings.get("downloadedCourses")) {
