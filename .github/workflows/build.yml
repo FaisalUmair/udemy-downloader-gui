@@ -27,9 +27,6 @@ jobs:
         with:
           node-version: 13.x
 
-      - name: Install All Dependencies 
-        run: npm install
-
       - name: Build/release Electron app
         uses: heliomarpm/action-electron-builder@v1
         with:
