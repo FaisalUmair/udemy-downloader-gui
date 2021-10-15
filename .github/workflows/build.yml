@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
@@ -28,7 +28,7 @@ jobs:
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
       - name: Build/release Electron app
-        uses: heliomarpm/action-electron-builder@v1
+        uses: heliomarpm/udemy-downloader-gui@v1
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
