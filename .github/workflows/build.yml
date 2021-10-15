@@ -27,14 +27,13 @@ jobs:
         with:
           node-version: 13.x
 
-      - name: Install All Dependencies 
-        run: npm install
+      - name: Build/release Electron app
+        uses: heliomarpm/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
 
-      - name: Build release Win32
-        run: npm run build-win32
-        
-      - name: Build release Win64
-        run: npm run build-win
-        
-      - name: Build release Linux
-        run: npm run build-linux
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
