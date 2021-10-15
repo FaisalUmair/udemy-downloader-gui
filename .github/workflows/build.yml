@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Build/release Electron app
-        uses: heliomarpm/udemy-downloader-gui@v1
+        uses: heliomarpm/action-electron-builder@v1
         with:
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
