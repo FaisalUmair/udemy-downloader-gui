@@ -1,6 +1,6 @@
 {
-  "name": "Udeler",
-  "version": "1.9.0",
+  "name": "udeler",
+  "version": "1.9.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/FaisalUmair/udemy-downloader-gui.git"

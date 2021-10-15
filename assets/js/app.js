@@ -210,7 +210,7 @@ function htmlCourseCard(course, downloadSection = false) {
   }
   else {
     if (course.completed) {
-      $course.find(".info-downloaded").html(course.infoDownloaded).show();
+      $course.find(".info-downloaded").html("<span style='color: #46C855'>" + course.infoDownloaded + "</span>").show();
     }
     else {
       $course.find(".individual.progress").progress({ percent: course.individualProgress }).show();
@@ -222,10 +222,13 @@ function htmlCourseCard(course, downloadSection = false) {
   }
 
   if (course.encryptedVideos == "0") {
-    $course.find(".icon-encrypted").hide()
-    $course.find(".ui.tiny.image").removeClass("wrapper")
+    $course.find(".icon-encrypted").hide();
+    $course.find(".ui.tiny.image .tooltip").hide();
+    $course.find(".ui.tiny.image").removeClass("wrapper");
+    
   } else {
     $course.find(".icon-encrypted").show()
+    $course.find(".ui.tiny.image .tooltip").show();
     $course.find(".ui.tiny.image").addClass("wrapper")
   }
 
@@ -384,6 +387,10 @@ function downloadButtonClick($course, subtitle) {
   $course.find(".course-encrypted").hide();
   $course.find(".download-status").show();
   $course.find(".info-downloaded").hide();
+  $course.find(".icon-encrypted").hide();
+  $course.find(".ui.tiny.image .tooltip").hide();
+  $course.find(".ui.tiny.image").removeClass("wrapper");
+  
   // var settingsCached = settings.getAll();
   var skipAttachments = settingsCached.download.skipAttachments;
   var skipSubtitles = settingsCached.download.skipSubtitles;
@@ -403,6 +410,7 @@ function downloadButtonClick($course, subtitle) {
       $course.css("padding-bottom", "25px");
       $course.find(".ui.progress").show();
 
+      debugger
       var coursedata = [];
       coursedata["id"] = courseid;
       coursedata["chapters"] = [];
@@ -600,7 +608,7 @@ function downloadButtonClick($course, subtitle) {
           lectureindex++;
         }
         else if (!skipAttachments) {
-          debugger;
+          //debugger;
           coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
             src: `<script type="text/javascript">
                     window.location = "https://${subDomain}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}";
@@ -1095,7 +1103,6 @@ function initDownload($course, coursedata, subTitle = "") {
       }
 
       // Per lecture: download maximum 1 of the language.
-      debugger;
       var request = https.get(
         // coursedata["chapters"][chapterindex]["lectures"][lectureindex][
         //   "caption"
@@ -1548,7 +1555,6 @@ function validURL(value) {
 }
 
 function search(keyword, headers) {
-  debugger;
   $.ajax({
     type: "GET",
     url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}&page=1&fields[user]=job_title&search=${keyword}`,
