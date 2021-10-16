@@ -34,11 +34,11 @@
   "devDependencies": {
     "electron": "^8.2.4",
     "electron-builder": "^22.11.7",
-    "electron-download-tf": "^4.3.4"
+    "electron-download-tf": "^4.3.4",
+    "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
-    "dialogs": "^2.0.1",
-    "electron-reload": "^2.0.0-alpha.1",
+    "dialogs": "^2.0.1",    
     "electron-settings": "^3.2.0",
     "jquery": "^3.6.0",
     "mkdirp": "^0.5.5",
