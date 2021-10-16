@@ -31,7 +31,7 @@ var settingsCached = null;
 
 app.listen(50490);
 
-// console.log('access_token', settings.get("access_token"));
+console.log('access_token', settings.get("access_token"));
 console.table(getAllDownloadsHistory());
 
 if (!settings.get("general")) {
