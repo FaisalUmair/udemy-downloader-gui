@@ -73,8 +73,8 @@ Waiting for volunteers to compile for Linux and Mac platforms.
 
 | Platform | Arch    | Version | Link                                                                                                                         |
 | -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Windows  | x64     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/udeler.Setup.1.9.1-Windows64.exe)  |
-| Windows  | x86     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/udeler.Setup.1.9.1-Windows.exe)  |
+| Windows  | x64     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/udeler.Setup.1.9.1.Win-x64.exe)  |
+| Windows  | x86     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/Udeler.Setup.1.9.1.Win-x86.exe)  |
 
 
 ### Facing Login Issues?
