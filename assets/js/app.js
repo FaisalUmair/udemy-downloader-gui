@@ -1189,7 +1189,7 @@ function initDownload($course, coursedata, subTitle = "") {
         var dl = downloader.resumeDownload(pathFileName);  
       }
       else if (fs.existsSync(pathFileName)
-        && (lectureType != "video" || (lectureType == "video" && fs.statSync(pathFileName).size > corruptedMP4Size))
+        //&& (lectureType != "video" || (lectureType == "video" && fs.statSync(pathFileName).size > corruptedMP4Size))
       ) {
         endDownloadAttachment();
         return;
