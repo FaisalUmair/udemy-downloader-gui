@@ -954,6 +954,9 @@ function initDownload($course, coursedata, subTitle = "") {
             return;
           }
         }
+        else {
+          $course.find('input[name="encryptedvideos"]').val(0);
+        }
 
         // $course.find(".downloading-file").hide();
         // $course.find(".downloading-error").hide();
