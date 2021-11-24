@@ -65,7 +65,7 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .courses .course .action.buttons .button {
-  border-radius: 0;
+  border-radius: 3;
 }
 
 .ui.dashboard .courses .course {

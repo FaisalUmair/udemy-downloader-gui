@@ -1,4 +1,5 @@
 const electron = require("electron");
+const shell = electron.shell;
 const remote = electron.remote;
 const dialog = remote.dialog;
 const BrowserWindow = remote.BrowserWindow;
@@ -9,9 +10,8 @@ const homedir = require("os").homedir();
 const sanitize = require("sanitize-filename");
 const vtt2srt = require("node-vtt-to-srt");
 const Downloader = require("mt-files-downloader");
-const shell = require("electron").shell;
 const https = require("https");
-const path = require("path");
+
 const app = require("http").createServer();
 const io = require("socket.io")(app);
 
@@ -105,11 +105,12 @@ var downloadTemplate = `
   <button class="ui basic blue download button"><i class="download icon"></i></button>
   <button class="ui basic red disabled pause button"><i class="pause icon"></i></button>
   <button class="ui basic green disabled resume button"><i class="play icon"></i></button>
+  
+  <div style="height: 1px; width: 5px;"></div>
+  
   <button class="ui basic yellow open-in-browser button"><i class="desktop icon"></i></button>
-  <!--
-  <button class="ui basic teal dismiss-card button" style="margin-left: 3px;"><i class="ban icon"></i></button>
   <button class="ui basic teal open-dir button"><i class="folder open icon"></i></button>
-  -->
+  
 </div>
 <div class="ui horizontal divider"></div>
 <div class="ui tiny indicating individual progress">
@@ -122,13 +123,13 @@ var downloadTemplate = `
   </div>
   <div class="label">${translate("Building Course Data")}</div>
 </div>
-<div class="info-downloaded"></div>
-`;
+<div class="info-downloaded"></div>`;
 
 function htmlCourseCard(course, downloadSection = false) {
   if (!course.completed) { course.completed = false; }
   course.infoDownloaded = "";
   course.encryptedVideos = 0;
+  course.pathDownloaded = "";
   
   const history = getDownloadHistory(course.id);
   if (history) {
@@ -136,7 +137,12 @@ function htmlCourseCard(course, downloadSection = false) {
     course.completed = history?.completed ? true : course.completed;
     course.encryptedVideos = history?.encryptedVideos ?? 0;
     course.selectedSubtitle = history?.selectedSubtitle ?? "";
+    course.pathDownloaded = history?.pathDownloaded ?? "";
   }
+
+  if (!fs.existsSync(course.pathDownloaded)) 
+    course.pathDownloaded = getPathDownloadsSetting(course.title);
+  
 
   const tagDismiss = `<a class="ui basic dismiss-download">${translate("Dismiss")}</a>`;
 
@@ -144,6 +150,7 @@ function htmlCourseCard(course, downloadSection = false) {
     <div class="ui course item" course-id="${course.id}" course-url="${course.url}" course-completed="${course.completed}">
       <input type="hidden" name="encryptedvideos" value="${course.encryptedVideos}">
       <input type="hidden" name="selectedSubtitle" value="${course.selectedSubtitle}">
+      <input type="hidden" name="path-downloaded" value="${course.pathDownloaded}">
       <div class="ui tiny label download-quality grey"></div>
       <div class="ui tiny grey label download-speed">
         <span class="value">0</span>
@@ -232,6 +239,10 @@ function htmlCourseCard(course, downloadSection = false) {
     $course.find(".ui.tiny.image").addClass("wrapper")
   }
 
+  if (!fs.existsSync(course.pathDownloaded)) {
+    $course.find(".open-dir.button").hide();
+  }
+
   return $course;
 }
 
@@ -252,6 +263,11 @@ checkLogin();
 $(".ui.dashboard .content").on("click", ".open-in-browser", function () {
   const link = `https://${subDomain}.udemy.com${$(this).parents(".course.item").attr('course-url')}`;
   shell.openExternal(link);
+});
+
+$(".ui.dashboard .content").on("click", ".open-dir", function () {
+  const pathDownloaded = $(this).parents(".course.item").find('input[name="path-downloaded"]').val();
+  shell.openItem(pathDownloaded);
 });
 
 $(".ui.dashboard .content").on("click", ".dismiss-download", function () {
@@ -709,7 +725,7 @@ function initDownload($course, coursedata, subTitle = "") {
   var $progressElemCombined = $course.find(".combined.progress");
   var $progressElemIndividual = $course.find(".individual.progress");
   // var settingsCached = settings.getAll();
-  var download_directory = settingsCached.download.path || homedir + "/Downloads";
+  var download_directory = getPathDownloadsSetting();
   var $download_speed = $course.find(".download-speed");
   var $download_speed_value = $download_speed.find(".value");
   var $download_speed_unit = $download_speed.find(".download-unit");
@@ -722,6 +738,9 @@ function initDownload($course, coursedata, subTitle = "") {
   $course
     .css("cssText", "padding-top: 35px !important")
     .css("padding-bottom", "25px");
+
+  $course.find('input[name="path-downloaded"]').val(`${download_directory}/${course_name}`);
+  $course.find('.open-dir.button').show();
 
   $pauseButton.click(function () {
     stopDownload();
@@ -799,7 +818,7 @@ function initDownload($course, coursedata, subTitle = "") {
   function downloadLecture(chapterindex, lectureindex, num_lectures, chapter_name) {
     if (downloaded == toDownload) {
       resetCourse($course, $course.find(".download-success"));
-      sendNotification(course_name, $course.find(".ui.tiny.image").find(".course-image").attr("src"));
+      sendNotification(download_directory + "/" + course_name, course_name, $course.find(".ui.tiny.image").find(".course-image").attr("src"));
       return;
     } else if (lectureindex == num_lectures) {
       downloadChapter(++chapterindex, 0);
@@ -811,11 +830,15 @@ function initDownload($course, coursedata, subTitle = "") {
     function dlStart(dl, typeVideo, callback) {
       // Change retry options to something more forgiving and threads to keep udemy from getting upset
       dl.setRetryOptions({
-        retryInterval: 5000
+        maxRetries: 3,		// Default: 5
+        retryInterval: 3000 // Default: 2000
       });
 
+      // Set download options
       dl.setOptions({
-        threadsCount: 5
+          threadsCount: 5, // Default: 2, Set the total number of download threads
+          timeout: 5000,   // Default: 5000, If no data is received, the download times out (milliseconds)
+          range: '0-100',  // Default: 0-100, Control the part of file that needs to be downloaded.
       });
 
       dl.start();
@@ -824,7 +847,6 @@ function initDownload($course, coursedata, subTitle = "") {
       let reStarted = 0;
 
       timer = setInterval(function () {
-
         // Status:
         //   -3 = destroyed
         //   -2 = stopped
@@ -1344,7 +1366,7 @@ function loadSettings() {
   settingsForm.find('input[name="skipsubtitles"]').prop("checked", settingsCached.download.skipSubtitles ?? false);
   settingsForm.find('input[name="autoretry"]').prop("checked", settingsCached.download.autoRetry ?? false);
 
-  settingsForm.find('input[name="downloadpath"]').val(settingsCached.download.path || homedir + "/Downloads");
+  settingsForm.find('input[name="downloadpath"]').val(getPathDownloadsSetting());
   settingsForm.find('input[name="downloadstart"]').val(settingsCached.download.downloadStart || "");
   settingsForm.find('input[name="downloadend"]').val(settingsCached.download.downloadEnd || "");
 
@@ -1436,7 +1458,7 @@ function rendererDownloads() {
   }
 }
 
-function addDownloadHistory(courseId, completed = false, encryptedVideos = 0, selectedSubtitle = "") {
+function addDownloadHistory(courseId, completed = false, encryptedVideos = 0, selectedSubtitle = "", pathDownloaded="") {
   var item = undefined;
   const items = getAllDownloadsHistory() ?? [];
 
@@ -1453,6 +1475,7 @@ function addDownloadHistory(courseId, completed = false, encryptedVideos = 0, se
     } 
     item.encryptedVideos = encryptedVideos;
     item.selectedSubtitle = selectedSubtitle;
+    item.pathDownloaded = pathDownloaded;
   }
   else {
     item = {
@@ -1460,10 +1483,12 @@ function addDownloadHistory(courseId, completed = false, encryptedVideos = 0, se
       completed,
       date: new Date(Date.now()).toLocaleDateString(),
       encryptedVideos,
-      selectedSubtitle
+      selectedSubtitle,
+      pathDownloaded
     }
+
     items.push(item)
-  }
+  }  
 
   settings.set("downloadedHistory", items);
 }
@@ -1493,6 +1518,7 @@ function saveDownloads(quit) {
   if ($downloads.length) {
     $downloads.each(function (index, elem) {
       $elem = $(elem);
+
       if ($elem.find(".progress.active").length) {
         var individualProgress = $elem.find(".download-status .individual.progress").attr("data-percent");
         var combinedProgress = $elem.find(".download-status .combined.progress").attr("data-percent");   
@@ -1513,11 +1539,12 @@ function saveDownloads(quit) {
         completed,
         progressStatus: $elem.find(".download-status .label").text(),
         encryptedVideos: $elem.find('input[name="encryptedvideos"]').val(),
-        selectedSubtitle: $elem.find('input[name="selectedSubtitle"]').val()
+        selectedSubtitle: $elem.find('input[name="selectedSubtitle"]').val(),
+        pathDownloaded: $elem.find('input[name="path-downloaded"]').val()     
       };
 
       downloadedCourses.push(course);
-      addDownloadHistory(course.id, completed, course.encryptedVideos, course.selectedSubtitle);
+      addDownloadHistory(course.id, completed, course.encryptedVideos, course.selectedSubtitle, course.pathDownloaded);
     });
 
     settings.set("downloadedCourses", downloadedCourses);
@@ -1747,11 +1774,15 @@ function resetToLogin() {
 // The purpose here is to have a notification sent, so the user can understand that the download ended
 // The title of the notification should be translated but since the translate function is in index.html and to avoid code duplication
 // I would like to have your feedback in this
-function sendNotification(course_name, urlImage = null) {
-  new Notification(course_name, {
+function sendNotification(pathCourse, course_name, urlImage = null) {
+  var notification = new Notification(course_name, {
     body: 'Download finished',
     icon: urlImage ?? __dirname + "/assets/images/build/icon.png"
   });
+
+  notification.onclick = function () {
+    shell.openItem(pathCourse);
+  }
 }
 
 function zeroPad(num, max) {
@@ -1795,4 +1826,10 @@ function dynamicSort(property) {
 function paginate(array, page_size, page_number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+
+function getPathDownloadsSetting(courseName="") {
+  var courseName = courseName != "" ? "/" + sanitize(courseName) : "";
+  const download_directory = settingsCached.download.path || homedir + "/Downloads";
+  return `${download_directory}${courseName}`;	
 }
