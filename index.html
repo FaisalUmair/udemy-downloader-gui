@@ -312,6 +312,12 @@
                   </div>
                   <div class="field">
                     <div class="ui checkbox">
+                      <input type="checkbox" name="seq-zero-left">
+                      <label>${translate("Number downloads with zero left")}</label>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui checkbox">
                       <input type="checkbox" name="autoretry">
                       <label>${translate("Auto Retry on Error (Experimental)")}</label>
                     </div>
@@ -338,18 +344,20 @@
                   v${appVersion}
                 </h4>
 
-                <!-- <div class="ui clearing divider"></div> -->
-                <h4 class="ui header">
-                  <i class="cloud download icon"></i></i>${translate("Check for updates")}
-                </h4>                
+                <!-- <div class="ui clearing divider"></div> -->              
                 <div class="ui fluid buttons">
                   <button class="ui primary button check-updates" style="margin-right: 1px">
-                    ${translate("Active Repository")}
+                    ${translate("Check for updates")}
                   </button>
+                </div>
+
+                <h4 class="ui header">
+                  <i class="cloud download icon"></i></i>${translate("Old version")}&nbsp;1.8.2
+                </h4>                
+                <div class="ui fluid buttons">
+                  <button class="ui secondary button old-version-linux" style="margin-left: 1px">Linux</button>
                   <div class="or"></div>
-                  <button class="ui button check-updates-original" style="margin-left: 1px">
-                    ${translate("Archived Repository")}
-                  </button>
+                  <button class="ui button old-version-mac" style="margin-right: 1px">Mac x64</button>
                 </div>
 
                 <div class="ui horizontal divider"></div>
