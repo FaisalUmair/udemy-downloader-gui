@@ -50,32 +50,6 @@ if you want help using the program, use [github issues](https://github.com/helio
 This version is currently only available on the Windows platform (x86, x64).
 Waiting for volunteers to compile for Linux and Mac platforms. 
 
-# Release Versions
-### Download for Windows [Last Release](https://github.com/heliomarpm/udemy-downloader-gui/releases/latest)
-
-1. Added link to update active repository
-2. New option: Check for a new version on startup
-4. New option: Start downloads at startup
-5. New option: If course is encrypted, keep downloading attachments and videos not encrypted
-6. Added description in flag for DRM-encrypted video
-7. Allows you to resize the window size.
-8. Keeps track of which courses you have previously downloaded.
-9. Manually hide courses already downloaded 
-10. A button for open course in browser
-11. When there is only one subtitle, it will not ask you to select the language.
-12. You can configure which default subtitle language should be downloaded.
-13. Allows you to automatically start downloading the unfinished course.
-14. Download speed displaying in Kbps or Mbps units
-
-* Fix: When resuming paused download
-
-### Downloads:
-
-| Platform | Arch    | Version | Link                                                                                                                         |
-| -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Windows  | x64     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/udeler.Setup.1.9.1.Win-x64.exe)  |
-| Windows  | x86     | 1.9.1   | [Download](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.9.1/Udeler.Setup.1.9.1.Win-x86.exe)  |
-
 
 ### Facing Login Issues?
 
@@ -229,10 +203,9 @@ Insert this:
 
 </p></details>
 
-
 ## Donate
 
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
-[![Donate](https://raw.githubusercontent.com/FaisalUmair/udemy-downloader-gui/master/assets/images/donate.png)](https://www.udeler.com/donate)
+[![Donate](https://raw.githubusercontent.com/heliomarpm/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&currency_code=USD)
 
