@@ -396,11 +396,6 @@ $(".ui.dashboard .content").on("click", ".download-success, .course-encrypted", 
     .find(".download-status")
     .show();
 });
-// $(".ui.dashboard .content").on("click", ".course-encrypted", function(e) {
-//   e.stopImmediatePropagation();
-//   var $course = $(this).parents(".course");
-//   resetCourse($course, $course.find(".download-sucess"));
-// });
 
 $(".ui.dashboard .content").on("click", ".download.button, .download-error", function (e) {
   e.stopImmediatePropagation();
@@ -417,10 +412,8 @@ function downloadButtonClick($course, subtitle) {
   $course.find(".icon-encrypted").hide();
   $course.find(".ui.tiny.image .tooltip").hide();
   $course.find(".ui.tiny.image").removeClass("wrapper");
-  $course.find(".encryptedvideos").val("0");
+  $course.find('input[name="encryptedvideos"]').val(0);
   
-
-  // var settingsCached = settings.getAll();
   var skipAttachments = settingsCached.download.skipAttachments;
   var skipSubtitles = settingsCached.download.skipSubtitles;
   var defaultSubtitle = subtitle ? subtitle : settingsCached.download.defaultSubtitle;
@@ -704,9 +697,7 @@ function initDownload($course, coursedata, subTitle = "") {
   $course.push($clone[0]);
   var timer;
   var downloader = new Downloader();
-  // var $downloadStatus = $course.find(".download-status");
   var $actionButtons = $course.find(".action.buttons");
-  // var $downloadButton = $actionButtons.find(".download.button");
   var $pauseButton = $actionButtons.find(".pause.button");
   var $resumeButton = $actionButtons.find(".resume.button");
   var lectureChaperMap = {};
@@ -733,11 +724,9 @@ function initDownload($course, coursedata, subTitle = "") {
   });
 
   var course_name = sanitize(coursedata["name"]);
-  // var totalchapters = coursedata["chapters"].length;
   var totallectures = coursedata["totallectures"];
   var $progressElemCombined = $course.find(".combined.progress");
   var $progressElemIndividual = $course.find(".individual.progress");
-  // var settingsCached = settings.getAll();
   var download_directory = getPathDownloadsSetting();
   var $download_speed = $course.find(".download-speed");
   var $download_speed_value = $download_speed.find(".value");
@@ -893,9 +882,6 @@ function initDownload($course, coursedata, subTitle = "") {
             var download_speed_and_unit = getDownloadSpeed(parseInt(stats.present.speed / 1000) || 0);
             $download_speed_value.html(download_speed_and_unit.value);
             $download_speed_unit.html(download_speed_and_unit.unit);
-            // $download_speed_value.html(
-            //   parseInt(stats.present.speed / 1000) || 0
-            // );
             $progressElemIndividual.progress("set percent", stats.total.completed);
 
             if (dl.status === -1
@@ -931,26 +917,12 @@ function initDownload($course, coursedata, subTitle = "") {
       }, 1000);
 
       dl.on("error", function (dl) {
-        // const RETRY = settingsCached.download.autoRetry && coursedata.errorCount++ < 3;
-        // Prevent throwing uncaught error
         console.error('errorDownload', dl.error.message);
-
-        // $course.find(".downloading-file").hide();
-        // $course.find(".downloading-error").html(dl.error.message).show();
-
-        // if (settingsCached.download.autoRetry
-        //   && (coursedata.encryptedVideos == 0
-        //     || (coursedata.encryptedVideos > 0 && settingsCached.download.continueDonwloadingEncrypted))) {
-        //   debugger;
-        //   dl.destroy();
-        //   removeCurseDownloads(coursedata.id)
-        //   initDownload($course, coursedata, subTitle);
-        // }
       });
 
       dl.on("start", function () {
         let file = (dl.filePath.split("/").slice(-2).join("/"));
-        // $course.find(".downloading-file").html(file).show();
+        
         console.log("startDownload", file);
         $pauseButton.removeClass("disabled");
       });
@@ -971,12 +943,6 @@ function initDownload($course, coursedata, subTitle = "") {
             return;
           }
         }
-        else {
-          $course.find('input[name="encryptedvideos"]').val(0);
-        }
-
-        // $course.find(".downloading-file").hide();
-        // $course.find(".downloading-error").hide();
         callback();
       });
     }
@@ -1050,7 +1016,7 @@ function initDownload($course, coursedata, subTitle = "") {
 
         function endDownload() {
           index++;
-          // $pauseButton.addClass("disabled");
+          
           clearInterval(timer);
           if (index == total_assets) {
             $progressElemCombined.progress("increment");
@@ -1225,7 +1191,6 @@ function initDownload($course, coursedata, subTitle = "") {
       dlStart(dl, lectureType == "video", endDownloadAttachment);
 
       function endDownloadAttachment() {
-        // $pauseButton.addClass("disabled");
         clearInterval(timer);
         if (
           coursedata["chapters"][chapterindex]["lectures"][lectureindex].caption
@@ -1357,7 +1322,6 @@ $(".ui.settings .form").submit(e => {
 var settingsForm = $(".ui.settings .form");
 
 function loadSettings() {
-  // var settingsCached = settings.getAll();
 
   settingsForm.find('input[name="check-new-version"]').prop("checked", settingsCached.download.checkNewVersion ?? false);
   settingsForm.find('input[name="auto-start-download"]').prop("checked", settingsCached.download.autoStartDownload ?? false);
@@ -1560,13 +1524,6 @@ function saveDownloads(quit) {
 }
 
 function removeCurseDownloads(courseId) {
-  // $(".ui.downloads.section .ui.courses.items .ui.course.item").forEach(
-  //   function () {
-  //     if ($(this).attr('course-id') == courseId) {
-  //       $(this).remove();
-  //     }
-  //   });
-
   var $downloads = $(".ui.downloads.section .ui.courses.items .ui.course.item").slice(0);
 
   if ($downloads.length) {
@@ -1604,12 +1561,6 @@ function askForSubtitle(availableSubs, initDownload, $course, coursedata, defaul
   var $subtitleModal = $(".ui.subtitle.modal");
   var $subtitleDropdown = $subtitleModal.find(".ui.dropdown");
   var subtitleLanguages = [];
-  // for (var key in availableSubs) {
-  //   subtitleLanguages.push({
-  //     name: `<b>${key}</b> <i>${availableSubs[key]} Lectures</i>`,
-  //     value: key
-  //   });
-  // }  
   var languages = [];
   var totals = {};
   var languageKeys = {};
@@ -1706,7 +1657,7 @@ function loginWithUdemy() {
   );
 
   console.log('loginWithUdemy', $subDomain.val())
-  // if ($(".ui.login .form").find('input[name="business"]').is(":checked") && $subDomain.val()) {
+  
   if ($subDomain.val()) {
     udemyLoginWindow.loadURL(`https://${$subDomain.val()}.udemy.com`);
   } else {
@@ -1800,7 +1751,6 @@ function getSequenceName(index, count, name, separatorIndex = ". ", path = null)
   const sequence_name = `${seq}${separatorIndex}${sanitize_name}`;
   const sequence_path = path ? `${path}/${sequence_name}` : sequence_name;
 
-  //WithZeroLeft
   if (settingsCached.download.seqZeroLeft) {
     if (fs.existsSync(index_path)) {
       fs.renameSync(index_path, sequence_path);
