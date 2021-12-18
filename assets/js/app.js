@@ -11,6 +11,7 @@ const sanitize = require("sanitize-filename");
 const vtt2srt = require("node-vtt-to-srt");
 const Downloader = require("mt-files-downloader");
 const https = require("https");
+const cookie = require("cookie");
 
 const app = require("http").createServer();
 const io = require("socket.io")(app);
@@ -1639,8 +1640,13 @@ function loginWithUdemy() {
   session.defaultSession.webRequest.onBeforeSendHeaders(
     { urls: ["*://*.udemy.com/*"] },
     function (request, callback) {
-      if (request.requestHeaders.Authorization) {
-        settings.set("access_token", request.requestHeaders.Authorization.split(" ")[1]);
+
+      const token = request.requestHeaders.Authorization
+        ? request.requestHeaders.Authorization.split(" ")[1]
+        : cookie.parse(request.requestHeaders.Cookie || '').access_token;
+      
+      if (token) {
+        settings.set("access_token", token);
         settings.set("subdomain", new URL(request.url).hostname.split(".")[0]);
         udemyLoginWindow.destroy();
         session.defaultSession.clearStorageData();

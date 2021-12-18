@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 1.10.2
+
+* Changed - Login with Credentials
+
 ## Version 1.10.1
 
 * Hotfix - Login with access token

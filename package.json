@@ -1,6 +1,6 @@
 {
   "name": "Udeler",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
@@ -38,6 +38,7 @@
     "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
+    "cookie": "^0.4.1",
     "dialogs": "^2.0.1",
     "electron-settings": "^3.2.0",
     "jquery": "^3.6.0",
