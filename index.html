@@ -103,6 +103,13 @@
           <div class="row">
             <div class="ten wide column">
               <form class="ui form">
+                <!-- <div class="field">                   
+                  <div class="ui fluid label input">
+                    <input type="text" name="username" id="username" placeholder="${translate("Username")}">
+                  
+                    <input type="password" name="userpass" id="userpass" placeholder="${translate("Password")}">
+                  </div>
+                </div> -->
                 <div class="field">                   
                   <div class="ui fluid label checkbox">
                     <input type="checkbox" name="business" id="business">
@@ -119,22 +126,30 @@
               <div class="ui horizontal divider">
                 ${translate("Choose Login Method")}
               </div>
-              <button class="ui fluid purple button" type="button" onclick="loginWithUdemy()">
-                ${translate("Login Using Credentials")}
-              </button>
+              <div class="ui fluid icon buttons">
+                <!-- <button class="ui purple button" onclick="loginWithPassword()" style="margin-right: 1px">
+                  <i class="key icon"></i> ${translate("Using Password")}
+                </button>
+                <div class="or"></div> -->
+                <button class="ui purple button" type="button" onclick="loginWithUdemy()">
+                  ${translate("Get Credentials")}
+                </button>
+              </div>
+              
               <div class="ui horizontal divider">
                 <i class="exchange icon"></i>
               </div>
-              <div class="ui fluid icon buttons">
+              <!-- <div class="ui fluid icon buttons"> 
                 <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
                   <i class="user secret icon"></i> Authenticator
                 </button>
-                <div class="or"></div>
-                <button class="ui violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
+                <div class="or"></div>  -->
+                <button class="ui fluid violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
                   <i class="key icon"></i> Access Token
                 </button>
-              </div>
-              </div>
+              <!-- </div> -->
+
+            </div>
           </div>
 
         </div>

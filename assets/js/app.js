@@ -1646,7 +1646,7 @@ function loginWithUdemy() {
         session.defaultSession.clearStorageData();
         session.defaultSession.webRequest.onBeforeSendHeaders(
           { urls: ["*://*.udemy.com/*"] },
-          function (request, callback) {
+          function (request, callback) {            
             callback({ requestHeaders: request.requestHeaders });
           }
         );
@@ -1698,6 +1698,28 @@ function checkLogin() {
   }
 }
 
+
+function loginWithPassword() {
+  if ($(".ui.login .form").find('input[name="business"]').is(":checked")) {
+    if (!$subDomain.val()) {
+      prompt.alert("Type Business Name");
+      return;
+    }
+  } else {
+    $subDomain.val("www");
+  }
+
+  
+  // prompt.prompt("Access Token", function (access_token) {
+  //   if (access_token) {
+  //     const submain = $subDomain.val();
+  //     settings.set("access_token", access_token);
+  //     settings.set("subdomain", submain.length == 0 ? "www" : submain);
+  //     checkLogin();
+  //   }
+  // });
+}
+
 function loginWithAccessToken() {
   if ($(".ui.login .form").find('input[name="business"]').is(":checked")) {
     if (!$subDomain.val()) {
@@ -1705,12 +1727,13 @@ function loginWithAccessToken() {
       return;
     }
   } else {
-    $subDomain.val(null);
+    $subDomain.val("www");
   }
   prompt.prompt("Access Token", function (access_token) {
     if (access_token) {
+      const submain = $subDomain.val();
       settings.set("access_token", access_token);
-      settings.set("subdomain", $subDomain.val() ?? "www");
+      settings.set("subdomain", submain.length == 0 ? "www" : submain);
       checkLogin();
     }
   });
