@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 1.10.3
+
+* Fixed - -infinity error
+* Fixed - Window clear after download
+
 ## Version 1.10.2
 
 * Changed - Login with Credentials

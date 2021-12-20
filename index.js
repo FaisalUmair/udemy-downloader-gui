@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require("path");
 const url = require("url");
+const appVersion = require(__dirname + "/package.json").version;
 
 const isDebug = process.argv.indexOf("--debug") != -1;
 // const env = process.env.NODE_ENV || 'production';
@@ -30,7 +31,9 @@ function createWindow() {
       nodeIntegration: true
     }
   });
-  // and load the index.html of the app.
+
+  win.setTitle(`Udeler | Udemy Course Downloader - v${appVersion}`);
+    // and load the index.html of the app.
   win.loadURL(
     url.format({
       pathname: path.join(__dirname, "index.html"),

@@ -457,6 +457,7 @@ function downloadButtonClick($course, subtitle) {
       }
 
       $.each(response.results, function (i, v) {
+
         if (v._class.toLowerCase() == "chapter") {
           chapterindex++;
           lectureindex = 0;
@@ -464,7 +465,8 @@ function downloadButtonClick($course, subtitle) {
           coursedata["chapters"][chapterindex]["name"] = v.title;
           coursedata["chapters"][chapterindex]["lectures"] = [];
           remaining--;
-        } else if (
+        }
+        else if (
           v._class.toLowerCase() == "lecture" &&
           (v.asset.asset_type.toLowerCase() == "video" ||
             v.asset.asset_type.toLowerCase() == "article" ||
@@ -482,13 +484,14 @@ function downloadButtonClick($course, subtitle) {
             }
             return;
           }
+
           function getLecture(lecturename, chapterindex, lectureindex) {
             $.ajax({
               type: "GET",
               url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=asset,supplementary_assets&fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token`,
               headers: headers,
               success: function (response) {
-
+              
                 if (v.asset.asset_type.toLowerCase() == "article") {
                   if (response.asset.data) {
                     var src = response.asset.data.body;
@@ -512,41 +515,40 @@ function downloadButtonClick($course, subtitle) {
                   var qualities = [];
                   var qualitySrcMap = {};
 
-                  const medias = response.asset.media_sources ?? response.asset.stream_urls.Video;
+                  const medias = response.asset.stream_urls?.Video ?? response.asset.media_sources;
                   medias.forEach(function (val) {
-                    if (val.label.toLowerCase() === "auto") return;
-
-                    qualities.push(val.label);
-                    qualitySrcMap[val.label] = val.file ?? val.src;
+                    if (val.label.toLowerCase() != "auto") {
+                      qualities.push(val.label);
+                      qualitySrcMap[val.label] = val.file ?? val.src;
+                    }
                   });
 
-                  var lowest = Math.min(...qualities);
-                  var highest = Math.max(...qualities);
-                  var videoQuality = settingsCached.download.videoQuality;
-
-                  if (!videoQuality || videoQuality.toLowerCase() === "auto") {
-                    var src = medias[0].src ?? medias[0].file;
-                    videoQuality = medias[0].label;
-                  } else {
-                    switch (videoQuality.toLowerCase()) {
+                  const lowest = Math.min(...qualities);
+                  const highest = Math.max(...qualities);
+                  var src = medias[0].src ?? medias[0].file;
+                  var videoQuality = qualities.length == 0 ? "Auto" : settingsCached.download.videoQuality;
+                  
+                    switch (videoQuality?.toLowerCase()) {
+                      case "auto":                        
+                        videoQuality = medias[0].label;
+                        break;
                       case "highest":
-                        var src = qualitySrcMap[highest];
+                        src = qualitySrcMap[highest];
                         videoQuality = highest;
                         break;
                       case "lowest":
-                        var src = qualitySrcMap[lowest];
+                        src = qualitySrcMap[lowest];
                         videoQuality = lowest;
                         break;
                       default:
                         videoQuality = videoQuality.slice(0, -1);
                         if (qualitySrcMap[videoQuality]) {
-                          var src = qualitySrcMap[videoQuality];
-                        } else {
-                          var src = medias[0].src ?? medias[0].file;
+                          src = qualitySrcMap[videoQuality];
+                        } else {                          
                           videoQuality = medias[0].label;
                         }
                     }
-                  }
+                  
                 }
 
                 coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
