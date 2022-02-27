@@ -2,10 +2,15 @@
 
 ## Version 1.11
 
-* Interface adjustments 
-1. Alert DRM Protected
-2. Rename options in setting
-* Update package electron_builder
+* Interface adjustments
+
+    1. Alert DRM Protected
+    2. Rename options in setting
+
+* Update packages
+
+    1. electron_builder
+    2. socket.io
 
 ## Version 1.10.3
 
