@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 1.11
+
+* Interface adjustments 
+1. Alert DRM Protected
+2. Rename options in setting
+* Update package electron_builder
+
 ## Version 1.10.3
 
 * Fixed - -infinity error

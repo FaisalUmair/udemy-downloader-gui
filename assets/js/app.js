@@ -19,11 +19,11 @@ const io = require("socket.io")(app);
 const pageSize = 25;
 const corruptedMP4Size = 20000;
 const $loginAuthenticator = $(".ui.login.authenticator");
+const msgDRMProtected = translate("Contains DRM protection and cannot be downloaded");
 
 var headers;
 var repoAccount = 'heliomarpm';
 var awaitingLogin = false;
-
 
 var $divSubDomain = $(".ui.login #divsubdomain");
 var $subDomain = $(".ui.login #subdomain");
@@ -165,7 +165,7 @@ function htmlCourseCard(course, downloadSection = false) {
         </div>
         <img src="${(course.image ?? course.image_240x135)}" class="course-image border-radius" />
         ${(downloadSection ? tagDismiss : '')}        
-        <div class="tooltip">${(course.encryptedVideos == 0 ? '' : translate("Contains encrypted videos"))}</div>
+        <div class="tooltip">${(course.encryptedVideos == 0 ? '' : msgDRMProtected)}</div>
       </div>
 
       <div class="content">
@@ -193,7 +193,7 @@ function htmlCourseCard(course, downloadSection = false) {
           <i class="lock icon"></i>
           <div class="content">
             <div class="headers">
-              <h4>${translate("Contains encrypted videos")}</h4>
+              <h4>${msgDRMProtected}</h4>
             </div>
             <p>${translate("Click to dismiss")}</p>
           </div>
@@ -941,7 +941,7 @@ function initDownload($course, coursedata, subTitle = "") {
           console.warn(`${coursedata.encryptedVideos} - encryptedVideos`, dl.filePath)
 
           if (!settingsCached.download.continueDonwloadingEncrypted) {
-            stopDownload(translate("Contains encrypted videos"));
+            stopDownload(msgDRMProtected);
             dl.destroy();
             return;
           }

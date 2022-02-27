@@ -1,35 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <!-- <meta charset="UTF-8" />
-  <title>Udeler | Udemy Course Downloader</title> -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Udeler | Udemy Course Downloader</title>
   <link rel="stylesheet" href="assets/css/semantic.min.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
 
-  <script type="text/javascript">
-    const settings = require("electron-settings");
-    const appVersion = require(__dirname + "/package.json").version;
-    function translate(text) {
-      if (!settings.get("general.language") || settings.get("general.language") == "English") {
-        return text;
-      } 
-      else {
-        try {
-          var meta = require("./locale/meta.json");
-          var locale = require(`./locale/${meta[settings.get("general.language")]}`);
-          return locale[text] || text;
-        } 
-        catch (e) {
-          return text;
-        }
-      }
-    }
-
-    function translateWrite(text) {
-      document.write(translate(text));
-    }
-  </script>
+  <script src="./renderer.js"></script>
 </head>
 
 <body>
@@ -80,402 +61,402 @@
 
   <script type="text/javascript">
     var template = `
-        <div class="ui center aligned login grid">
-          <div class="ui login dimmer">
-            <div class="ui big text loader">${translate("Logging in")}</div>
-          </div>
-
-          <div class="ui authenticator dimmer">
-            <div class="ui big text loader">
-              ${translate("Awaiting Login Request")}
+          <div class="ui center aligned login grid">
+            <div class="ui login dimmer">
+              <div class="ui big text loader">${translate("Logging in")}</div>
             </div>
-          </div>
-    
-          <div class="row">
-            <div class="ten wide column">
-              <h2 class="ui icon grey login header">
-                <i class="circular purple user icon"></i>
-                ${translate("Udemy Login")}
-              </h2>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="ten wide column">
-              <form class="ui form">
-                <!-- <div class="field">                   
-                  <div class="ui fluid label input">
-                    <input type="text" name="username" id="username" placeholder="${translate("Username")}">
-                  
-                    <input type="password" name="userpass" id="userpass" placeholder="${translate("Password")}">
-                  </div>
-                </div> -->
-                <div class="field">                   
-                  <div class="ui fluid label checkbox">
-                    <input type="checkbox" name="business" id="business">
-                    <label for="business">${translate("Udemy Business")} ?</label>
-                  </div>
-                </div>
-                <div class="field">
-                    <div id="divsubdomain" class="ui right labeled input" style="display: none" >
-                      <input type="text" id="subdomain" name="subdomain" placeholder="${translate("Udemy Business Name")}">
-                      <span class="ui tag label">.udemy.com</span>
-                    </div>
-                </div>
-              </form>
-              <div class="ui horizontal divider">
-                ${translate("Choose Login Method")}
+  
+            <div class="ui authenticator dimmer">
+              <div class="ui big text loader">
+                ${translate("Awaiting Login Request")}
               </div>
-              <div class="ui fluid icon buttons">
-                <!-- <button class="ui purple button" onclick="loginWithPassword()" style="margin-right: 1px">
-                  <i class="key icon"></i> ${translate("Using Password")}
-                </button>
-                <div class="or"></div> -->
-                <button class="ui purple button" type="button" onclick="loginWithUdemy()">
-                  ${translate("Get Credentials")}
-                </button>
+            </div>
+      
+            <div class="row">
+              <div class="ten wide column">
+                <h2 class="ui icon grey login header">
+                  <i class="circular purple user icon"></i>
+                  ${translate("Udemy Login")}
+                </h2>
               </div>
-              
-              <div class="ui horizontal divider">
-                <i class="exchange icon"></i>
-              </div>
-              <!-- <div class="ui fluid icon buttons"> 
-                <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
-                  <i class="user secret icon"></i> Authenticator
-                </button>
-                <div class="or"></div>  -->
-                <button class="ui fluid violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
-                  <i class="key icon"></i> Access Token
-                </button>
-              <!-- </div> -->
-
             </div>
-          </div>
-
-        </div>
-
-        <div class="ui dashboard">    
-          <div class="ui logout dimmer">
-            <div class="ui big text loader">${translate("Logging Out")}</div>
-          </div>  
-          <div class="ui courses dimmer">
-            <div class="ui big text loader">${translate("Loading Courses")}</div>
-          </div>
-            <div class="ui course dimmer">
-            <div class="ui big text loader">${translate("Getting Info")}</div>
-          </div>
-          <div class="ui about dimmer">
-            <div class="ui big text loader">${translate("Checking for Updates")}</div>
-          </div>
-          <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get("general.language") == "Arabic" ? "right" : "left"}">
-            <a class="active purple courses-sidebar item">
-              <i class="file video icon"></i>
-              ${translate("Courses")}
-            </a>
-            <a class="downloads-sidebar item">
-              <i class="download icon"></i>
-              ${translate("Downloads")}
-            </a>
-            <a class="settings-sidebar item">
-              <i class="wrench icon"></i>
-              ${translate("Settings")}
-            </a>
-            <a class="about-sidebar item">
-              <i class="info icon"></i>
-              ${translate("About")}
-            </a>
-            
-            <div class="ui footer">
-              <a class="logout-sidebar item">
-                <i class="power off icon"></i>
-                ${translate("Logout")}
-              </a>
-            </div>
-          </div>
-
-          <div class="content">
-            <div class="ui courses section">
-              <form class="ui search form">
-                <div class="ui fluid search">
-                  <div class="ui fluid icon input">
-                    <input class="prompt" type="text" placeholder="${translate("Search Courses")}">
-                    <i class="search icon"></i>
+  
+            <div class="row">
+              <div class="ten wide column">
+                <form class="ui form">
+                  <!-- <div class="field">                   
+                    <div class="ui fluid label input">
+                      <input type="text" name="username" id="username" placeholder="${translate("Username")}">
+                    
+                      <input type="password" name="userpass" id="userpass" placeholder="${translate("Password")}">
+                    </div>
+                  </div> -->
+                  <div class="field">                   
+                    <div class="ui fluid label checkbox">
+                      <input type="checkbox" name="business" id="business">
+                      <label for="business">${translate("Udemy Business")} ?</label>
+                    </div>
                   </div>
+                  <div class="field">
+                      <div id="divsubdomain" class="ui right labeled input" style="display: none" >
+                        <input type="text" id="subdomain" name="subdomain" placeholder="${translate("Udemy Business Name")}">
+                        <span class="ui tag label">.udemy.com</span>
+                      </div>
+                  </div>
+                </form>
+                <div class="ui horizontal divider">
+                  ${translate("Choose Login Method")}
                 </div>
-              </form>
-              <div class="ui divided unstackable courses items attached segment" style="margin-top: 5px !important;"></div>
-            </div>
-
-            <div class="ui downloads section">
-              <h5 class="ui top attached header">
-                <i class="ui download icon"></i> ${translate("Downloads")}
-              </h5>
-              <div class="ui divided unstackable courses items attached segment" style="margin-top: 0px !important;"></div>
-            </div>
-
-            <div class="ui settings section"> 
-              <form class="ui form">
-                <h5 class="ui top attached  header">
-                  <i class="ui setting icon"></i> ${translate("Application Settings")}
-                </h5>
-                <div class="ui attached segment">
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="check-new-version">
-                      <label>${translate("Check for a new version on startup")}</label>
-                    </div>
-                  </div>
-
-                  <div class="field">
-                    <label>${translate("Language (Requires App Restart)")}</label>
-                    <div class="ui fluid search selection language dropdown">
-                      <input type="hidden" name="language">
-                      <i class="dropdown icon"></i>
-                      <div class="default text"></div>
-                      <div class="menu">
-                        <div class="item" data-value="English">English</div>
-                      </div>
-                    </div>
-                  </div>
-                
-                  <div class="field">
-                    <label>${translate("Default Subtitle for download")}</label>
-                    <div class="ui fluid search selection defaultSubtitle dropdown">
-                      <input type="hidden" name="defaultSubtitle">
-                      <i class="dropdown icon"></i>
-                      <div class="defaultSubtitle text"></div>
-                      <div class="menu">
-                        <div class="item" data-value=""></div>
-                        <div class="item" data-value="English">English</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <h5 class="ui top attached header">
-                  <i class="ui download icon"></i> ${translate("Download Settings")}
-                </h5>
-                <div class="ui attached segment">                  
-                  <div class="field">
-                    <label>${translate("Download Path")}</label>
-                    <div class="ui action input">
-                      <input type="text" readonly name="downloadpath">
-                      <label class="ui icon button btn-file" onclick="selectDownloadPath()">
-                        <i class="folder icon"></i>
-                      </label>
-                    </div>
-                  </div>  
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="auto-start-download">
-                      <label>${translate("Start pending downloads at startup")}</label>
-                    </div>
-                  </div>   
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="continue-downloading-encrypted">
-                      <label>${translate("Continue if course is encrypted")}</label>
-                    </div>
-                  </div> 
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="enabledownloadstartend">
-                      <label>${translate("Enable Download Start/End")}</label>
-                    </div>
-                  </div>
-                  <div class="two unstackable fields">
-                    <div class="field">
-                      <label>${translate("Download Start")}</label>
-                      <input placeholder="${translate("Start Download at")}" type="number" min="1" name="downloadstart">
-                    </div>
-                    <div class="field">
-                      <label>${translate("Download End")}</label>
-                      <input placeholder="${translate("End Download at")}" type="number" min="1" name="downloadend">
-                    </div>
-                  </div>
-
-                  <div class="ui  divider"></div>
-                  
-                  <div class="field">
-                    <label>${translate("Video Quality")}</label>
-                    <div class="ui fluid search selection dropdown">
-                      <input type="hidden" name="videoquality">
-                      <i class="dropdown icon"></i>
-                      <div class="default text"></div>
-                      <div class="menu">
-                        <div class="item" data-value="Auto">${translate("Auto")}</div>
-                        <div class="item" data-value="Lowest">${translate("Lowest")}</div>
-                        <div class="item" data-value="360p">360p</div>
-                        <div class="item" data-value="480p">480p</div>
-                        <div class="item" data-value="720p">720p</div>
-                        <div class="item" data-value="1080p">1080p</div>
-                        <div class="item" data-value="Highest">${translate("Highest")}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="skipattachments">
-                      <label>${translate("Skip Attachments")}</label>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="skipsubtitles">
-                      <label>${translate("Skip Subtitles")}</label>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="seq-zero-left">
-                      <label>${translate("Number downloads with zero left")}</label>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui checkbox">
-                      <input type="checkbox" name="autoretry">
-                      <label>${translate("Auto Retry on Error (Experimental)")}</label>
-                    </div>
-                  </div>
-
-                </div>                
-
-                <div class="ui horizontal divider"></div>
-
-                <button class="ui fluid green button" type="submit">
-                  ${translate("Save")}
-                </button>
-              </form>
-
-            </div>
-
-            <div class="ui about section">   
-              <div class="ui segment">
-                <h4 class="ui center aligned icon header">
-                  <!-- <i class="grey file code outline icon"></i> -->
-                  <!-- <i class="grey download icon"></i> -->                  
-                  <img src="./assets/images/logo64.png" style="height: 64px; width: 64px"/>
-                  <br>
-                  v${appVersion}
-                </h4>
-
-                <!-- <div class="ui clearing divider"></div> -->              
-                <div class="ui fluid buttons">
-                  <button class="ui primary button check-updates" style="margin-right: 1px">
-                    ${translate("Check for updates")}
+                <div class="ui fluid icon buttons">
+                  <!-- <button class="ui purple button" onclick="loginWithPassword()" style="margin-right: 1px">
+                    <i class="key icon"></i> ${translate("Using Password")}
+                  </button>
+                  <div class="or"></div> -->
+                  <button class="ui purple button" type="button" onclick="loginWithUdemy()">
+                    ${translate("Get Credentials")}
                   </button>
                 </div>
-
-                <h4 class="ui header">
-                  <i class="cloud download icon"></i></i>${translate("Old version")}&nbsp;1.8.2
-                </h4>                
-                <div class="ui fluid buttons">
-                  <button class="ui secondary button old-version-linux" style="margin-left: 1px">Linux</button>
-                  <div class="or"></div>
-                  <button class="ui button old-version-mac" style="margin-right: 1px">Mac x64</button>
-                </div>
-
-                <div class="ui horizontal divider"></div>
-                <div class="ui clearing divider"></div>
-                <h4 class="ui header">
-                  <i class="heart icon"></i>${translate("Donate")}
-                </h4>
-                <p>
-                  ${translate(
-                    "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
-                  )}
-                </p>
-                <br>
                 
-                <a href="https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0
-                         &item_name=${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.").replace(" ","+")}
-                         &currency_code=USD" class="ui centered donate grid">
-                  <img src="assets/images/donate-qrcode.png" alt="${translate("Donate")} (for maintainer)"/>
+                <div class="ui horizontal divider">
+                  <i class="exchange icon"></i>
+                </div>
+                <!-- <div class="ui fluid icon buttons"> 
+                  <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
+                    <i class="user secret icon"></i> Authenticator
+                  </button>
+                  <div class="or"></div>  -->
+                  <button class="ui fluid violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
+                    <i class="key icon"></i> Access Token
+                  </button>
+                <!-- </div> -->
+  
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="ui dashboard">    
+            <div class="ui logout dimmer">
+              <div class="ui big text loader">${translate("Logging Out")}</div>
+            </div>  
+            <div class="ui courses dimmer">
+              <div class="ui big text loader">${translate("Loading Courses")}</div>
+            </div>
+              <div class="ui course dimmer">
+              <div class="ui big text loader">${translate("Getting Info")}</div>
+            </div>
+            <div class="ui about dimmer">
+              <div class="ui big text loader">${translate("Checking for Updates")}</div>
+            </div>
+            <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get("general.language") == "Arabic" ? "right" : "left"}">
+              <a class="active purple courses-sidebar item">
+                <i class="file video icon"></i>
+                ${translate("Courses")}
+              </a>
+              <a class="downloads-sidebar item">
+                <i class="download icon"></i>
+                ${translate("Downloads")}
+              </a>
+              <a class="settings-sidebar item">
+                <i class="wrench icon"></i>
+                ${translate("Settings")}
+              </a>
+              <a class="about-sidebar item">
+                <i class="info icon"></i>
+                ${translate("About")}
+              </a>
+              
+              <div class="ui footer">
+                <a class="logout-sidebar item">
+                  <i class="power off icon"></i>
+                  ${translate("Logout")}
                 </a>
-
-                <div class="ui horizontal divider"></div>                
-                <div class="ui clearing divider"></div>
-                <h3 class="ui header">
-                  <i class="linkify icon"></i>${translate("Links")}
-                </h3>                
-                <div class="ui relaxed divided list">
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui">heliomarpm/udemy-downloader-gui</a>
-                      <div class="description">${translate("Active Repository")}</div>
+              </div>
+            </div>
+  
+            <div class="content">
+              <div class="ui courses section">
+                <form class="ui search form">
+                  <div class="ui fluid search">
+                    <div class="ui fluid icon input">
+                      <input class="prompt" type="text" placeholder="${translate("Search Courses")}">
+                      <i class="search icon"></i>
                     </div>
                   </div>
-                  <div class="item">
-                    <i class="large world middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://steemkr.com/utopian-io/@moenawar/my-new-logo-design-proposal-for-udeler">@Moenawar</a>
-                      <div class="description">${translate("Icon Designer")}</div>
+                </form>
+                <div class="ui divided unstackable courses items attached segment" style="margin-top: 5px !important;"></div>
+              </div>
+  
+              <div class="ui downloads section">
+                <h5 class="ui top attached header">
+                  <i class="ui download icon"></i> ${translate("Downloads")}
+                </h5>
+                <div class="ui divided unstackable courses items attached segment" style="margin-top: 0px !important;"></div>
+              </div>
+  
+              <div class="ui settings section"> 
+                <form class="ui form">
+                  <h5 class="ui top attached  header">
+                    <i class="ui setting icon"></i> ${translate("Application Settings")}
+                  </h5>
+                  <div class="ui attached segment">
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="check-new-version">
+                        <label>${translate("Check for a new version on startup")}</label>
+                      </div>
                     </div>
-                  </div>
+  
+                    <div class="field">
+                      <label>${translate("Language (Requires App Restart)")}</label>
+                      <div class="ui fluid search selection language dropdown">
+                        <input type="hidden" name="language">
+                        <i class="dropdown icon"></i>
+                        <div class="default text"></div>
+                        <div class="menu">
+                          <div class="item" data-value="English">English</div>
+                        </div>
+                      </div>
+                    </div>
                   
-                  <div class="ui horizontal divider"></div>
-                  <!-- <div class="ui clearing divider"></div> -->
-                  <h3 class="ui header">
-                    <i class="connectdevelop icon"></i>${translate("Collaborate")}
-                  </h3>                
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
-                      <div class="description">${translate("Report Bug")}</div>
+                    <div class="field">
+                      <label>${translate("Default Subtitle for download")}</label>
+                      <div class="ui fluid search selection defaultSubtitle dropdown">
+                        <input type="hidden" name="defaultSubtitle">
+                        <i class="dropdown icon"></i>
+                        <div class="defaultSubtitle text"></div>
+                        <div class="menu">
+                          <div class="item" data-value=""></div>
+                          <div class="item" data-value="English">English</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
-                      <div class="description">${translate("Contribute")}</div>
+  
+                  <h5 class="ui top attached header">
+                    <i class="ui download icon"></i> ${translate("Download Settings")}
+                  </h5>
+                  <div class="ui attached segment">                  
+                    <div class="field">
+                      <label>${translate("Download Path")}</label>
+                      <div class="ui action input">
+                        <input type="text" readonly name="downloadpath">
+                        <label class="ui icon button btn-file" onclick="selectDownloadPath()">
+                          <i class="folder icon"></i>
+                        </label>
+                      </div>
+                    </div>  
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="auto-start-download">
+                        <label>${translate("Start pending downloads at startup")}</label>
+                      </div>
+                    </div>   
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="continue-downloading-encrypted">
+                        <label>${translate("Keep downloading even if the course is DRM protected")}</label>
+                      </div>
+                    </div> 
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="enabledownloadstartend">
+                        <label>${translate("Enable Download Start/End")}</label>
+                      </div>
                     </div>
-                  </div>
-                </div>
-
-                <div class="ui horizontal divider"></div>
-                <div class="ui clearing divider"></div>
-                <h3 class="ui header">
-                  <i class="user secret icon"></i>FaisalUmair - ${translate("The great creator of this project")}
-                </h3>
-                <div class="ui relaxed divided list">
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui">FaisalUmair/udemy-downloader-gui</a>
-                      <div class="description">${translate("Repository")} (${translate("Archived")})</div>
+                    <div class="two unstackable fields">
+                      <div class="field">
+                        <label>${translate("Download Start")}</label>
+                        <input placeholder="${translate("Start Download at")}" type="number" min="1" name="downloadstart">
+                      </div>
+                      <div class="field">
+                        <label>${translate("Download End")}</label>
+                        <input placeholder="${translate("End Download at")}" type="number" min="1" name="downloadend">
+                      </div>
                     </div>
-                  </div>
-                  <div class="item">
-                    <i class="large github middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="https://github.com/FaisalUmair">FaisalUmair</a>
-                      <div class="description">${translate("Developer")}</div>
+  
+                    <div class="ui  divider"></div>
+                    
+                    <div class="field">
+                      <label>${translate("Video Quality")}</label>
+                      <div class="ui fluid search selection dropdown">
+                        <input type="hidden" name="videoquality">
+                        <i class="dropdown icon"></i>
+                        <div class="default text"></div>
+                        <div class="menu">
+                          <div class="item" data-value="Auto">${translate("Auto")}</div>
+                          <div class="item" data-value="Lowest">${translate("Lowest")}</div>
+                          <div class="item" data-value="360p">360p</div>
+                          <div class="item" data-value="480p">480p</div>
+                          <div class="item" data-value="720p">720p</div>
+                          <div class="item" data-value="1080p">1080p</div>
+                          <div class="item" data-value="Highest">${translate("Highest")}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="item">
-                    <i class="large world middle aligned icon"></i>
-                    <div class="content">
-                      <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
-                      <div class="description">${translate("Website")}</div>
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="skipattachments">
+                        <label>${translate("Skip Attachments")}</label>
+                      </div>
                     </div>
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="skipsubtitles">
+                        <label>${translate("Skip Subtitles")}</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="seq-zero-left">
+                        <label>${translate("Enumerate download with zero left")}</label>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui checkbox">
+                        <input type="checkbox" name="autoretry">
+                        <label>${translate("Auto Retry on Error (Experimental)")}</label>
+                      </div>
+                    </div>
+  
                   </div>                
-                
+  
+                  <div class="ui horizontal divider"></div>
+  
+                  <button class="ui fluid green button" type="submit">
+                    ${translate("Save")}
+                  </button>
+                </form>
+  
+              </div>
+  
+              <div class="ui about section">   
+                <div class="ui segment">
+                  <h4 class="ui center aligned icon header">
+                    <!-- <i class="grey file code outline icon"></i> -->
+                    <!-- <i class="grey download icon"></i> -->                  
+                    <img src="./assets/images/logo64.png" style="height: 64px; width: 64px"/>
+                    <br>
+                    v${appVersion}
+                  </h4>
+  
+                  <!-- <div class="ui clearing divider"></div> -->              
+                  <div class="ui fluid buttons">
+                    <button class="ui primary button check-updates" style="margin-right: 1px">
+                      ${translate("Check for updates")}
+                    </button>
+                  </div>
+  
+                  <h4 class="ui header">
+                    <i class="cloud download icon"></i></i>${translate("Old version")}&nbsp;1.8.2
+                  </h4>                
+                  <div class="ui fluid buttons">
+                    <button class="ui secondary button old-version-linux" style="margin-left: 1px">Linux</button>
+                    <div class="or"></div>
+                    <button class="ui button old-version-mac" style="margin-right: 1px">Mac x64</button>
+                  </div>
+  
+                  <div class="ui horizontal divider"></div>
+                  <div class="ui clearing divider"></div>
                   <h4 class="ui header">
                     <i class="heart icon"></i>${translate("Donate")}
                   </h4>
+                  <p>
+                    ${translate(
+      "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
+    )}
+                  </p>
                   <br>
-                  <a href="https://www.udeler.com/donate" class="ui centered donate grid">
-                    <img src="assets/images/donate.png" alt="${translate("Donate")}"/>
+                  
+                  <a href="https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0
+                           &item_name=${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.").replace(" ", "+")}
+                           &currency_code=USD" class="ui centered donate grid">
+                    <img src="assets/images/donate-qrcode.png" alt="${translate("Donate")} (for maintainer)"/>
                   </a>
+  
+                  <div class="ui horizontal divider"></div>                
+                  <div class="ui clearing divider"></div>
+                  <h3 class="ui header">
+                    <i class="linkify icon"></i>${translate("Links")}
+                  </h3>                
+                  <div class="ui relaxed divided list">
+                    <div class="item">
+                      <i class="large github middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui">heliomarpm/udemy-downloader-gui</a>
+                        <div class="description">${translate("Active Repository")}</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <i class="large world middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://steemkr.com/utopian-io/@moenawar/my-new-logo-design-proposal-for-udeler">@Moenawar</a>
+                        <div class="description">${translate("Icon Designer")}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="ui horizontal divider"></div>
+                    <!-- <div class="ui clearing divider"></div> -->
+                    <h3 class="ui header">
+                      <i class="connectdevelop icon"></i>${translate("Collaborate")}
+                    </h3>                
+                    <div class="item">
+                      <i class="large github middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/issues">udemy-downloader-gui/issues</a>
+                        <div class="description">${translate("Report Bug")}</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <i class="large github middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui/pulls">udemy-downloader-gui/pulls</a>
+                        <div class="description">${translate("Contribute")}</div>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="ui horizontal divider"></div>
+                  <div class="ui clearing divider"></div>
+                  <h3 class="ui header">
+                    <i class="user secret icon"></i>FaisalUmair - ${translate("The great creator of this project")}
+                  </h3>
+                  <div class="ui relaxed divided list">
+                    <div class="item">
+                      <i class="large github middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://github.com/FaisalUmair/udemy-downloader-gui">FaisalUmair/udemy-downloader-gui</a>
+                        <div class="description">${translate("Repository")} (${translate("Archived")})</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <i class="large github middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="https://github.com/FaisalUmair">FaisalUmair</a>
+                        <div class="description">${translate("Developer")}</div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <i class="large world middle aligned icon"></i>
+                      <div class="content">
+                        <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
+                        <div class="description">${translate("Website")}</div>
+                      </div>
+                    </div>                
+                  
+                    <h4 class="ui header">
+                      <i class="heart icon"></i>${translate("Donate")}
+                    </h4>
+                    <br>
+                    <a href="https://www.udeler.com/donate" class="ui centered donate grid">
+                      <img src="assets/images/donate.png" alt="${translate("Donate")}"/>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-    `;
+      `;
 
     $("body").prepend(template);
 

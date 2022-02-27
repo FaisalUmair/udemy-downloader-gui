@@ -70,7 +70,7 @@
 	"In the download list since": "В списке загрузок с",
 	"Download completed in": "Загрузка завершена в",
 	"Icon Designer": "Дизайнер иконок",
-	"Contains encrypted videos": "Содержит зашифрованные видео",
+	"Contains DRM protection and cannot be downloaded": "Содержит защиту DRM и не может быть загружен",
 	"Confirm Log Out?": "Вы действительно хотите выйти?",
 	"official version": "официальная версия"
 }
