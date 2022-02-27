@@ -6,6 +6,7 @@
 
     1. Alert DRM Protected
     2. Rename options in setting
+    3. Donate Menu
 
 * Update packages
 

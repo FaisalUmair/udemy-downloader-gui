@@ -3,6 +3,8 @@ const path = require("path");
 const url = require("url");
 const appVersion = require(__dirname + "/package.json").version;
 
+const httpDonate = "https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&item_name=Udeler%20is%20free%20and%20without%20any%20ads.%20If%20you%20appreciate%20that,%20please%20consider%20donating%20to%20the%20Developer.&currency_code=USD";
+
 // const isDebug = !app.isPackaged;
 const isDebug = process.argv.indexOf("--debug") != -1;
 
@@ -114,6 +116,13 @@ function createWindow() {
           }
         }
       ]
+    },
+    {
+      label: 'Donate',
+      click: async () => {
+        const { shell } = require('electron')
+        await shell.openExternal(httpDonate)
+      }
     }
   ];
 
