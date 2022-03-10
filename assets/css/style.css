@@ -1,3 +1,7 @@
+body .dialog-widget.background {
+  background: rgba(0, 0, 0, 0.85);
+}
+
 .ui.dimmer {
   position: fixed;
 }
@@ -14,9 +18,10 @@
   font-family: Verdana;
   font-weight: normal;
 }
-
-body .dialog-widget.background {
-  background: rgba(0, 0, 0, 0.85);
+.ui.footer { /* Increased specificity for SO snippet priority */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .dialog-widget.alert {
@@ -33,14 +38,13 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .sidebar.menu .item {
-  padding-left: 7px;
-  padding-right: 7px;
-  max-width: 84px;
+  padding: 15px 3px;
+  max-width: 96px;
   word-wrap: break-word;
 }
 
 .ui.dashboard > .content {
-  margin-left: 95px;
+  margin-left: 100px;
   width: 100%;
 }
 
@@ -61,7 +65,7 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .courses .course .action.buttons .button {
-  border-radius: 0;
+  border-radius: 3;
 }
 
 .ui.dashboard .courses .course {
@@ -92,7 +96,7 @@ body .dialog-widget.background {
 }
 
 .ui.dashboard .courses .course .extra .button {
-  padding: 7px 15px;
+  padding: 5px 10px;
 }
 
 .ui.dashboard > .content .about .donate-button {
@@ -105,4 +109,101 @@ body .dialog-widget.background {
 
 .ui.login.authenticator i.icon.user.secret:before {
   content: "\f21b";
+}
+
+.info-downloaded {
+  font-size: 13px;
+  font-weight: normal !important;
+  color: #a8a8aa;
+}
+
+.border-radius {
+  border-radius: 10px !important;
+}
+
+.dismiss-download {
+  text-transform: uppercase;
+  text-align: left !important;
+}
+.wrapper {
+  background: #ececec;
+  color: #555;
+  /* cursor: help; */
+  /* font-size: 20px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  position: relative; */
+  /* width: 230px; */
+  /* -webkit-transform: translateZ(0); */ /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+}
+.wrapper .tooltip {
+  text-transform: uppercase;
+  text-align: center;
+  background: rgba(250, 5, 5, 0.75);
+  bottom: 100%;
+  color: #fff;
+  display: block;
+  left: 0;
+  margin-bottom: 5px;
+  opacity: 0;
+  padding: 2px;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  font-size: 8px;
+  -webkit-transform: translateY(10px);
+  -moz-transform: translateY(10px);
+  -ms-transform: translateY(10px);
+  -o-transform: translateY(10px);
+  transform: translateY(10px);
+  -webkit-transition: all .25s ease-out;
+  -moz-transition: all .25s ease-out;
+  -ms-transition: all .25s ease-out;
+  -o-transition: all .25s ease-out;
+  transition: all .25s ease-out;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+.wrapper:hover .tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  -webkit-transform: translateY(0px);
+  -moz-transform: translateY(0px);
+  -ms-transform: translateY(0px);
+  -o-transform: translateY(0px);
+  transform: translateY(0px);
+}
+/* This bridges the gap so you can mouse into the tooltip without it disappearing */
+.wrapper .tooltip:before {
+  bottom: -20px;
+  content: " ";
+  display: block;
+  height: 20px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+/* CSS Triangles - see Trevor's post */
+.wrapper .tooltip:after {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgba(250, 5, 5, 0.75);
+  bottom: -10px;
+  content: " ";
+  height: 0;
+  left: 50%;
+  margin-left: -13px;
+  position: absolute;
+  width: 0;
+}
+/* IE can just show/hide with no transition */
+.lte8 .wrapper .tooltip {
+  display: none;
+}
+.lte8 .wrapper:hover .tooltip {
+  display: block;
 }
