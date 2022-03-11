@@ -667,11 +667,19 @@ function downloadButtonClick($course, subtitle) {
       });
     },
     error: function (error) {
+      debugger
       $(".ui.dashboard .course.dimmer").removeClass("active");
-      if (error.status == 403) {
-        prompt.alert(
-          translate("You do not have permission to access this course")
-        );
+
+      switch (error.status) {
+        case 403:
+          prompt.alert(translate("You do not have permission to access this course"));
+          break;
+        case 504:
+            prompt.alert("Gateway timeout");
+            break;
+        default:
+          prompt.alert(error.message);
+          break;
       }
     }
   });
