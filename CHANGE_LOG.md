@@ -1,6 +1,7 @@
 # Change Log
 
 ## Version 1.11.1
+
 * Bug fixes
     Freezing when Building course data
 
