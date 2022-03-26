@@ -13,10 +13,12 @@
   </tr>
 </table>
   
-### Warning
+## Warning
 
-**Udemy has started to encrypt many of the course videos, so downloading them may be impossible/illegal because it involves decrypting DRM'd videos which opens up the author to DMCA takedowns/lawsuits.
-If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.**
+* Downloading courses is against Udemy's Terms of Service, I am NOT held responsible for your account getting suspended as a result from the use of this program!
+* Udemy has started to encrypt many of the course videos, so downloading them may be impossible/illegal because it involves decrypting DRM videos which opens up the author to DMCA takedowns/lawsuits.
+* If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.
+* This program is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
 
 If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609).
 
