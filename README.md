@@ -20,7 +20,7 @@ If you use Udeler and some/all videos are skipped, please don't open a new issue
 
 If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609).
 
-# Disclaimer:
+# Description:
 
 This software is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
 
