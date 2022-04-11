@@ -17,10 +17,11 @@ const app = require("http").createServer();
 const io = require("socket.io")(app);
 
 const pageSize = 25;
-const corruptedMP4Size = 20000;
+const corruptedMP4Size = 50000; // 50kb
 const $loginAuthenticator = $(".ui.login.authenticator");
 const msgDRMProtected = translate("Contains DRM protection and cannot be downloaded");
 
+var loggers = [];
 var headers;
 var repoAccount = 'heliomarpm';
 var awaitingLogin = false;
@@ -209,7 +210,11 @@ function htmlCourseCard(course, downloadSection = false) {
 
   if (!downloadSection) {
     if (course.completed) {
-      resetCourse($course, $course.find(".download-success"));
+      // if (course.encryptedVideos > 0) {
+      //   resetCourse($course, $course.find(".course-encrypted"));
+      // } else {
+        resetCourse($course, $course.find(".download-success"));
+      // }
     }
     else if (course.encryptedVideos > 0) {
       resetCourse($course, $course.find(".course-encrypted"));
@@ -297,6 +302,9 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function () {
       } else {
         $this.data("url", response.next);
       }
+    },
+    error: function (error) {
+      appendLog(`loadMoreError: ${error.status}`, error.message);
     }
   });
 });
@@ -375,13 +383,14 @@ $(".ui.dashboard .content .courses.section .search.form").submit(function (e) {
           );
         }
       },
-      error: function () {
+      error: function (error) {
         $(".ui.dashboard .courses.dimmer").removeClass("active");
         $(".ui.dashboard .ui.courses.section .disposable").remove();
         $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
         $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
           `<div class="ui yellow message disposable">${translate("No Courses Found")}</div>`
         );
+        appendLog(`error: ${error.status}`, error.message);
       }
     });
   } else {
@@ -666,21 +675,23 @@ function downloadButtonClick($course, subtitle) {
         }
       });
     },
-    error: function (error) {
-      debugger
+    error: function (error) {    
       $(".ui.dashboard .course.dimmer").removeClass("active");
-
-      switch (error.status) {
+      
+      switch (error?.status) {
         case 403:
-          prompt.alert(translate("You do not have permission to access this course"));
+          var msgError = translate("You do not have permission to access this course");          
           break;
         case 504:
-            prompt.alert("Gateway timeout");
+          var msgError = "Gateway timeout";
             break;
         default:
-          prompt.alert(error.message);
+          var msgError = error.message;
           break;
       }
+
+      appendLog(`downloadError: ${error.status}`, msgError);
+      prompt.alert(msgError);
     }
   });
 }
@@ -911,6 +922,7 @@ function initDownload($course, coursedata, subTitle = "") {
                     fs.unlinkSync(dl.filePath);
                   }
                   resetCourse($course, $course.find(".download-error"), settingsCached.download.autoRetry, coursedata, subtitle);
+                  appendLog(`downloadLeactureError ${error.status}`, error.message);
                 },
                 success: function () {
                   resetCourse($course, $course.find(".download-error"), settingsCached.download.autoRetry, coursedata, subtitle);
@@ -921,6 +933,7 @@ function initDownload($course, coursedata, subTitle = "") {
             break;
 
           case 2:
+          case -3:
             break;
           default:
             $download_speed_value.html(0);
@@ -928,7 +941,7 @@ function initDownload($course, coursedata, subTitle = "") {
       }, 1000);
 
       dl.on("error", function (dl) {
-        console.error('errorDownload', dl.error.message);
+        appendLog('errorDownload', dl.error.message);
       });
 
       dl.on("start", function () {
@@ -944,13 +957,14 @@ function initDownload($course, coursedata, subTitle = "") {
       });
 
       dl.on("end", function () {
-        if (typeVideo && dl.meta.size < corruptedMP4Size) {
+        // if (typeVideo && dl.meta.size < corruptedMP4Size) {
+        if (typeVideo && !dl.meta.headers["content-type"].includes("video")) {
           $course.find('input[name="encryptedvideos"]').val(++coursedata.encryptedVideos);
-          console.warn(`${coursedata.encryptedVideos} - encryptedVideos`, dl.filePath)
-
+          appendLog(`${coursedata.encryptedVideos} - encryptedVideos`, dl.filePath)
+          
+          dl.destroy();
           if (!settingsCached.download.continueDonwloadingEncrypted) {
             stopDownload(msgDRMProtected);
-            dl.destroy();
             return;
           }
         }
@@ -1271,6 +1285,15 @@ $(".about-sidebar").click(function () {
   $(this).addClass("active purple");
 });
 
+$(".logger-sidebar").click(function () {
+  $(".content .ui.section").hide();
+  $(".content .ui.logger.section").show();
+  $(this).parent(".sidebar").find(".active").removeClass("active purple");
+  $(this).addClass("active purple");
+
+  rendererLogger();
+});
+
 $(".logout-sidebar").click(function () {
   prompt.confirm(translate("Confirm Log Out?"), function (ok) {
     if (ok) {
@@ -1547,6 +1570,32 @@ function removeCurseDownloads(courseId) {
   }
 }
 
+function appendLog(title, description) {
+  debugger;
+  const log = {
+    title,
+    description
+  }
+
+  loggers.unshift(log);
+  console.warn(`[${title}] ${description}`);
+}
+
+function rendererLogger() {
+  $(".ui.logger.section .ui.list").empty();
+  loggers.forEach(item => { 
+    $(".ui.logger.section .ui.list").append(
+      `<div class="item">
+        <div class="header">
+          ${item.title}
+        </div>
+        ${item.description}
+      </div>`
+    );
+  });
+
+}
+
 
 function validURL(value) {
   var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
@@ -1564,6 +1613,9 @@ function search(keyword, headers) {
     headers: headers,
     success: function (response) {
       rendererCourse(response, keyword);
+    },
+    error: function (error) {
+      appendLog(`searchError: ${error.status}`, error.message);
     }
   });
 }
@@ -1655,6 +1707,7 @@ function loginWithUdemy() {
         ? request.requestHeaders.Authorization.split(" ")[1]
         : cookie.parse(request.requestHeaders.Cookie || '').access_token;
       
+      console.log(token);
       if (token) {
         settings.set("access_token", token);
         settings.set("subdomain", new URL(request.url).hostname.split(".")[0]);
@@ -1675,7 +1728,8 @@ function loginWithUdemy() {
   console.log('loginWithUdemy', $subDomain.val())
   
   if ($subDomain.val()) {
-    udemyLoginWindow.loadURL(`https://${$subDomain.val()}.udemy.com`);
+    subDomain = $subDomain.val();
+    udemyLoginWindow.loadURL(`https://${subDomain}.udemy.com`);
   } else {
     udemyLoginWindow.loadURL("https://www.udemy.com/join/login-popup");
   }
@@ -1709,6 +1763,7 @@ function checkLogin() {
           settings.set("access_token", null);
         }
         resetToLogin();
+        appendLog(`loginError: ${error.status}`, error.message);
       }
     });
   }

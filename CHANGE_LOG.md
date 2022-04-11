@@ -1,22 +1,34 @@
 # Change Log
 
+## Version 1.11.2
+
+* Features
+    - Initial version of log view section
+    - Remove videos protecteds e corrupteds after download
+
+
+* Bug Fixes
+    - Issue 30 (Courses not found)
+    - DRM-protected course identification
+    - A possible resolution for crash in _"Build Course Data"_
+
 ## Version 1.11.1
 
 * Bug fixes
-    Freezing when Building course data
+    - Freezing when Building course data
 
-## Version 1.11
+## Version 1.11.0
 
 * Interface adjustments
 
-    1. Alert DRM Protected
-    2. Rename options in setting
-    3. Donate Menu
+    - Alert DRM Protected
+    - Rename options in setting
+    - Donate Menu
 
 * Update packages
 
-    1. electron_builder
-    2. socket.io
+    - electron_builder
+    - socket.io
 
 ## Version 1.10.3
 

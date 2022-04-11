@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
+  <!-- <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
   <!-- TITULO ADICIONADO VIA INDEX.JS -->
   <!-- <title>Udeler | Udemy Course Downloader</title> -->
@@ -166,7 +166,10 @@
                 <i class="info icon"></i>
                 ${translate("About")}
               </a>
-              
+              <a class="logger-sidebar item">
+                <i class="code icon"></i>
+              </a>
+
               <div class="ui footer">
                 <a class="logout-sidebar item">
                   <i class="power off icon"></i>
@@ -364,8 +367,8 @@
                   </h4>
                   <p>
                     ${translate(
-      "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
-    )}
+                      "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
+                    )}
                   </p>
                   <br>
                   
@@ -454,6 +457,13 @@
                     </a>
                   </div>
                 </div>
+              </div>
+              <div class="ui logger section">
+                <h5 class="ui top attached header">
+                  <i class="ui code icon"></i> ${translate("Console.Log")}
+                </h5>
+                <div class="ui list divided unstackable attached segment" style="margin-top: 0px !important;">
+                </div>          
               </div>
             </div>
           </div>
