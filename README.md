@@ -1,4 +1,5 @@
 # Udeler | Udemy Course Downloader (GUI)
+-  English is not my native language; please excuse typing errors
 
 <table border=0 cellspacing=5 celspadding=5>
   <tr>
