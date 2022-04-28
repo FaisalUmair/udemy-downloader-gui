@@ -30,10 +30,11 @@
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder -wml",
-    "build-win": "electron-builder -w",
-    "build-win32": "electron-builder -w \"--ia32\"",
-    "build-mac": "electron-builder -m",
-    "build-linux": "electron-builder -l",
+		"prebuild": "node prebuild.js",
+		"build-win": "npm run prebuild && electron-builder -w",
+		"build-win32": "npm run prebuild && electron-builder -w \"--ia32\"",
+		"build-mac": "npm run prebuild && electron-builder -m",
+		"build-linux": "npm run prebuild && electron-builder -l",
     "dist": "build"
   },
   "devDependencies": {
