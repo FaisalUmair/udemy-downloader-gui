@@ -1,8 +1,8 @@
 name: "🐛 Bug report"
 description: Report errors or unexpected behavior
 labels: 
-- Issue-Bug
-- Needs-Triage
+- bug
+- needs-triage
 body:
 - type: markdown
   attributes:
