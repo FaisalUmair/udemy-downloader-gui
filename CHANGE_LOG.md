@@ -6,7 +6,6 @@
     - Initial version of log view section
     - Remove videos protecteds e corrupteds after download
 
-
 * Bug Fixes
     - Issue 30 (Courses not found)
     - DRM-protected course identification
@@ -20,13 +19,11 @@
 ## Version 1.11.0
 
 * Interface adjustments
-
     - Alert DRM Protected
     - Rename options in setting
     - Donate Menu
 
 * Update packages
-
     - electron_builder
     - socket.io
 
