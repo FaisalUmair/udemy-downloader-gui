@@ -55,7 +55,7 @@ function loadDefaults() {
     autoRetry: false,
     downloadStart: false,
     downloadEnd: false,
-    videoQuality: false,
+    videoQuality: '',
     path: false,
     defaultSubtitle: "",
     seqZeroLeft: false,
