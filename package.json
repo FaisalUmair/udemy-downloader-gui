@@ -1,57 +1,57 @@
 {
-  "name": "Udeler",
-  "version": "1.11.2",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
-  },
-  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
-  "license": "ISC",
-  "build": {
-    "appId": "com.faisaumair.udeler",
-    "productName": "Udeler",
-    "directories": {
-      "buildResources": "assets/images/build"
-    },
-    "mac": {
+	"name": "Udeler",
+	"version": "1.11.3",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
+	},
+	"description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
+	"license": "ISC",
+	"build": {
+		"appId": "com.faisaumair.udeler",
+		"productName": "Udeler",
+		"directories": {
+			"buildResources": "assets/images/build"
+		},
+		"mac": {
 			"category": "public.app-category.utilities"
 		},
-    "linux": {
-      "category": "Utility"
-    }
-  },
-  "author": {
-    "name": "Faisal Umair",
-    "email": "eff.umair@gmail.com",
-    "url": "https://github.com/FaisalUmair"
-  },
-  "scripts": {
-    "dev": "electron . --debug",
-    "start": "electron .",
-    "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder -wml",
+		"linux": {
+			"category": "Utility"
+		}
+	},
+	"author": {
+		"name": "Faisal Umair",
+		"email": "eff.umair@gmail.com",
+		"url": "https://github.com/FaisalUmair"
+	},
+	"scripts": {
+		"dev": "electron . --debug",
+		"start": "electron .",
+		"postinstall": "electron-builder install-app-deps",
+		"build": "electron-builder -wml",
 		"prebuild": "node prebuild.js",
 		"build-win": "npm run prebuild && electron-builder -w",
 		"build-win32": "npm run prebuild && electron-builder -w \"--ia32\"",
 		"build-mac": "npm run prebuild && electron-builder -m",
 		"build-linux": "npm run prebuild && electron-builder -l",
-    "dist": "build"
-  },
-  "devDependencies": {
-    "electron": "^8.2.4",
-    "electron-builder": "^22.14.13",
-    "electron-download-tf": "^4.3.4",
-    "electron-reload": "^2.0.0-alpha.1"
-  },
-  "dependencies": {
-    "cookie": "^0.4.1",
-    "dialogs": "^2.0.1",
-    "electron-settings": "^3.2.0",
-    "jquery": "^3.6.0",
-    "mkdirp": "^0.5.5",
-    "mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
-    "node-vtt-to-srt": "github:/riazXrazor/vtt-to-srt.git",
-    "sanitize-filename": "^1.6.3",
-    "socket.io": "^4.4.1"
-  }
+		"dist": "build"
+	},
+	"devDependencies": {
+		"electron": "^8.2.4",
+		"electron-builder": "^22.14.13",
+		"electron-download-tf": "^4.3.4",
+		"electron-reload": "^2.0.0-alpha.1"
+	},
+	"dependencies": {
+		"cookie": "^0.4.1",
+		"dialogs": "^2.0.1",
+		"electron-settings": "^3.2.0",
+		"jquery": "^3.6.0",
+		"mkdirp": "^0.5.5",
+		"mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
+		"node-vtt-to-srt": "github:/riazXrazor/vtt-to-srt.git",
+		"sanitize-filename": "^1.6.3",
+		"socket.io": "^4.4.1"
+	}
 }

@@ -1,5 +1,13 @@
 # Change Log
 
+
+## Version 1.11.3
+
+* Bug Fixes
+    - Contributed by @freddygarcia to issue _#49 Stuck on "Building Course Data"_ 
+    - Adjusting the backslash in the default download path
+
+
 ## Version 1.11.2
 
 * Features

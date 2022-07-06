@@ -55,10 +55,7 @@ function loadDefaults() {
     autoRetry: false,
     downloadStart: false,
     downloadEnd: false,
-    videoQuality: '',
-=======
     videoQuality: "auto",
->>>>>>> Stashed changes
     path: false,
     defaultSubtitle: "",
     seqZeroLeft: false,
