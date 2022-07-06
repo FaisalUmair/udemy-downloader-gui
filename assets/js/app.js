@@ -56,6 +56,9 @@ function loadDefaults() {
     downloadStart: false,
     downloadEnd: false,
     videoQuality: '',
+=======
+    videoQuality: "auto",
+>>>>>>> Stashed changes
     path: false,
     defaultSubtitle: "",
     seqZeroLeft: false,
@@ -1923,7 +1926,8 @@ function paginate(array, page_size, page_number) {
 }
 
 function getPathDownloadsSetting(courseName = "") {
-  var courseName = courseName != "" ? "/" + sanitize(courseName) : "";
-  const download_directory = settingsCached.download.path || homedir + "/Downloads";
+  var courseName = courseName != "" ? "\\" + sanitize(courseName) : "";
+  const download_directory = settingsCached.download.path || homedir + "\\Downloads";
+  
   return `${download_directory}${courseName}`;
 }
