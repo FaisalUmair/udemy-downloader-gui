@@ -136,3 +136,4 @@ Follow Step 2 of How to Section
 
 ### Note: 
 Please do not use any translation tools as it would defeat the purpose of the contribution. 
+Optional: Give me a :star: if you like my work.
