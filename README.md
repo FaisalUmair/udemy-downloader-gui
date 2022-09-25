@@ -60,8 +60,13 @@ Any contributions are welcome, if you plan to contribute please read the [contri
 
 if you want help using the program, use [github issues](https://github.com/heliomarpm/udemy-downloader-gui/issues).
 This version is currently only available on the Windows platform (x86, x64).
-Waiting for volunteers to compile for Linux and Mac platforms. 
+Waiting for volunteers to compile for Linux and Mac platforms.  
 
+<a href="https://github.com/heliomarpm/udemy-downloader-gui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=heliomarpm/udemy-downloader-gui" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ### Facing Login Issues?
 
@@ -75,7 +80,7 @@ Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A 
 
 3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.  
   
- 
+
 ### Download Previous Version for Windows, Mac and Linux
 
 <details><summary>Expand</summary>
