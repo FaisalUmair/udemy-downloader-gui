@@ -38,7 +38,7 @@
 		"dist": "build"
 	},
 	"devDependencies": {
-		"electron": "^8.2.4",
+		"electron": "^18.3.7",
 		"electron-builder": "^22.14.13",
 		"electron-download-tf": "^4.3.4",
 		"electron-reload": "^2.0.0-alpha.1"
