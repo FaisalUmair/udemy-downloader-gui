@@ -1,5 +1,5 @@
-# Udeler | Udemy Course Downloader (GUI)
--  English is not my native language; please excuse typing errors
+# Udeler | Udemy Course Downloader (GUI) 
+[![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui/badge)](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui)
 
 ## Donate
 
