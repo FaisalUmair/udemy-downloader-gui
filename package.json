@@ -1,6 +1,6 @@
 {
 	"name": "Udeler",
-	"version": "1.11.4",
+	"version": "1.11.5",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
@@ -10,6 +10,7 @@
 	"build": {
 		"appId": "com.faisaumair.udeler",
 		"productName": "Udeler",
+		"artifactName": "${productName} ${version} ${os} ${arch}.${ext}",
 		"directories": {
 			"buildResources": "assets/images/build"
 		},
@@ -35,7 +36,7 @@
 		"build-win32": "npm run prebuild && electron-builder -w \"--ia32\"",
 		"build-mac": "npm run prebuild && electron-builder -m",
 		"build-linux": "npm run prebuild && electron-builder -l",
-		"dist": "build"
+		"build-all": "npm run prebuild && electron-builder -w && electron-builder -w \"--ia32\" && electron-builder -l && electron-builder -m"
 	},
 	"devDependencies": {
 		"electron": "^8.2.4",
