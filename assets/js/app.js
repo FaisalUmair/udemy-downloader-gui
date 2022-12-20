@@ -747,7 +747,7 @@ function initDownload($course, coursedata, subTitle = "") {
     });
   });
 
-  var course_name = sanitize(coursedata["name"]);
+  var course_name = sanitize(coursedata["name"], { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
   var totallectures = coursedata["totallectures"];
   var $progressElemCombined = $course.find(".combined.progress");
   var $progressElemIndividual = $course.find(".individual.progress");
@@ -856,7 +856,7 @@ function initDownload($course, coursedata, subTitle = "") {
     }
 
     const lectureType = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["type"].toLowerCase();
-    const lectureName = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim();
+    const lectureName = sanitize(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim(), { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
 
     function dlStart(dl, typeVideo, callback) {
       // Change retry options to something more forgiving and threads to keep udemy from getting upset
@@ -1997,7 +1997,7 @@ function sendNotification(pathCourse, course_name, urlImage = null) {
 }
 
 function getSequenceName(index, count, name, separatorIndex = ". ", path = null) {
-  const sanitize_name = sanitize(name);
+  const sanitize_name = sanitize(name, { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
 
   const index_name = `${index}${separatorIndex}${sanitize_name}`;
   const index_path = path ? `${path}/${index_name}` : index_name;
@@ -2067,7 +2067,7 @@ function paginate(array, page_size, page_number) {
 }
 
 function getPathDownloadsSetting(courseName = "") {
-  var courseName = courseName != "" ? "\\" + sanitize(courseName) : "";
+  var courseName = courseName != "" ? "\\" + sanitize(courseName, { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim() : "";
   const download_directory = settingsCached.download.path || homedir + "\\Downloads";
 
   return `${download_directory}${courseName}`;
