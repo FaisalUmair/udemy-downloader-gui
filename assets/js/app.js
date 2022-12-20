@@ -528,6 +528,7 @@ function downloadButtonClick($course, subtitle) {
                       videoQuality = lowest;
                       break;
                     case "stream":
+                      // has stream use it otherwise user highest quality
                       if (qualitySrcMap["Auto"]) {
                         src = qualitySrcMap["Auto"];
                         videoQuality = "Stream";
@@ -1165,12 +1166,14 @@ function initDownload($course, coursedata, subTitle = "") {
       );
     }
 
-    async function getFile(e, binary) {
+    // read url as string or ArrayBuffer
+    async function getFile(url, binary) {
       var count = 0;
 
+      // on error retry 3 times
       while (count < 3) {
         try {
-          var i = await fetch(e);
+          var i = await fetch(url);
 
           var t = i.status;
 
@@ -1192,6 +1195,58 @@ function initDownload($course, coursedata, subTitle = "") {
       }
 
       return null;
+    }
+
+    // read highest quality playlist
+    async function getPlaylist(url) {
+      var playlist = await getFile(url, false);
+
+      if (!playlist)
+        return [];
+
+      var lines = playlist.trim().split("\n");
+      var urlList = [];
+
+      lines.forEach(line => {
+        if (line.toLowerCase().indexOf(".ts") > -1)
+          urlList.push(line);
+      });
+
+      if (urlList.length == 0 && playlist.indexOf("m3u8") > 0) {
+        var maximumQuality = 0;
+        var maximumQualityPlaylistUrl;
+        var getUrl = false;
+
+        for (var line of lines) {
+          if (getUrl) {
+            maximumQualityPlaylistUrl = line;
+            getUrl = false;
+          }
+
+          line = line.toUpperCase();
+
+          if (line.indexOf("EXT-X-STREAM-INF") > -1 && line.indexOf("RESOLUTION") > -1) {
+            try {
+              var readQuality = parseInt(line.split("RESOLUTION=")[1].split("X")[1].split(",")[0]) || 0;
+
+              if (readQuality > maximumQuality) {
+                maximumQuality = readQuality;
+                getUrl = true;
+              }
+            }
+            catch (err) {
+              console.error(err);
+            }
+          }
+        }
+
+        if (maximumQuality > 0) {
+          $download_quality.html(`${lectureQuality} ${maximumQuality}p`);
+          return await getPlaylist(maximumQualityPlaylistUrl);
+        }
+      }
+
+      return urlList;
     }
 
     $progressElemIndividual.progress("reset");
@@ -1265,55 +1320,6 @@ function initDownload($course, coursedata, subTitle = "") {
         else if (fs.existsSync(seqName.fullPath)) {
           endDownloadAttachment();
           return;
-        }
-
-        // length of section        
-        var totalTime = 0.0;
-
-        // read highest quality m3u8
-        async function getPlaylist(url) {
-          var m3u8 = await getFile(url, false);
-          var lines = m3u8.trim().split("\n");
-          var dlList = [];
-
-          lines.forEach(i => {
-            if (i.toUpperCase().indexOf("#EXTINF:") > -1) {
-              totalTime += parseFloat(i.split("#EXTINF:")[1]);
-            }
-
-            if (i.toLowerCase().indexOf(".ts") > -1)
-              dlList.push(i);
-          });
-
-          if (dlList.length == 0 && lines[lines.length - 1].indexOf("m3u8") > 0) {
-            var maxQ = 0;
-            var address;
-            var getAddress = false;
-
-            for (var line of lines) {
-              if (getAddress) {
-                address = line;
-                getAddress = false;
-              }
-
-              line = line.toUpperCase();
-
-              if (line.indexOf("EXT-X-STREAM-INF") > -1 && line.indexOf("RESOLUTION") > -1) {
-                var bq = parseInt(line.split("RESOLUTION=")[1].split("X")[1].split(",")[0]) || 0;
-
-                if (bq > maxQ) {
-                  maxQ = bq;
-                  getAddress = true;
-                }
-              }
-            }
-
-            $download_quality.html(`${lectureQuality} ${maxQ}p`);
-
-            return await getPlaylist(address);
-          }
-
-          return dlList;
         }
 
         getPlaylist(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["src"]).then(async list => {
