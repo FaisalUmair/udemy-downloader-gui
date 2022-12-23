@@ -202,13 +202,12 @@ function htmlCourseCard(course, downloadSection = false) {
             <p>${translate("Click to dismiss")}</p>
           </div>
         </div>
-
         <div class="extra download-status">
           ${downloadTemplate}
         </div>
+        <div style='margin-top:15px'><span class="lecture-name"></span></div>
 
       </div>
-      
     </div>`);
 
   if (!downloadSection) {
@@ -314,7 +313,7 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function () {
       console.log("falha ao carregar mais cursos");
       appendLog(`loadMore_Error: ${resp.status}`, resp.statusText);
     });
-    
+
 });
 
 $(".ui.dashboard .content").on("click", ".check-updates", function () {
@@ -474,7 +473,7 @@ function downloadButtonClick($course, subtitle) {
               url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=asset,supplementary_assets&fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token`,
               headers: headersAuth
             })
-              .done(function(resp) {
+              .done(function (resp) {
                 console.log("carregando aula");
 
                 if (v.asset.asset_type.toLowerCase() == "article") {
@@ -506,6 +505,9 @@ function downloadButtonClick($course, subtitle) {
                       qualities.push(val.label);
                       qualitySrcMap[val.label] = val.file ?? val.src;
                     }
+                    else {
+                      qualitySrcMap[val.label] = val.file ?? val.src;
+                    }
                   });
 
                   const lowest = Math.min(...qualities);
@@ -525,6 +527,17 @@ function downloadButtonClick($course, subtitle) {
                       src = qualitySrcMap[lowest];
                       videoQuality = lowest;
                       break;
+                    case "stream":
+                      // has stream use it otherwise user highest quality
+                      if (qualitySrcMap["Auto"]) {
+                        src = qualitySrcMap["Auto"];
+                        videoQuality = "Stream";
+                      }
+                      else {
+                        src = qualitySrcMap[highest];
+                        videoQuality = highest;
+                      }
+                      break;
                     default:
                       videoQuality = videoQuality.slice(0, -1);
                       if (qualitySrcMap[videoQuality]) {
@@ -533,7 +546,6 @@ function downloadButtonClick($course, subtitle) {
                         videoQuality = medias[0].label;
                       }
                   }
-
                 }
 
                 coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
@@ -624,6 +636,7 @@ function downloadButtonClick($course, subtitle) {
                 appendLog(`getLecture_Error: ${resp.status}`, resp.statusText);
               });
           }
+
           getLecture(v.title, chapterindex, lectureindex);
           lectureindex++;
         }
@@ -665,7 +678,7 @@ function downloadButtonClick($course, subtitle) {
       console.error("falha ao carregar curso p/ download");
 
       $(".ui.dashboard .course.dimmer").removeClass("active");
-      
+
       switch (resp.status) {
         case 403:
           var msgError = translate("You do not have permission to access this course");
@@ -681,7 +694,7 @@ function downloadButtonClick($course, subtitle) {
       appendLog(`download_Error: ${resp.status}`, msgError);
       prompt.alert(msgError);
     });
-  
+
 }
 
 function initDownload($course, coursedata, subTitle = "") {
@@ -718,6 +731,7 @@ function initDownload($course, coursedata, subTitle = "") {
     480: "teal",
     720: "olive",
     1080: "green",
+    "Stream": "green",
     auto: "purple",
     Attachment: "pink",
     Subtitle: "black"
@@ -733,11 +747,12 @@ function initDownload($course, coursedata, subTitle = "") {
     });
   });
 
-  var course_name = sanitize(coursedata["name"]);
+  var course_name = sanitize(coursedata["name"], { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
   var totallectures = coursedata["totallectures"];
   var $progressElemCombined = $course.find(".combined.progress");
   var $progressElemIndividual = $course.find(".individual.progress");
   var download_directory = getPathDownloadsSetting();
+  var $lecture_name = $course.find(".lecture-name");
   var $download_speed = $course.find(".download-speed");
   var $download_speed_value = $download_speed.find(".value");
   var $download_speed_unit = $download_speed.find(".download-unit");
@@ -841,7 +856,7 @@ function initDownload($course, coursedata, subTitle = "") {
     }
 
     const lectureType = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["type"].toLowerCase();
-    const lectureName = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim();
+    const lectureName = sanitize(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["name"].trim(), { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
 
     function dlStart(dl, typeVideo, callback) {
       // Change retry options to something more forgiving and threads to keep udemy from getting upset
@@ -902,7 +917,7 @@ function initDownload($course, coursedata, subTitle = "") {
               clearInterval(timer);
             }
             else if (dl.status === -1) {
-            
+
               $.ajax({
                 timeout: ajaxTimeout,
                 type: "HEAD",
@@ -922,7 +937,7 @@ function initDownload($course, coursedata, subTitle = "") {
                   resetCourse($course, $course.find(".download-error"), settingsCached.download.autoRetry, coursedata, subtitle);
 
                 });
-              
+
               clearInterval(timer);
             }
             break;
@@ -1151,12 +1166,96 @@ function initDownload($course, coursedata, subTitle = "") {
       );
     }
 
+    // read url as string or ArrayBuffer
+    async function getFile(url, binary) {
+      var count = 0;
+
+      // on error retry 3 times
+      while (count < 3) {
+        try {
+          var i = await fetch(url);
+
+          var t = i.status;
+
+          if (t >= 200 && t < 300) {
+            if (binary)
+              return await i.arrayBuffer();
+
+            return await i.text();
+          }
+          else
+            appendLog('errorDownload', i.statusText);
+        }
+        catch (err) {
+          appendLog('errorDownload', err);
+          console.error(err);
+        }
+
+        count++;
+      }
+
+      return null;
+    }
+
+    // read highest quality playlist
+    async function getPlaylist(url) {
+      var playlist = await getFile(url, false);
+
+      if (!playlist)
+        return [];
+
+      var lines = playlist.trim().split("\n");
+      var urlList = [];
+
+      lines.forEach(line => {
+        if (line.toLowerCase().indexOf(".ts") > -1)
+          urlList.push(line);
+      });
+
+      if (urlList.length == 0 && playlist.indexOf("m3u8") > 0) {
+        var maximumQuality = 0;
+        var maximumQualityPlaylistUrl;
+        var getUrl = false;
+
+        for (var line of lines) {
+          if (getUrl) {
+            maximumQualityPlaylistUrl = line;
+            getUrl = false;
+          }
+
+          line = line.toUpperCase();
+
+          if (line.indexOf("EXT-X-STREAM-INF") > -1 && line.indexOf("RESOLUTION") > -1) {
+            try {
+              var readQuality = parseInt(line.split("RESOLUTION=")[1].split("X")[1].split(",")[0]) || 0;
+
+              if (readQuality > maximumQuality) {
+                maximumQuality = readQuality;
+                getUrl = true;
+              }
+            }
+            catch (err) {
+              console.error(err);
+            }
+          }
+        }
+
+        if (maximumQuality > 0) {
+          $download_quality.html(`${lectureQuality} ${maximumQuality}p`);
+          return await getPlaylist(maximumQualityPlaylistUrl);
+        }
+      }
+
+      return urlList;
+    }
+
     $progressElemIndividual.progress("reset");
 
     var lectureQuality = coursedata["chapters"][chapterindex]["lectures"][lectureindex]["quality"];
     var lastClass = $download_quality.attr("class").split(" ").pop();
+
     $download_quality.html(
-      lectureQuality + (lectureType == "video" ? "p" : "")
+      lectureQuality + (lectureType == "video" && !isNaN(parseFloat(lectureQuality)) && isFinite(lectureQuality) ? "p" : "")
     ).removeClass(
       lastClass
     ).addClass(qualityColorMap[lectureQuality] || "grey");
@@ -1192,23 +1291,68 @@ function initDownload($course, coursedata, subTitle = "") {
         `${download_directory}/${course_name}/${chapter_name}`
       );
 
-      if (fs.existsSync(seqName.fullPath + ".mtd") && !fs.statSync(seqName.fullPath + ".mtd").size) {
-        fs.unlinkSync(seqName.fullPath + ".mtd");
-      }
+      $lecture_name.html(`${coursedata["chapters"][chapterindex].name}\\${coursedata["chapters"][chapterindex]["lectures"][lectureindex].name}`);
 
-      if (fs.existsSync(seqName.fullPath + ".mtd")) {
-        var dl = downloader.resumeDownload(seqName.fullPath);
-      }
-      else if (fs.existsSync(seqName.fullPath)
-      ) {
-        endDownloadAttachment();
-        return;
+      // if not stream
+      if (lectureQuality != "Stream") {
+        if (fs.existsSync(seqName.fullPath + ".mtd") && !fs.statSync(seqName.fullPath + ".mtd").size) {
+          fs.unlinkSync(seqName.fullPath + ".mtd");
+        }
+
+        if (fs.existsSync(seqName.fullPath + ".mtd")) {
+          var dl = downloader.resumeDownload(seqName.fullPath);
+        }
+        else if (fs.existsSync(seqName.fullPath)
+        ) {
+          endDownloadAttachment();
+          return;
+        }
+        else {
+          var dl = downloader.download(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["src"], seqName.fullPath);
+        }
+
+        dlStart(dl, lectureType == "video", endDownloadAttachment);
       }
       else {
-        var dl = downloader.download(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["src"], seqName.fullPath);
-      }
+        if (fs.existsSync(seqName.fullPath + ".mtd")) {
+          fs.unlinkSync(seqName.fullPath + ".mtd");
+        }
+        else if (fs.existsSync(seqName.fullPath)) {
+          endDownloadAttachment();
+          return;
+        }
 
-      dlStart(dl, lectureType == "video", endDownloadAttachment);
+        getPlaylist(coursedata["chapters"][chapterindex]["lectures"][lectureindex]["src"]).then(async list => {
+          if (list.length > 0) {
+            var result = [list.length];
+
+            var count = 0;
+            $progressElemIndividual.progress("reset");
+
+            for (var a of list) {
+              var startTime = performance.now();
+              var response = await getFile(a, true);
+              var endTime = performance.now();
+              var timeDiff = (endTime - startTime) / 1000.0;
+
+              var download_speed_and_unit = getDownloadSpeed(parseInt((response.byteLength / 1024) / timeDiff) || 0);
+              $download_speed_value.html(download_speed_and_unit.value);
+              $download_speed_unit.html(download_speed_and_unit.unit);
+              result[count] = response;
+              count++;
+              $progressElemIndividual.progress("set percent", parseInt((count / list.length) * 100));
+            }
+
+            var blob = new Blob(result, { type: 'application/octet-binary' });
+            var data = Buffer.from(await blob.arrayBuffer());
+            fs.writeFileSync(seqName.fullPath + ".mtd", data);
+            fs.renameSync(seqName.fullPath + ".mtd", seqName.fullPath);
+          }
+
+          endDownloadAttachment();
+          return;
+        });
+      }
 
       function endDownloadAttachment() {
         clearInterval(timer);
@@ -1629,7 +1773,7 @@ function search(keyword) {
     .always(function () {
       console.log("search always");
     });
-  
+
 }
 
 function askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle = "") {
@@ -1764,7 +1908,7 @@ function checkLogin() {
         $(".ui.dashboard .courses.dimmer").addClass("active");
       }
     })
-      .done(function(resp) {
+      .done(function (resp) {
         console.log("checkLogin done");
         if (settingsCached.download.checkNewVersion ?? false) {
           checkUpdate(repoAccount, true);
@@ -1774,7 +1918,7 @@ function checkLogin() {
           rendererDownloads()
         }
       })
-      .fail(function (resp) { 
+      .fail(function (resp) {
         console.error("falha ao fazer login");
         appendLog(`checkLogin_Error: ${resp.status}`, resp.statusText);
 
@@ -1783,7 +1927,7 @@ function checkLogin() {
         }
         resetToLogin();
       });
-    
+
   }
 }
 
@@ -1853,7 +1997,7 @@ function sendNotification(pathCourse, course_name, urlImage = null) {
 }
 
 function getSequenceName(index, count, name, separatorIndex = ". ", path = null) {
-  const sanitize_name = sanitize(name);
+  const sanitize_name = sanitize(name, { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim();
 
   const index_name = `${index}${separatorIndex}${sanitize_name}`;
   const index_path = path ? `${path}/${index_name}` : index_name;
@@ -1923,8 +2067,8 @@ function paginate(array, page_size, page_number) {
 }
 
 function getPathDownloadsSetting(courseName = "") {
-  var courseName = courseName != "" ? "\\" + sanitize(courseName) : "";
+  var courseName = courseName != "" ? "\\" + sanitize(courseName, { replacement: (s) => "? ".indexOf(s) > -1 ? "" : "-", }).trim() : "";
   const download_directory = settingsCached.download.path || homedir + "\\Downloads";
-  
+
   return `${download_directory}${courseName}`;
 }
