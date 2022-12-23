@@ -53,6 +53,6 @@
 		"mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
 		"node-vtt-to-srt": "github:/riazXrazor/vtt-to-srt.git",
 		"sanitize-filename": "^1.6.3",
-		"socket.io": "^4.4.1"
+		"socket.io": "^4.5.4"
 	}
 }
