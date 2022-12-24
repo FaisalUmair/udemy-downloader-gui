@@ -12,7 +12,7 @@ body:
   attributes:
     label: Udeler | Udemy Course Downloader 
     placeholder: |
-      "1.11.2"
+      1.11.2
     description: |
       Check the version informed in the window title
   validations:
@@ -73,12 +73,17 @@ body:
     label: ✔️ Expected Behavior
     placeholder: What were you expecting?
   validations:
-    required: false
+    required: true
 
 - type: textarea
   attributes:
-    label: ❌ Actual Behavior
-    placeholder: What happened instead?
+    label: ❌ Actual Behavior / Steps to Reproduce 
+    desription: What happened instead, steps to reproduce the behavior?
+    placeholder: |
+      1. Go to ...
+      2. Click on ...
+      3. ...
+    
   validations:
-    required: false
+    required: true
 
