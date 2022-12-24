@@ -78,7 +78,7 @@ body:
 - type: textarea
   attributes:
     label: ❌ Actual Behavior / Steps to Reproduce 
-    desription: What happened instead, steps to reproduce the behavior?
+    description: What happened instead, steps to reproduce the behavior?
     placeholder: |
       1. Go to ...
       2. Click on ...
