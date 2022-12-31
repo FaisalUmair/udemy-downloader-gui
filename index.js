@@ -1,6 +1,6 @@
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, screen } = require("electron");
 const path = require("path");
-const url = require("url");
+//const url = require("url");
 const appVersion = require(__dirname + "/package.json").version;
 
 const httpDonate = "https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&item_name=Udeler%20is%20free%20and%20without%20any%20ads.%20If%20you%20appreciate%20that,%20please%20consider%20donating%20to%20the%20Developer.&currency_code=USD";
@@ -18,19 +18,23 @@ if (isDebug) {
 }
 
 var downloadsSaved = false;
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win;
 
 function createWindow() {
+  const size = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
-  win = new BrowserWindow({
-    width: 588,
-    height: 700,
-    //icon: __dirname + "/assets/images/build/icon.png",
-    resizable: isDebug,
+  let win = new BrowserWindow({
+    minWidth: 650,
+    minHeight: 550,
+    width: 650,
+    height: size.height - 150,
+    icon: __dirname + "/assets/images/build/icon.png",
+    resizable: true,
+    maximizable: true,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      // contextIsolation: true,
+      // preload: path.resolve("./preload.js")
     }
   });
 

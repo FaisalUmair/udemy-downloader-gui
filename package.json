@@ -1,6 +1,7 @@
 {
 	"name": "Udeler",
 	"version": "1.11.5",
+	"main": "index.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
@@ -8,9 +9,9 @@
 	"description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
 	"license": "ISC",
 	"build": {
-		"appId": "com.faisaumair.udeler",
+		"appId": "com.faisalumair.udeler",
 		"productName": "Udeler",
-		"artifactName": "${productName} ${version} ${os} ${arch}.${ext}",
+		"artifactName": "${productName}-Setup-v${version}_${os}_${arch}.${ext}",
 		"directories": {
 			"buildResources": "assets/images/build"
 		},
@@ -30,7 +31,7 @@
 		"dev": "electron . --debug",
 		"start": "electron .",
 		"postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder -wml",
+		"build": "electron-builder",
 		"prebuild": "node prebuild.js",
 		"build-win": "npm run prebuild && electron-builder -w",
 		"build-win32": "npm run prebuild && electron-builder -w \"--ia32\"",
@@ -38,21 +39,20 @@
 		"build-linux": "npm run prebuild && electron-builder -l",
 		"build-all": "npm run prebuild && electron-builder -w && electron-builder -w \"--ia32\" && electron-builder -l && electron-builder -m"
 	},
-	"devDependencies": {
-		"electron": "^18.3.7",
-		"electron-builder": "^22.14.13",
-		"electron-download-tf": "^4.3.4",
-		"electron-reload": "^2.0.0-alpha.1"
-	},
 	"dependencies": {
-		"cookie": "^0.4.1",
+		"cookie": "^0.5.0",
 		"dialogs": "^2.0.1",
 		"electron-settings": "^3.2.0",
-		"jquery": "^3.6.0",
-		"mkdirp": "^0.5.5",
+		"jquery": "^3.6.3",
+		"mkdirp": "^1.0.4",
 		"mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
-		"node-vtt-to-srt": "github:/riazXrazor/vtt-to-srt.git",
+		"node-vtt-to-srt": "^1.0.1",
 		"sanitize-filename": "^1.6.3",
 		"socket.io": "^4.5.4"
+	},
+	"devDependencies": {
+		"electron": "^8.5.5",
+		"electron-builder": "^23.6.0",
+		"electron-reload": "^2.0.0-alpha.1"
 	}
 }

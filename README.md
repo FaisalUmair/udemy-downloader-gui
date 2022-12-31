@@ -6,8 +6,9 @@
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
 [![Donate](https://raw.githubusercontent.com/heliomarpm/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&currency_code=USD) 
-<noscript><a href="https://liberapay.com/heliomarpm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
-
+<noscript><a href="https://liberapay.com/heliomarpm/donate">
+<img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+</noscript>
 <img src="https://img.shields.io/liberapay/receives/heliomarpm.svg?logo=liberapay">
 
 <table border=0 cellspacing=5 celspadding=5>

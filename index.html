@@ -93,7 +93,7 @@
                     </div>
                   </div> -->
                   <div class="field">                   
-                    <div class="ui fluid label checkbox">
+                    <div class="ui fluid label toggle checkbox">
                       <input type="checkbox" name="business" id="business">
                       <label for="business">${translate("Udemy Business")} ?</label>
                     </div>
@@ -168,6 +168,7 @@
               </a>
               <a class="logger-sidebar item">
                 <i class="code icon"></i>
+                Logger
               </a>
 
               <div class="ui footer">
@@ -205,7 +206,7 @@
                   </h5>
                   <div class="ui attached segment">
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="check-new-version">
                         <label>${translate("Check for a new version on startup")}</label>
                       </div>
@@ -251,19 +252,19 @@
                       </div>
                     </div>  
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="auto-start-download">
                         <label>${translate("Start pending downloads at startup")}</label>
                       </div>
                     </div>   
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="continue-downloading-encrypted">
                         <label>${translate("Keep downloading even if the course is DRM protected")}</label>
                       </div>
                     </div> 
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="enabledownloadstartend">
                         <label>${translate("Enable Download Start/End")}</label>
                       </div>
@@ -283,6 +284,7 @@
                     
                     <div class="field">
                       <label>${translate("Video Quality")}</label>
+                      <small style="color:#444;">${translate("Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.")} </small>
                       <div class="ui fluid search selection dropdown">
                         <input type="hidden" name="videoquality">
                         <i class="dropdown icon"></i>
@@ -293,32 +295,44 @@
                           <div class="item" data-value="360p">360p</div>
                           <div class="item" data-value="480p">480p</div>
                           <div class="item" data-value="720p">720p</div>
-                          <div class="item" data-value="1080p">1080p</div>
-                          <div class="item" data-value="Stream">Prefer Highest Quality Stream</div>
                           <div class="item" data-value="Highest">${translate("Highest")}</div>
                         </div>
                       </div>
                     </div>
+                    
                     <div class="field">
-                      <div class="ui checkbox">
-                        <input type="checkbox" name="skipattachments">
-                        <label>${translate("Skip Attachments")}</label>
+                      <div class="ui slider checkbox">
+                        <input type="radio" name="downloadFiles" value="0">
+                        <label>${translate("Download Lectures and Attachments")}</label>
                       </div>
-                    </div>
+                    </div>                  
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui slider checkbox">
+                        <input type="radio" name="downloadFiles" value="1">
+                        <label>${translate("Download Only Lectures")}</label>
+                      </div>
+                    </div>                    
+                    <div class="field">
+                      <div class="ui slider checkbox">
+                        <input type="radio" name="downloadFiles" value="2">
+                        <label>${translate("Download Only Attachments")}</label>
+                      </div>
+                    </div> 
+
+                    <div class="field">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="skipsubtitles">
                         <label>${translate("Skip Subtitles")}</label>
                       </div>
                     </div>
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="seq-zero-left">
                         <label>${translate("Enumerate download with zero left")}</label>
                       </div>
                     </div>
                     <div class="field">
-                      <div class="ui checkbox">
+                      <div class="ui toggle checkbox">
                         <input type="checkbox" name="autoretry">
                         <label>${translate("Auto Retry on Error (Experimental)")}</label>
                       </div>
@@ -327,9 +341,8 @@
                   </div>                
   
                   <div class="ui horizontal divider"></div>
-  
-                  <button class="ui fluid green button" type="submit">
-                    ${translate("Save")}
+                  <button class="floating-btn" type="submit">
+                    <i class="save outline icon"></i>
                   </button>
                 </form>
   
@@ -368,8 +381,8 @@
                   </h4>
                   <p>
                     ${translate(
-                      "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
-                    )}
+      "Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer."
+    )}
                   </p>
                   <br>
                   
@@ -460,9 +473,12 @@
                 </div>
               </div>
               <div class="ui logger section">
-                <h5 class="ui top attached header">
-                  <i class="ui code icon"></i> ${translate("Console.Log")}
-                </h5>
+                <div class="ui top attached header">                             
+                  <h5>
+                    <i class="ui code icon"></i> ${translate("Udeler Logger")}
+                  </h5>
+                  <i id="clear_logger" class="recycle icon"></i> <i id="save_logger" class="save icon"></i> 
+                </div>
                 <div class="ui list divided unstackable attached segment" style="margin-top: 0px !important;">
                 </div>          
               </div>

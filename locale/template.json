@@ -39,9 +39,11 @@
   "Language (Requires App Restart)": "",
   "Save": "",
   "Settings Saved": "",
-  "Skip Attachments": "",
   "About": "",
   "Logout": "",
+  "Download Lectures and Attachments": "",
+  "Download Only Lectures": "",
+  "Download Only Attachments": "",
   "Skip Subtitles": "",
   "Select Subtitle": "",
   "Subtitle Language": "",
@@ -84,5 +86,6 @@
   "Enumerate download with zero left": "",
   "Old version": "",
   "Using Password": "",
-  "Get Credentials": ""
+  "Get Credentials": "",
+  "Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": ""
 }

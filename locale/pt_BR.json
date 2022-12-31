@@ -38,7 +38,9 @@
 	"Language (Requires App Restart)": "Idioma (Necessário reiniciar)",
 	"Save": "Salvar",
 	"Settings Saved": "Configurações Salvas",
-	"Skip Attachments": "Ignorar anexos (baixar somente vídeo aulas)",
+	"Download Lectures and Attachments": "Baixar Aulas e Anexos",
+   	"Download Only Lectures": "Baixar apenas Aulas",
+  	"Download Only Attachments": "Baixar apenas Anexos",
 	"Skip Subtitles": "Ignorar legendas",
 	"About": "Sobre",
 	"Logout": "Desconectar",
@@ -85,5 +87,6 @@
   	"Enumerate download with zero left": "Enumerar download com zero à esquerda",
 	"Old version": "Versão antiga",
 	"Using Password": "Use a senha",
-	"Get Credentials": "Obter credenciais"
+	"Get Credentials": "Obter credenciais",
+	"Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": "Nota: Quando a opção selecionada não está disponível na API da Udemy, a qualidade mais alta disponível será baixada."
 }

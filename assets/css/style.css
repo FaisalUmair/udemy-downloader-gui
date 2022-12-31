@@ -207,3 +207,32 @@ body .dialog-widget.background {
 .lte8 .wrapper:hover .tooltip {
   display: block;
 }
+
+.floating-btn {
+  width: 60px;
+  height: 60px;
+  right: 15px;
+  bottom: 15px;
+  background-color: #00985e;
+  display: flex;
+  padding-left: 10px; /* hack center */
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.25);
+  position: fixed;
+  
+  /* <button> */
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.floating-btn:hover {
+  background-color: #04b281;
+}
+.floating-btn:active {
+  background-color: #007d5a;
+}

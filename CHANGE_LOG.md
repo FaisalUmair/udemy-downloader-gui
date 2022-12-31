@@ -1,57 +1,198 @@
 # Change Log
 
+## Unreleased
+  - Inputting your DRM encryption keycode
+  - Update the electron pack to the latest
 
+
+----
+## Version 1.11.5
+
+### Added
+  1. Save File Log - Improvement request _[#85](https://github.com/heliomarpm/udemy-downloader-gui/issues/85)_
+  2. Download only the attachments and subtitles - Improvement request _[#86](https://github.com/heliomarpm/udemy-downloader-gui/issues/86)_
+  3. Allow downloading video streams (M3U8) - Contributed by @CetinOzdil [PR97](https://github.com/heliomarpm/udemy-downloader-gui/pull/87)
+     - _[#20](https://github.com/heliomarpm/udemy-downloader-gui/issues/20) How to download 1080p video?_
+     - _[#63](https://github.com/heliomarpm/udemy-downloader-gui/issues/63) quality 1080_
+
+### Security
+  * Update package - electron 8.2.4 to 8.5.5
+  * Update package - electron_builder 22.14.13 to 23.6.0
+  * Update package - socket.io 4.4.1 to 4.5.4
+  * Update package - mkdirp 0.5.5 to 1.0.4
+  * Update package - jquery 3.6.0 to 3.6.3
+  
+### Refactor
+  * Clean Code - #03
+
+
+----
+## Version 1.11.4
+##### Aug 12, 2022
+
+### Added
+  1. Add Floating Save Button in Config Section
+  2. Remove option Auto in video quality
+
+### Security
+  * Update package - momment 2.29.1 to 2.29.4
+
+
+----
 ## Version 1.11.3
+##### Jul 9, 2022
+### Fixed
+  1. Contributed by @freddygarcia [PR #56](https://github.com/heliomarpm/udemy-downloader-gui/pull/56) 
+     - _[#49](https://github.com/heliomarpm/udemy-downloader-gui/issues/49) Stuck on "Building Course Data"_ 
+  2. Adjusting the backslash in the default download path
 
-* Bug Fixes
-    - Contributed by @freddygarcia to issue _#49 Stuck on "Building Course Data"_ 
-    - Adjusting the backslash in the default download path
 
-
+----
 ## Version 1.11.2
+##### Apr 27, 2022
 
-* Features
-    - Initial version of log view section
-    - Remove videos protecteds e corrupteds after download
+### Added
+  1. Section Logger (Initial version)
+  2. Remove videos protecteds e corrupteds after download
 
-* Bug Fixes
-    - Issue 30 (Courses not found)
-    - DRM-protected course identification
-    - A possible resolution for crash in _"Build Course Data"_
+### Fixed
+  1. Issue #30 (Courses not found)
+  2. DRM-protected course identification
+  3. A possible resolution for crash in _"Build Course Data"_
 
+
+----
 ## Version 1.11.1
+##### Mar 11, 2022
 
-* Bug fixes
-    - Freezing when Building course data
+### Fixed
+  1. Freezing when Building course data
 
+
+----
 ## Version 1.11.0
+##### Feb 27, 2022
 
-* Interface adjustments
-    - Alert DRM Protected
-    - Rename options in setting
-    - Donate Menu
+### Changed
+  1. Interface adjustments - Alert DRM Protected
+  2. Interface adjustments - Rename options in setting
+  3. Interface adjustments - Add donate menu
 
-* Update packages
-    - electron_builder
-    - socket.io
+### Security
+  * Update package - electron_builder 22.11.7 to 22.14.13
+  * Update package - socket.io 4.1.3 to 4.4.1
 
+
+----
 ## Version 1.10.3
+##### Dec 20, 2021
 
-* Fixed - -infinity error
-* Fixed - Window clear after download
+### Changed
+  1. Include version number in titleBar
+   
+### Fixed
+  1. Tag -infinity error
+  2. Window clear after download
 
+----
 ## Version 1.10.2
-
-* Changed - Login with Credentials
+##### Dec 18, 2021
+### Changed
+  1. Login with Credentials
+----
 
 ## Version 1.10.1
+##### Dec 18, 2021
 
-* Hotfix - Login with access token
-* Removed obsolete option, Authenticator
+### Fixed
+  1. Hotfix - Login with access token
+   
+### Removed
+  1. Obsolete option, Authenticator
+----
+
 
 ## Version 1.10.0
+##### Dec 4, 2021
 
-* Option for open downloading folder
-* New option config - Number download with zero left.
-* Auto ignore attachments downloaded
-* +Bugfixed
+### Added
+  1. Option for open downloading folder
+  2. New option config - Number download with zero left.
+  3. New option to skip downloading attachments
+
+### Refactor
+  * Clean Code - #02
+----
+
+
+## Version 1.9.0
+##### Sep 9, 2021
+
+### Fixed 
+  1. Improved error messages
+  2. Other small fixes
+
+### Refactor
+  * Clean Code - #01
+----
+
+
+## Version 1.8.7
+##### Jul 17, 2021
+
+### Added
+  1.  New option: Check for a new version on startup
+  2.  New option: Start downloads at startup
+  3.  New option: If course is encrypted, keep downloading attachments and videos not encrypted
+  4.  Added description in flag for DRM-encrypted video.
+  5.  Keeps track of which courses you have previously downloaded.
+  6.  Manually hide courses already downloaded 
+  7.  A button for open course in browser
+  8.  When there is only one subtitle, it will not ask you to select the language.
+  9.  You can configure which default subtitle language should be downloaded.
+  10. Allows you to automatically start downloading the unfinished course.
+  11. Download speed displaying in Kbps or Mbps units
+   
+### Changed
+  1. Pull update from active repository from GitHub
+  2. Allows you to resize the window size.
+   
+### Fixed
+  1.  When resuming paused download
+----
+
+
+## Version 1.8.6
+##### Jul 1, 2021
+
+### Added
+  1. Course indicator with DRM-encrypted lectures (video does not download )
+   
+### Changed
+  1. Updated Icon design by [@moenawar](https://steemkr.com/utopian-io/@moenawar/my-new-logo-design-proposal-for-udeler)
+  2. Updated notification box for completed downloads
+----
+
+
+## Version 1.8.5
+##### Jul 10, 2021
+
+### Added
+  1. A new feature for dispensing items in the downloads section.
+  2. A new feature for setting default Subtitle.
+  3. A new feature for Save history of Started and Completed downloads.
+  4. A new feature to sort attachments before downloading.
+  5. Encrypted Lectures does not download, but allows you to continue downloading too many files.
+  6. Option to open the selected course in the Udemy subdomain.
+
+### Changed
+  1. Included text translation of version update popup.
+----
+
+
+## Version 1.8.3
+##### Jul 5, 2021
+
+### Fixed
+  1. The issue "Stuck on Building Course Data" #609.
+  2. The issue of attachment downloads
