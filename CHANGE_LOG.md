@@ -1,7 +1,6 @@
 # Change Log
 
 ## Unreleased
-  - Inputting your DRM encryption keycode
   - Update the electron pack to the latest
 
 
