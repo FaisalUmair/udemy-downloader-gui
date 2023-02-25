@@ -1,0 +1,44 @@
+on:
+  push:
+    tags: ["*"]
+
+jobs:
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: apt-update
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt-get update
+
+      - name: autoremove
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt autoremove
+
+      - name: Install libarchive rpm on Linux
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt-get install libarchive-tools rpm
+
+      - name: Release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: true
