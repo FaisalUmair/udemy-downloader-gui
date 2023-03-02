@@ -88,5 +88,6 @@
 	"Old version": "Versão antiga",
 	"Using Password": "Use a senha",
 	"Get Credentials": "Obter credenciais",
-	"Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": "Nota: Quando a opção selecionada não está disponível na API da Udemy, a qualidade mais alta disponível será baixada."
+	"Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": "Nota: Quando a opção selecionada não está disponível na API da Udemy, a qualidade mais alta disponível será baixada.",
+	"How to get an Access Token": "Como obter o Access Token"
 }

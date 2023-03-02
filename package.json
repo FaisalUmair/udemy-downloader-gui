@@ -1,47 +1,35 @@
 {
 	"name": "Udeler",
-	"version": "1.11.5",
+	"version": "1.11.6",
 	"main": "index.js",
+	"urlHelp": "https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
 	},
 	"description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
 	"license": "ISC",
-	"build": {
-		"appId": "com.faisalumair.udeler",
-		"productName": "Udeler",
-		"artifactName": "${productName}-Setup-v${version}_${os}_${arch}.${ext}",
-		"directories": {
-			"buildResources": "assets/images/build"
-		},
-		"mac": {
-			"category": "public.app-category.utilities"
-		},
-		"linux": {
-			"category": "Utility"
-		}
-	},
 	"author": {
 		"name": "Faisal Umair",
 		"email": "eff.umair@gmail.com",
 		"url": "https://github.com/FaisalUmair"
 	},
 	"scripts": {
-		"dev": "electron . --debug",
+		"dev": "electron . --developer",
 		"start": "electron .",
 		"postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder",
 		"prebuild": "node prebuild.js",
-		"build-win": "npm run prebuild && electron-builder -w",
-		"build-win32": "npm run prebuild && electron-builder -w \"--ia32\"",
+		"build": "electron-builder",
+		"build:win": "npm run prebuild && electron-builder -w --ia32 --x64",
 		"build-mac": "npm run prebuild && electron-builder -m",
 		"build-linux": "npm run prebuild && electron-builder -l",
-		"build-all": "npm run prebuild && electron-builder -w && electron-builder -w \"--ia32\" && electron-builder -l && electron-builder -m"
+		"build-all": "npm run prebuild && electron-builder -wml && electron-builder -w \"--ia32\""
 	},
 	"dependencies": {
+		"@sentry/electron": "^4.3.0",
 		"cookie": "^0.5.0",
 		"dialogs": "^2.0.1",
+		"dotenv": "^16.0.3",
 		"electron-settings": "^3.2.0",
 		"jquery": "^3.6.3",
 		"mkdirp": "^1.0.4",
@@ -54,5 +42,31 @@
 		"electron": "^8.5.5",
 		"electron-builder": "^23.6.0",
 		"electron-reload": "^2.0.0-alpha.1"
+	},
+	"build": {
+		"appId": "com.faisalumair.udeler",
+		"productName": "Udeler",
+		"artifactName": "${productName}Setup_v${version}_${os}-${arch}.${ext}",
+		"directories": {
+			"buildResources": "assets/images/build"
+		},
+		"mac": {
+			"category": "public.app-category.utilities"
+		},
+		"win": {
+			"target": [
+				"nsis",
+				"portable"
+			]
+		},
+		"linux": {
+			"category": "Utility",
+			"target": [
+				"AppImage",
+				"deb",
+				"freebsd",
+				"rpm"
+			]
+		}
 	}
 }

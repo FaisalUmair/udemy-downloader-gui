@@ -1,12 +1,11 @@
 const { app, BrowserWindow, Menu, ipcMain, screen } = require("electron");
 const path = require("path");
-//const url = require("url");
 const appVersion = require(__dirname + "/package.json").version;
 
 const httpDonate = "https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&item_name=Udeler%20is%20free%20and%20without%20any%20ads.%20If%20you%20appreciate%20that,%20please%20consider%20donating%20to%20the%20Developer.&currency_code=USD";
 
 // const isDebug = !app.isPackaged;
-const isDebug = process.argv.indexOf("--debug") != -1;
+const isDebug = process.argv.indexOf("--developer") != -1;
 
 if (isDebug) {
   console.log("Development environment");
@@ -17,7 +16,7 @@ if (isDebug) {
   });
 }
 
-var downloadsSaved = false;
+let downloadsSaved = false;
 
 function createWindow() {
   const size = screen.getPrimaryDisplay().workAreaSize
@@ -34,7 +33,7 @@ function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       // contextIsolation: true,
-      // preload: path.resolve("./preload.js")
+      preload: path.resolve("./preload.js")
     }
   });
 
@@ -48,12 +47,15 @@ function createWindow() {
   //   })
   // );
   win.loadFile("index.html");
-  win.setTitle(`Udeler | Udemy Course Downloader - v${appVersion}`);
+  win.webContents.on("did-finish-load", () => {
+    // console.log("did-finish-load");
+    win.setTitle(`Udeler | Udemy Course Downloader - v${appVersion}`);
+  });
 
   // Open the DevTools.
   // win.webContents.openDevTools();  
   if (isDebug) {
-    win.webContents.openDevTools();
+    win.openDevTools(); //{ mode: 'detach' });
     win.maximize();
   }
 
@@ -161,7 +163,7 @@ function createWindow() {
   function saveOnClose(event = null) {
     if (!downloadsSaved) {
       downloadsSaved = true;
-      if (event != null) { event.preventDefault(); }
+      // if (event != null) { event.preventDefault(); }
       win.webContents.send("saveDownloads");
 
       console.log("saveOnClose", downloadsSaved)
@@ -200,7 +202,4 @@ app.on("window-all-closed", () => {
 ipcMain.on("quitApp", function () {
   app.quit();
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 

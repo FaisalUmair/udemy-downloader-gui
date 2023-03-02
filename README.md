@@ -31,7 +31,9 @@ Udeler is free and without any ads. If you appreciate that, please consider dona
 * If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.
 * This program is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
 
-If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609).
+<!--
+If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609). 
+-->
 
 # Description:
 

@@ -3,6 +3,17 @@
 ## Unreleased
   - Update the electron pack to the latest
 
+----
+## Version 1.11.6
+
+### Added
+  1. Error monitoring with Sentry.io
+  2. Link for "How to Get Access Token"
+  3. Get/Set default language for new users
+
+### Fixed
+  * Post login failure for new users
+
 
 ----
 ## Version 1.11.5

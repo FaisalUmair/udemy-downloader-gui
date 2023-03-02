@@ -2,9 +2,10 @@
 <html>
 
 <head>
-  <!-- <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
   <!-- TITULO ADICIONADO VIA INDEX.JS -->
   <!-- <title>Udeler | Udemy Course Downloader</title> -->
@@ -121,16 +122,20 @@
                 <div class="ui horizontal divider">
                   <i class="exchange icon"></i>
                 </div>
-                <!-- <div class="ui fluid icon buttons"> 
+
+                <!--
+                <div class="ui fluid icon buttons"> 
                   <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
                     <i class="user secret icon"></i> Authenticator
                   </button>
-                  <div class="or"></div>  -->
+                  <div class="or"></div> 
+                --> 
                   <button class="ui fluid violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
-                    <i class="key icon"></i> Access Token
+                    <i class="key icon"></i> Access Token                  
                   </button>
                 <!-- </div> -->
-  
+                <a class="how-get-token" href="${urlHelp}" target="_blank">${translate("How to get an Access Token")}</a>
+                
               </div>
             </div>
   
@@ -149,7 +154,7 @@
             <div class="ui about dimmer">
               <div class="ui big text loader">${translate("Checking for Updates")}</div>
             </div>
-            <div class="ui visible fixed vertical inverted sidebar labeled icon menu ${settings.get("general.language") == "Arabic" ? "right" : "left"}">
+            <div class="ui visible fixed vertical inverted sidebar labeled icon menu left">
               <a class="active purple courses-sidebar item">
                 <i class="file video icon"></i>
                 ${translate("Courses")}

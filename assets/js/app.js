@@ -11,8 +11,8 @@ const Downloader = require("mt-files-downloader");
 const https = require("https");
 const cookie = require("cookie");
 
-const app = require("http").createServer();
-const io = require("socket.io")(app);
+const server = require("http").createServer();
+const socketIO = require("socket.io")(server);
 
 const pageSize = 25;
 const $loginAuthenticator = $(".ui.login.authenticator");
@@ -27,18 +27,23 @@ var awaitingLogin = false;
 var $divSubDomain = $(".ui.login #divsubdomain");
 var $subDomain = $(".ui.login #subdomain");
 var subDomain = settings.get("subdomain") || "www";
-var settingsCached = null;
+var settingsCached = settings.getAll();
 
 const downloadFiles = {
-  LecturesAndAttachments: "0",
-  OnlyLectures: "1",
-  OnlyAttachments: "2"
+  LecturesAndAttachments: 0,
+  OnlyLectures: 1,
+  OnlyAttachments: 2
 }
 
-app.listen(50490);
+// server.listen(50490);
 
-console.table(getAllDownloadsHistory());
-console.log('access_token', settings.get("access_token"));
+
+// external browser
+// $(document).on('click', 'a[href^="http"]', (event) => {
+$(document).on('click', '.how-get-token', (event) => {
+  event.preventDefault();
+  shell.openExternal(event.target.href);
+});
 
 if (!settings.get("general")) {
   loadDefaultSettings();
@@ -53,7 +58,7 @@ function loadDefaultSettings() {
     autoStartDownload: false,
     continueDonwloadingEncrypted: false,
     enableDownloadStartEnd: false,
-    downFiles: downloadFiles.LecturesAndAttachments, 
+    downFiles: downloadFiles.LecturesAndAttachments,
     // skipAttachments: false, 
     skipSubtitles: false,
     autoRetry: false,
@@ -72,7 +77,7 @@ function loadDefaultSettings() {
   settingsCached = settings.getAll();
 }
 
-io.on("connect", function (socket) {
+socketIO.on("connect", function (socket) {
   console.log('io.onConnect');
   $loginAuthenticator.removeClass("disabled");
 
@@ -150,6 +155,7 @@ function htmlCourseCard(course, downloadSection = false) {
     course.pathDownloaded = history.pathDownloaded ?? "";
   }
 
+  // Se o caminho não existir, obtenha o caminho de configurações de download para o título do curso    
   if (!fs.existsSync(course.pathDownloaded))
     course.pathDownloaded = getPathDownloadsSetting(course.title);
 
@@ -218,11 +224,7 @@ function htmlCourseCard(course, downloadSection = false) {
 
   if (!downloadSection) {
     if (course.completed) {
-      // if (course.encryptedVideos > 0) {
-      //   resetCourse($course, $course.find(".course-encrypted"));
-      // } else {
       resetCourse($course, $course.find(".download-success"));
-      // }
     }
     else if (course.encryptedVideos > 0) {
       resetCourse($course, $course.find(".course-encrypted"));
@@ -469,8 +471,8 @@ function downloadButtonClick($course, subtitle) {
             v.asset.asset_type.toLowerCase() == "file" ||
             v.asset.asset_type.toLowerCase() == "e-book")
         ) {
-          
-          if (v.asset.asset_type.toLowerCase() != "video" && downFiles==downloadFiles.OnlyLectures) {//skipAttachments) {
+
+          if (v.asset.asset_type.toLowerCase() != "video" && downFiles == downloadFiles.OnlyLectures) {//skipAttachments) {
             remaining--;
             if (!remaining) {
               if (Object.keys(availableSubs).length) {
@@ -590,7 +592,7 @@ function downloadButtonClick($course, subtitle) {
                   });
                 }
 
-                if (resp.supplementary_assets.length && downFiles!=downloadFiles.OnlyLectures){ //!skipAttachments) {
+                if (resp.supplementary_assets.length && downFiles != downloadFiles.OnlyLectures) { //!skipAttachments) {
                   coursedata["chapters"][chapterindex]["lectures"][lectureindex]["supplementary_assets"] = [];
                   var supplementary_assets_remaining = resp.supplementary_assets.length;
 
@@ -624,7 +626,7 @@ function downloadButtonClick($course, subtitle) {
                         if (!supplementary_assets_remaining) {
                           remaining--;
                           coursedata["totallectures"] += 1;
-                          
+
                           if (!remaining) {
                             if (Object.keys(availableSubs).length) {
                               askForSubtitle(availableSubs, initDownload, $course, coursedata, defaultSubtitle);
@@ -665,7 +667,7 @@ function downloadButtonClick($course, subtitle) {
           getLecture(v.title, chapterindex, lectureindex);
           lectureindex++;
         }
-        else if (downFiles!=downloadFiles.OnlyLectures) { //(!skipAttachments) {
+        else if (downFiles != downloadFiles.OnlyLectures) { //(!skipAttachments) {
           coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
             src: `<script type="text/javascript">
                     window.location = "https://${subDomain}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}";
@@ -1071,7 +1073,7 @@ function initDownload($course, coursedata, subTitle = "") {
             return;
           }
           else {
-            var dl = downloader.download(attachment["src"], seqName.fullPath);            
+            var dl = downloader.download(attachment["src"], seqName.fullPath);
           }
 
           dlStart(dl, attachment["type"].toLowerCase() == "video", endDownload);
@@ -1331,7 +1333,7 @@ function initDownload($course, coursedata, subTitle = "") {
             fs.unlinkSync(seqName.fullPath + ".mtd");
           }
 
-          
+
           if (fs.existsSync(seqName.fullPath + ".mtd") && !skipLecture) {
             var dl = downloader.resumeDownload(seqName.fullPath);
           }
@@ -1553,7 +1555,7 @@ function loadSettings() {
     downFiles = legadoSkipAttachment ? downloadFiles.OnlyLectures : downloadFiles.LecturesAndAttachments;
     settingsCached.download.downFiles = downFiles;
   }
-  
+
   settingsForm.find('input:radio[name="downloadFiles"]').filter(`[value="${downFiles}"]`).prop("checked", true);
   // settingsForm.find('input[name="skipattachments"]').prop("checked", settingsCached.download.skipAttachments ?? false);
   settingsForm.find('input[name="skipsubtitles"]').prop("checked", settingsCached.download.skipSubtitles ?? false);
@@ -1955,7 +1957,8 @@ function checkLogin() {
     })
       .done(function (resp) {
         console.log("checkLogin done");
-        if (settingsCached.download.checkNewVersion ?? false) {
+        
+        if (settingsCached.download.checkNewVersion) {
           checkUpdate(repoAccount, true);
         }
         rendererCourse(resp);
@@ -2120,12 +2123,12 @@ function getPathDownloadsSetting(courseName = "") {
 
 function saveLogFile() {
   if (loggers.length == 0) return;
-  
+
   dialog.showSaveDialog({
     title: "Udeler Log",
     defaultPath: "udeler_logger.txt",
     filters: [{ name: "Text File (*.txt)", fileExtension: ["txt"] }]
-  }).then((result) => { 
+  }).then((result) => {
     if (!result.canceled) {
       let filePath = result.filePath;
       if (!filePath.endsWith(".txt")) filePath += ".txt"
@@ -2135,15 +2138,17 @@ function saveLogFile() {
       loggers.forEach(item => {
         content += `${item.datetime} - ${item.title}: ${item.description}\n`;
       });
-  
+
       fs.writeFile(filePath, content, (err) => {
         if (err) {
           console.error("saveLogFile_Error", err.message);
           return;
-        }  
+        }
         console.log("File successfully create!");
       });
     }
   });
 
 }
+
+console.table(getAllDownloadsHistory());
