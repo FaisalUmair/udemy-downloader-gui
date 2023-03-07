@@ -4,10 +4,15 @@
   - Update the electron pack to the latest
 
 ----
-## Version 1.11.9
+## Version 1.11.10
 
 ### Added
   1. Release for Linux and Mac - _finally!_ 😁
+
+### Fixed
+  1. Can't login _[#53](https://github.com/heliomarpm/udemy-downloader-gui/issues/53)_
+  2. Login popup not closing, unable to use _[#66](https://github.com/heliomarpm/udemy-downloader-gui/issues/66)_
+
 
 ### Other Changes
   1. Messaging improvement
