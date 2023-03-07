@@ -4,7 +4,7 @@
   - Update the electron pack to the latest
 
 ----
-## Version 1.11.7
+## Version 1.11.8
 
 ### Added
   1. Release for Linux and Mac - _finally!_ 😁
