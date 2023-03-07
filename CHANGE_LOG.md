@@ -4,12 +4,23 @@
   - Update the electron pack to the latest
 
 ----
+## Version 1.11.7
+
+### Added
+  1. Release for Linux and Mac - _finally!_ 😁
+
+### Other Changes
+  1. Messaging improvement
+  2. Command to make release version - _for developers_
+
+----
 ## Version 1.11.6
 
 ### Added
   1. Error monitoring with Sentry.io
   2. Link for "How to Get Access Token"
   3. Get/Set default language for new users
+  4. Portable version included for Windows
 
 ### Fixed
   * Post login failure for new users

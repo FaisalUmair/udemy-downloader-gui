@@ -1,72 +1,83 @@
 {
-	"name": "Udeler",
-	"version": "1.11.6",
-	"main": "index.js",
-	"urlHelp": "https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
-	},
-	"description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
-	"license": "ISC",
-	"author": {
-		"name": "Faisal Umair",
-		"email": "eff.umair@gmail.com",
-		"url": "https://github.com/FaisalUmair"
-	},
-	"scripts": {
-		"dev": "electron . --developer",
-		"start": "electron .",
-		"postinstall": "electron-builder install-app-deps",
-		"prebuild": "node prebuild.js",
-		"build": "electron-builder",
-		"build:win": "npm run prebuild && electron-builder -w --ia32 --x64",
-		"build-mac": "npm run prebuild && electron-builder -m",
-		"build-linux": "npm run prebuild && electron-builder -l",
-		"build-all": "npm run prebuild && electron-builder -wml && electron-builder -w \"--ia32\""
-	},
-	"dependencies": {
-		"@sentry/electron": "^4.3.0",
-		"cookie": "^0.5.0",
-		"dialogs": "^2.0.1",
-		"dotenv": "^16.0.3",
-		"electron-settings": "^3.2.0",
-		"jquery": "^3.6.3",
-		"mkdirp": "^1.0.4",
-		"mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
-		"node-vtt-to-srt": "^1.0.1",
-		"sanitize-filename": "^1.6.3",
-		"socket.io": "^4.5.4"
-	},
-	"devDependencies": {
-		"electron": "^8.5.5",
-		"electron-builder": "^23.6.0",
-		"electron-reload": "^2.0.0-alpha.1"
-	},
-	"build": {
-		"appId": "com.faisalumair.udeler",
-		"productName": "Udeler",
-		"artifactName": "${productName}Setup_v${version}_${os}-${arch}.${ext}",
-		"directories": {
-			"buildResources": "assets/images/build"
-		},
-		"mac": {
-			"category": "public.app-category.utilities"
-		},
-		"win": {
-			"target": [
-				"nsis",
-				"portable"
-			]
-		},
-		"linux": {
-			"category": "Utility",
-			"target": [
-				"AppImage",
-				"deb",
-				"freebsd",
-				"rpm"
-			]
-		}
-	}
+  "name": "udeler",
+  "productName": "Udeler",
+  "version": "1.11.7",
+  "main": "index.js",
+  "urlHelp": "https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
+  },
+  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
+  "license": "ISC",
+  "author": {
+    "name": "Faisal Umair",
+    "email": "eff.umair@gmail.com",
+    "url": "https://github.com/FaisalUmair"
+  },
+  "scripts": {
+    "dev": "electron . --developer",
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder",
+    "build:mac": "electron-builder -m",
+    "build:linux": "electron-builder -l",
+    "build:win": "electron-builder -w",
+    "build:w32": "electron-builder -w \"--ia32\"",
+    "build:all": "electron-builder -wml && electron-builder -w --ia32",
+    "prebuild:local": "node prebuild.js",
+    "build:local": "npm run build",
+    "make:release": "node ./bin/modules/release/index.js"
+  },
+  "dependencies": {
+    "@sentry/electron": "^4.3.0",
+    "cookie": "^0.5.0",
+    "dialogs": "^2.0.1",
+    "dotenv": "^16.0.3",
+    "electron-settings": "^3.2.0",
+    "jquery": "^3.6.3",
+    "mkdirp": "^1.0.4",
+    "mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
+    "node-vtt-to-srt": "^1.0.1",
+    "sanitize-filename": "^1.6.3",
+    "socket.io": "^4.5.4"
+  },
+  "devDependencies": {
+    "electron": "^8.5.5",
+    "electron-builder": "^23.6.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "open": "^8.4.2",
+    "semver": "^7.3.8"
+  },
+  "build": {
+    "appId": "com.faisalumair.udeler",
+    "productName": "Udeler",
+    "copyright": "Copyright © 2023 — ${author}",
+    "artifactName": "${productName}_Setup-v${version}_${os}-${arch}.${ext}",
+    "portable": {
+      "artifactName": "${productName}_Portable-v${version}_${os}-${arch}.${ext}"
+    },
+    "directories": {
+      "buildResources": "assets/images/build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb",
+        "freebsd",
+        "rpm"
+      ]
+    }
+  }
 }

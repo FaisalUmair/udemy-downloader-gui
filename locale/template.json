@@ -79,7 +79,7 @@
   "Contains DRM protection and cannot be downloaded": "",
   "Check for a new version on startup": "",
 	"Start pending downloads at startup" : "",
-  "Keep downloading even if the course is DRM protected": "",
+  "Skip downloading DRM-protected courses": "",
   "If course is encrypted, keep downloading attachments and videos not encrypted": "",
   "Collaborate": "",
   "Confirm Log Out?": "",
