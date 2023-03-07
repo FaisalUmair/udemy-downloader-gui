@@ -39,11 +39,10 @@
     "mkdirp": "^1.0.4",
     "mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
     "node-vtt-to-srt": "^1.0.1",
-    "sanitize-filename": "^1.6.3",
-    "socket.io": "^4.5.4"
+    "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "electron": "^8.5.5",
+    "electron": "^11.5.0",
     "electron-builder": "^23.6.0",
     "electron-reload": "^2.0.0-alpha.1",
     "open": "^8.4.2",

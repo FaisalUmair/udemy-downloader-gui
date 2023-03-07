@@ -13,6 +13,10 @@
   1. Messaging improvement
   2. Command to make release version - _for developers_
 
+### Security
+  * Update package - electron 8.5.5 to 11.5.0
+  * Remove package - socket.io
+
 ----
 ## Version 1.11.6
 

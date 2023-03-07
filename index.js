@@ -2,13 +2,8 @@ const { app, BrowserWindow, Menu, ipcMain, screen } = require("electron");
 const path = require("path");
 require('dotenv').config();
 
-const appVersion = require(__dirname + "/package.json").version;
+const { version: appVersion } = require(__dirname + "/package.json");
 const httpDonate = "https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&item_name=Udeler%20is%20free%20and%20without%20any%20ads.%20If%20you%20appreciate%20that,%20please%20consider%20donating%20to%20the%20Developer.&currency_code=USD";
-
-if (app.isPackaged) {
-  const Sentry = require('@sentry/electron');
-  Sentry.init({ dsn: process.env.SENTRY_DSN });
-}
 
 // const isDebug = !app.isPackaged;
 const isDebug = process.argv.indexOf("--developer") != -1;
@@ -18,6 +13,20 @@ if (isDebug) {
     electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
     hardResetMethod: 'exit'
   });
+}
+
+if (app.isPackaged) {
+  try {
+    if (!process.env.SENTRY_DSN)
+      throw new Error("SENTRY_DSN is not defined");
+
+    const Sentry = require('@sentry/electron');
+    Sentry.init({ dsn: process.env.SENTRY_DSN });
+
+    process.env.IS_PACKAGE = true;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 let downloadsSaved = false;

@@ -11,11 +11,11 @@ const Downloader = require("mt-files-downloader");
 const https = require("https");
 const cookie = require("cookie");
 
-const server = require("http").createServer();
-const socketIO = require("socket.io")(server);
+// const server = require("http").createServer();
+// const socketIO = require("socket.io")(server);
+// const $loginAuthenticator = $(".ui.login.authenticator");
 
 const pageSize = 25;
-const $loginAuthenticator = $(".ui.login.authenticator");
 const msgDRMProtected = translate("Contains DRM protection and cannot be downloaded");
 const ajaxTimeout = 60000;  // 60 segundos
 
@@ -29,13 +29,40 @@ var $subDomain = $(".ui.login #subdomain");
 var subDomain = settings.get("subdomain") || "www";
 var settingsCached = settings.getAll();
 
+
+// server.listen(50490);
+// socketIO.on("connect", function (socket) {
+//   console.log('io.onConnect');
+//   $loginAuthenticator.removeClass("disabled");
+
+//   socket.on("disconnect", function () {
+//     console.log('socket.onDisconnect');
+//     $loginAuthenticator.addClass("disabled");
+//     $(".ui.authenticator.dimmer").removeClass("active");
+//     awaitingLogin = false;
+//   });
+
+//   $loginAuthenticator.click(function () {
+//     $(".ui.authenticator.dimmer").addClass("active");
+//     awaitingLogin = true;
+//     socket.emit("awaitingLogin");
+//   });
+
+//   socket.on("newLogin", function (data) {
+//     console.log('socket.onNewLogin');
+//     if (awaitingLogin) {
+//       settings.set("access_token", data.access_token);
+//       settings.set("subdomain", data.subdomain);
+//       checkLogin();
+//     }
+//   });
+// });
+
 const downloadFiles = {
   LecturesAndAttachments: 0,
   OnlyLectures: 1,
   OnlyAttachments: 2
 }
-
-// server.listen(50490);
 
 
 // external browser
@@ -77,32 +104,6 @@ function loadDefaultSettings() {
   settingsCached = settings.getAll();
 }
 
-socketIO.on("connect", function (socket) {
-  console.log('io.onConnect');
-  $loginAuthenticator.removeClass("disabled");
-
-  socket.on("disconnect", function () {
-    console.log('socket.onDisconnect');
-    $loginAuthenticator.addClass("disabled");
-    $(".ui.authenticator.dimmer").removeClass("active");
-    awaitingLogin = false;
-  });
-
-  $loginAuthenticator.click(function () {
-    $(".ui.authenticator.dimmer").addClass("active");
-    awaitingLogin = true;
-    socket.emit("awaitingLogin");
-  });
-
-  socket.on("newLogin", function (data) {
-    console.log('socket.onNewLogin');
-    if (awaitingLogin) {
-      settings.set("access_token", data.access_token);
-      settings.set("subdomain", data.subdomain);
-      checkLogin();
-    }
-  });
-});
 
 ipcRenderer.on("saveDownloads", function () {
   saveDownloads(true);

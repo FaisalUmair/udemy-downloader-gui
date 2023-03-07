@@ -19,6 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: create env file
+        run: |
+          touch .env
+          echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
+
       - name: Cache node_modules
         uses: actions/cache@v3
         with:

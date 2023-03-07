@@ -1,6 +1,5 @@
 const settings = require("electron-settings");
-const { version, urlHelp } = require(__dirname + "/package.json");
-const appVersion = version;
+const { version: appVersion, urlHelp } = require(__dirname + "/package.json");
 
 // Initialize settings
 loadDefaultSettings();
