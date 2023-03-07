@@ -47,6 +47,10 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-latest')
         run: sudo apt-get install libarchive-tools rpm
 
+      - name: Install dmg-license fo MacOS
+        if: startsWith(matrix.os, 'macos-latest')
+        run: npm install dmg-license
+
       - name: Build Electron App
         uses: coparse-inc/action-electron-builder@v1.0.0
         with:
