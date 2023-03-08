@@ -1,234 +1,151 @@
-# Udeler | Udemy Course Downloader (GUI) 
-[![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui/badge)](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui)
+<h1 align="center">
+  <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width="128" />
+  <br> Udeler | Course Downloader (GUI)
 
-## Donate
+  [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui/badge)](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui) ![CodeQL](https://github.com/heliomarpm/udemy-downloader-gui/actions/workflows/codeql-analysis.yml/badge.svg) ![Publish](https://github.com/heliomarpm/udemy-downloader-gui/actions/workflows/publish.yml/badge.svg) 
 
-Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
+</h1>
 
-[![Donate](https://raw.githubusercontent.com/heliomarpm/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&currency_code=USD) 
-<noscript><a href="https://liberapay.com/heliomarpm/donate">
-<img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
-</noscript>
-<img src="https://img.shields.io/liberapay/receives/heliomarpm.svg?logo=liberapay">
+<p align="center">
+  <!-- PayPal -->
+  <a href="https://bit.ly/paypal-udeler" target="_blank" rel="noopener noreferrer">
+    <img alt="kofi url" src="https://img.shields.io/badge/donate%20on-paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
+  </a>
+  <!-- Ko-fi -->
+  <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
+    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=B181F1"/>
+  </a>
+  <!-- LiberaPay -->  
+  <a href="https://liberapay.com/heliomarpm" target="_blank" rel="noopener noreferrer">
+     <img alt="releases url" src="https://img.shields.io/badge/liberapay-1C1E26?style=for-the-badge&labelColor=1C1E26&color=f6c915"/>
+  </a>
+  <!-- Version -->
+  <a href="https://github.com/heliomarpm/udemy-downloader-gui/releases" target="_blank" rel="noopener noreferrer">
+     <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/udemy-downloader-gui?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
+  </a>  
+  <!-- License -->
+  <a href="https://github.com/heliomarpm/udemy-downloader-gui/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+    <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
+  </a>
+</p>
 
-<table border=0 cellspacing=5 celspadding=5>
-  <tr>
-    <td width="150px">
-      <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width="128px" height="128px"/>
-    </td>
-    <td>
-      A cross-platform app to download your purchased courses (paid or free) from Udemy.
-      Project originally conceived and maintained by [@FaisalUmair](https://github.com/FaisalUmair/udemy-downloader-gui) is archived.<br>
-      Since then, I've kept it active, providing fixes and small features.
-    </td>
-  </tr>
-</table>
+<div align="center">
+
+  A cross-platform app to download your purchased courses (paid or free) from Udemy, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.<br>
+  Project originally by [@FaisalUmair](https://github.com/FaisalUmair/udemy-downloader-gui) is archived.<br>
   
+  ![](https://i.imgur.com/nsaAgDU.gif)
+
+  <table border=0 cellspacing=0 celspadding=0>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/13087389/126054264-48caf1f5-472f-44b0-991a-145c9169a2c3.png" width="240px"/></td>
+    <td><img src="https://user-images.githubusercontent.com/13087389/126054265-4a343a67-803a-4400-b196-090864fbc1eb.png" width="240px"/></td>
+    <td><img src="https://user-images.githubusercontent.com/13087389/126076966-57f318ae-c9ee-4948-862f-87fae4502290.png" width="240px"/></td>
+
+  </tr>
+  </table>  
+</div>
+
+
 ## Warning
 
-* Downloading courses is against Udemy's Terms of Service, I am NOT held responsible for your account getting suspended as a result from the use of this program!
-* Udemy has started to encrypt many of the course videos, so downloading them may be impossible/illegal because it involves decrypting DRM videos which opens up the author to DMCA takedowns/lawsuits.
-* If you use Udeler and some/all videos are skipped, please don't open a new issue or comment that the issue still exists.  All requests to bypass DRM/encryption will be ignored.
+
+* This software is intended to help you download Udemy courses for personal use only. 
+
+* Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. 
+
+* Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use.  
+
+* Each and every Udemy course is subject to copyright infringement. Downloading courses is against Udemy's Terms of Service, I am NOT responsible for your account being suspended as a result of using this program!
+
+* This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in. 
+ 
+* Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser.
+
+* Udemy has started to encrypt many of their course videos, please do not open an issue if some/all videos are skipped. Breaking DRM encryption implies piracy, so it will not be included in this application.
+
 * This program is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
 
-<!--
-If you'd like to see the full context, then read [issue 609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609). 
--->
 
-# Description:
+## To Use
 
-This software is WIP, the code is provided as-is and I am not held resposible for any legal issues resulting from the use of this program.
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
-This software is intended to help you download Udemy courses for personal use only.  
-Sharing the content of your subscribed courses is strictly prohibited under Udemy Terms of Use.  
-Each and every course on Udemy is subjected to copyright infringement.
-This software does not magically download any paid course available on Udemy, you need to provide your Udemy login credentials to download the courses you have enrolled in.  
-Udeler downloads the lecture videos by simply using the source of the video player returned to the user by Udemy after proper authentication, you can also do the same manually. 
-Many download managers use same method to download videos on a web page. This app only automates the process of a user doing this manually in a web browser.
+```bash
+# Clone this repository
+git clone https://github.com/heliomarpm/udemy-downloader-gui
+# Go into the repository
+cd udemy-downloader-gui
+# Install dependencies
+npm install
+# Run the app
+npm start
+-- or --
+# Run the app mode develop
+npm run dev
+```
 
-# License
+> **Note**: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-All code is licensed under the MIT license
 
-#Screenshots
+# Releasing
+> **Note**: to be able to perform `auto-updates` you will need a `code signed app`, for this purpose you will need to configure it by yourself, so check the [electron-builder](https://www.electron.build/code-signing) and [action-electron-builder](https://github.com/samuelmeuli/action-electron-builder#code-signing) docs please to get know how to do this.
 
-![v187](https://user-images.githubusercontent.com/13087389/126054264-48caf1f5-472f-44b0-991a-145c9169a2c3.png)
-![v187-down](https://user-images.githubusercontent.com/13087389/126054265-4a343a67-803a-4400-b196-090864fbc1eb.png)
-![v187-config](https://user-images.githubusercontent.com/13087389/126076966-57f318ae-c9ee-4948-862f-87fae4502290.png)
+To release your app on a GitHub release with `Windows`, `Mac` and `Linux` binaries, you can perform the following commands:
+
+```bash
+git pull
+npm run make:release
+```
+
+> **Note**: Script for make release is contribution by @daltonmenezes
 
 
 # Contributing:
 
-Any contributions are welcome, if you plan to contribute please read the [contributing](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/CONTRIBUTING.md) docs first.
+Please make sure to read the [Contributing Guide](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/docs/CONTRIBUTING.md) before making a pull request.
 
-if you want help using the program, use [github issues](https://github.com/heliomarpm/udemy-downloader-gui/issues).
-This version is currently only available on the Windows platform (x86, x64).
-Waiting for volunteers to compile for Linux and Mac platforms.  
+Thank you to all the people who already contributed to Udeler!
 
-<a href="https://github.com/heliomarpm/udemy-downloader-gui/graphs/contributors">
+<a href="https://github.com/heliomarpm/udemy-downloader-gui/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=heliomarpm/udemy-downloader-gui" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
 
-### Facing Login Issues?
+That said, there's a bunch of ways you can contribute to this project, like by:
 
-Since Udeler v1.6.0, there is support for login through Udeler Authenticator (A chrome extension for easily authenticating a Udemy account with Udeler).
-
-#### How to use Udeler Authenticator?
-
-1. Install the extension from [here](https://www.udeler.com/extension)
-
-2. After installing/enabling the extension, open udeler desktop app, you will see a new anonymous icon on the login page. Click the icon and it will start to listen for any login requests from your chrome web browser.
-
-3. Open Udemy website on your chrome web browser and simply login to your account. Udeler app will detect the login and will let you in. If you are already logged in to Udemy, you can simply visit the website and it will still detect your account.  
-  
-
-### Download Previous Version for Windows, Mac and Linux
-
-<details><summary>Expand</summary>
-<p>
-
-### Downloads:
-
-| Platform | Arch    | Version | Link                                                                                                                         |
-| -------- | ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Windows  | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-Setup-1.8.2-windows-x64.exe)  |
-| Windows  | x86     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-Setup-1.8.2-windows-x86.exe)  |
-| Mac      | x64     | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg)                |
-| Linux    | x86_x64 | 1.8.2   | [Download](https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage) |
+- :beetle: Reporting a bug
+- :page_facing_up: Improving this documentation
+- :rotating_light: Sharing this project and recommending it to your friends
+- :dollar: Supporting this project on GitHub Sponsors or Ko-fi
+- :star2: Giving a star on this repository
 
 
-
-</p></details>
-
-### Prerequisites
-<details><summary>Expand</summary>
-<p>
-
-```
-You must have npm and nodejs installed.
-```
-
-</p></details>
-
-### To use the application
-<details><summary>Expand</summary>
-<p>
-
-```
-1. Clone the project
-2. Run npm install
-3. Run npm start
-```
-
-</p></details>
-
-### Build
-<details><summary>Expand</summary>
-<p>
-
-Detect Platform:
-
-```
-npm run dist
-```
-
-Windows:
-
-```
-npm run build-win
-```
-
-Mac:
-
-```
-npm run build-mac
-```
-
-Linux:
-
-```
-npm run build-linux
-```
-
-Cross Platform:
-
-```
-npm run build
-```
-
-#### To force 32 bit build:
-
-_Append "-- --ia32" to npm run command_
-
-Example:
-
-```
-npm run build-win -- --ia32
-```
-
-</p></details>
-
-### Debug
-<details><summary>Expand</summary>
-<p>
-First run ```npm run install``` to download/setup the required libraries.
-
-Now in Visual Studio Code press ```CTRL-SHIFT-P``` and type "Debug: Open launch.json".
-
-Insert this:
-```
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            
-            "name": "Launch",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceRoot}/index.js",
-            "stopOnEntry": false,
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "preLaunchTask": null,
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
-            "runtimeArgs": [
-                ".",
-                "--enable-logging",
-                "--debug"
-            ],
-            "env": {},
-            "console": "internalConsole",
-            "sourceMaps": false,
-            "outDir": null
-        },
-        {
-            "name": "Attach",
-            "type": "node",
-            "request": "attach",
-            "port": 5858,
-            "address": "localhost",
-            "restart": false,
-            "sourceMaps": false,
-            "outDir": null,
-            "localRoot": "${workspaceRoot}",
-            "remoteRoot": null
-        }
-    ]
-}
-```
-
-(For MacOS/Linux, remove the .cmd from the runtimeExecutable.)
-
-</p></details>
 
 ## Donate
 
 Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.
 
-[![Donate](https://raw.githubusercontent.com/heliomarpm/udemy-downloader-gui/master/assets/images/donate.png)](https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&currency_code=USD) 
-<noscript><a href="https://liberapay.com/heliomarpm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+<p align="center">
+  <!-- PayPal -->
+  <a href="https://bit.ly/paypal-udeler" target="_blank" rel="noopener noreferrer">
+    <img alt="kofi url" src="https://img.shields.io/badge/donate%20on-paypal-1C1E26?style=for-the-badge&labelColor=1C1E26&color=0475fe"/>
+  </a>
+  <!-- Ko-fi -->
+  <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
+    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=B181F1"/>
+  </a>
+  <!-- LiberaPay -->  
+  <a href="https://liberapay.com/heliomarpm" target="_blank" rel="noopener noreferrer">
+     <img alt="releases url" src="https://img.shields.io/badge/liberapay-1C1E26?style=for-the-badge&labelColor=1C1E26&color=f6c915"/>
+  </a>  
+  <!-- GitHub Sponsors -->
+  <a href="https://github.com/sponsors/heliomarpm" target="_blank" rel="noopener noreferrer">
+    <img alt="license url" src="https://img.shields.io/badge/GitHub%20-Sponsor-1C1E26?style=for-the-badge&labelColor=1C1E26&color=db61a2"/>
+  </a>
+</p>
 
-<img src="https://img.shields.io/liberapay/receives/heliomarpm.svg?logo=liberapay">
+## License
 
+[MIT © Heliomar P. Marques](https://github.com/heliomarpm/udemy-downloader-gui/blob/main/LICENSE)

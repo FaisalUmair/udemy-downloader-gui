@@ -25,9 +25,9 @@
     "build:win": "electron-builder -w",
     "build:w32": "electron-builder -w \"--ia32\"",
     "build:all": "electron-builder -wml && electron-builder -w --ia32",
-    "prebuild:local": "node prebuild.js",
-    "build:local": "npm run build",
-    "make:release": "node ./bin/modules/release/index.js"
+    "make:release": "node ./cmd/modules/release/index.js",
+    "prebuild:local": "node ./cmd/prebuild.js",
+    "build:local": "npm run build"
   },
   "dependencies": {
     "@sentry/electron": "^4.3.0",
