@@ -35,6 +35,7 @@ function createWindow() {
   const size = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   let win = new BrowserWindow({
+    title: `Udeler | Udemy Course Downloader - v${appVersion}`,
     minWidth: 650,
     minHeight: 550,
     width: 650,
@@ -60,10 +61,10 @@ function createWindow() {
   //   })
   // );
   win.loadFile("index.html");
-  win.webContents.on("did-finish-load", () => {
-    // console.log("did-finish-load");
-    win.setTitle(`Udeler | Udemy Course Downloader - v${appVersion}`);
-  });
+  // win.webContents.on("did-finish-load", () => {
+  //   // console.log("did-finish-load");
+  //   win.setTitle(`Udeler | Udemy Course Downloader - v${appVersion}`);
+  // });
 
   // Open the DevTools.
   // win.webContents.openDevTools();  

@@ -4,7 +4,8 @@
   - Update the electron pack to the latest
 
 ----
-## Version 1.11.10
+## Version [1.11.10](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.6...v1.11.10)
+##### Mar, 07 2023
 
 ### Added
   1. Release for Linux and Mac - _finally!_ 😁
@@ -23,7 +24,8 @@
   * Remove package - socket.io
 
 ----
-## Version 1.11.6
+## Version [1.11.6](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.5...v1.11.6)
+##### Mar, 03 2023
 
 ### Added
   1. Error monitoring with Sentry.io
@@ -36,7 +38,8 @@
 
 
 ----
-## Version 1.11.5
+## Version [1.11.5](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.4...v1.11.5)
+#### Dez, 31 2022
 
 ### Added
   1. Save File Log - Improvement request _[#85](https://github.com/heliomarpm/udemy-downloader-gui/issues/85)_
@@ -57,7 +60,7 @@
 
 
 ----
-## Version 1.11.4
+## Version [1.11.4](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.3...v1.11.4)
 ##### Aug 12, 2022
 
 ### Added
@@ -69,7 +72,7 @@
 
 
 ----
-## Version 1.11.3
+## Version [1.11.3](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.2...v1.11.3)
 ##### Jul 9, 2022
 ### Fixed
   1. Contributed by @freddygarcia [PR #56](https://github.com/heliomarpm/udemy-downloader-gui/pull/56) 
@@ -78,7 +81,7 @@
 
 
 ----
-## Version 1.11.2
+## Version [1.11.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.1...v1.11.2)
 ##### Apr 27, 2022
 
 ### Added
@@ -92,7 +95,7 @@
 
 
 ----
-## Version 1.11.1
+## Version [1.11.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.0...v1.11.1)
 ##### Mar 11, 2022
 
 ### Fixed
@@ -100,7 +103,7 @@
 
 
 ----
-## Version 1.11.0
+## Version [1.11.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.3...v1.11.0)
 ##### Feb 27, 2022
 
 ### Changed
@@ -114,7 +117,7 @@
 
 
 ----
-## Version 1.10.3
+## Version [1.10.3](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.2...v1.10.3)
 ##### Dec 20, 2021
 
 ### Changed
@@ -125,13 +128,13 @@
   2. Window clear after download
 
 ----
-## Version 1.10.2
+## Version [1.10.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.1...v1.10.2)
 ##### Dec 18, 2021
 ### Changed
   1. Login with Credentials
 ----
 
-## Version 1.10.1
+## Version [1.10.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.0...v1.10.1)
 ##### Dec 18, 2021
 
 ### Fixed
@@ -142,7 +145,7 @@
 ----
 
 
-## Version 1.10.0
+## Version [1.10.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.9.0...v1.10.0)
 ##### Dec 4, 2021
 
 ### Added
@@ -155,7 +158,7 @@
 ----
 
 
-## Version 1.9.0
+## Version [1.9.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.7...v1.9.0)
 ##### Sep 9, 2021
 
 ### Fixed 
@@ -167,7 +170,7 @@
 ----
 
 
-## Version 1.8.7
+## Version [1.8.7](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.6...v1.8.7)
 ##### Jul 17, 2021
 
 ### Added
@@ -192,31 +195,24 @@
 ----
 
 
-## Version 1.8.6
-##### Jul 1, 2021
+## Version [1.8.6](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.3...v1.8.6)
+##### Jul 11, 2021
 
 ### Added
-  1. Course indicator with DRM-encrypted lectures (video does not download )
+  1. Course indicator with DRM-encrypted lectures (video does not download)
+  2. A new feature for dispensing items in the downloads section.
+  3. A new feature for setting default Subtitle.
+  4. A new feature for Save history of Started and Completed downloads.
+  5. A new feature to sort attachments before downloading.
+  6. Encrypted Lectures does not download, but allows you to continue downloading too many files.
+  7. Option to open the selected course in the Udemy subdomain.
    
 ### Changed
   1. Updated Icon design by [@moenawar](https://steemkr.com/utopian-io/@moenawar/my-new-logo-design-proposal-for-udeler)
   2. Updated notification box for completed downloads
-----
+  3. Included text translation of version update popup.
 
-
-## Version 1.8.5
-##### Jul 10, 2021
-
-### Added
-  1. A new feature for dispensing items in the downloads section.
-  2. A new feature for setting default Subtitle.
-  3. A new feature for Save history of Started and Completed downloads.
-  4. A new feature to sort attachments before downloading.
-  5. Encrypted Lectures does not download, but allows you to continue downloading too many files.
-  6. Option to open the selected course in the Udemy subdomain.
-
-### Changed
-  1. Included text translation of version update popup.
+![DRMProtection](https://github.com/heliomarpm/udemy-downloader-gui/releases/download/v1.8.6/screen-encrypted.png)
 ----
 
 
@@ -224,5 +220,5 @@
 ##### Jul 5, 2021
 
 ### Fixed
-  1. The issue "Stuck on Building Course Data" #609.
+  1. The issue "Stuck on Building Course Data" [#609](https://github.com/FaisalUmair/udemy-downloader-gui/issues/609).
   2. The issue of attachment downloads
