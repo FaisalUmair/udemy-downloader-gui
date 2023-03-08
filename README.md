@@ -13,7 +13,7 @@
   </a>
   <!-- Ko-fi -->
   <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
-    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=B181F1"/>
+    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=ff5f5f"/>
   </a>
   <!-- LiberaPay -->  
   <a href="https://liberapay.com/heliomarpm" target="_blank" rel="noopener noreferrer">
@@ -134,7 +134,7 @@ Udeler is free and without any ads. If you appreciate that, please consider dona
   </a>
   <!-- Ko-fi -->
   <a href="https://ko-fi.com/heliomarpm" target="_blank" rel="noopener noreferrer">
-    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=B181F1"/>
+    <img alt="kofi url" src="https://img.shields.io/badge/kofi-1C1E26?style=for-the-badge&labelColor=1C1E26&color=ff5f5f"/>
   </a>
   <!-- LiberaPay -->  
   <a href="https://liberapay.com/heliomarpm" target="_blank" rel="noopener noreferrer">
