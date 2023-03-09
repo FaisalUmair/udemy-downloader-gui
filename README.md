@@ -111,7 +111,7 @@ Thank you to all the people who already contributed to Udeler!
   <img src="https://contrib.rocks/image?repo=heliomarpm/udemy-downloader-gui" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
+###### Made with [contrib.rocks](https://contrib.rocks).
 
 That said, there's a bunch of ways you can contribute to this project, like by:
 
