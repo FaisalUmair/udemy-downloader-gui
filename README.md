@@ -156,4 +156,4 @@ Udeler is free and without any ads. If you appreciate that, please consider dona
 
 ## License
 
-[MIT © Heliomar P. Marques](https://github.com/heliomarpm/udemy-downloader-gui/blob/main/LICENSE)
+[MIT © Heliomar P. Marques](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/LICENSE)
