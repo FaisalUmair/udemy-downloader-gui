@@ -126,7 +126,7 @@ That said, there's a bunch of ways you can contribute to this project, like by:
 - :beetle: Reporting a bug
 - :page_facing_up: Improving this documentation
 - :rotating_light: Sharing this project and recommending it to your friends
-- :dollar: Supporting this project on GitHub Sponsors or PayPal, Ko-fi, Liberapay, you decide. 😉
+- :dollar: Supporting this project on GitHub Sponsors, PayPal, Ko-fi or Liberapay, you decide. 😉
 - :star2: Giving a star on this repository
 
 
