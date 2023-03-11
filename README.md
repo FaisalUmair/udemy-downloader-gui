@@ -23,14 +23,16 @@
   <a href="https://github.com/heliomarpm/udemy-downloader-gui/releases" target="_blank" rel="noopener noreferrer">
      <img alt="releases url" src="https://img.shields.io/github/v/release/heliomarpm/udemy-downloader-gui?style=for-the-badge&labelColor=1C1E26&color=2ea043"/>
   </a>
+  <!-- Downloads -->
+  <a href="https://github.com/heliomarpm/udemy-downloader-gui/releases" target="_blank" rel="noopener noreferrer">
+    <img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/total?style=for-the-badge&labelColor=1C1E26&color=2ea043">
+  </a>
   <!-- Issues -->
   <!-- <a href="https://github.com/heliomarpm/udemy-downloader-gui/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" target="_blank">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/heliomarpm/udemy-downloader-gui?style=for-the-badge&labelColor=1C1E26">
   </a> -->
-  <!-- Downloads -->
-  <img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/total?color=brightgreen&style=for-the-badge&labelColor=1C1E26">
   <!-- License -->
-  <a href="https://github.com/heliomarpm/udemy-downloader-gui/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+  <a href="https://github.com/heliomarpm/udemy-downloader-gui/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">
     <img alt="license url" src="https://img.shields.io/badge/license%20-MIT-1C1E26?style=for-the-badge&labelColor=1C1E26&color=61ffca"/>
   </a>
 </p>
