@@ -1,3 +1,4 @@
+<span id="top"></span>
 <h1 align="center">
   <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width="128" />
   <br> Udeler | Course Downloader (GUI)
@@ -77,7 +78,8 @@
 
 ## To Use
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. \
+From your command line:
 
 ```bash
 # Clone this repository
@@ -156,4 +158,4 @@ Udeler is free and without any ads. If you appreciate that, please consider dona
 
 ## License
 
-[MIT © Heliomar P. Marques](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/LICENSE)
+[MIT © Heliomar P. Marques](https://github.com/heliomarpm/udemy-downloader-gui/blob/master/LICENSE) <a href="#top">🔝</a>

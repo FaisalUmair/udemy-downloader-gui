@@ -51,7 +51,7 @@
   "build": {
     "appId": "com.faisalumair.udeler",
     "productName": "Udeler",
-    "copyright": "Copyright © 2023 — ${author}",
+    "copyright": "Copyright © 2017 - 2023 | ${author}",
     "artifactName": "${productName}_Setup-v${version}_${os}-${arch}.${ext}",
     "portable": {
       "artifactName": "${productName}_Portable-v${version}_${os}-${arch}.${ext}"
