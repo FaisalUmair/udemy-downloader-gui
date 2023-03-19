@@ -6,6 +6,7 @@
 ----
 ## Version [1.11.10](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.6...v1.11.10)
 ##### Mar, 07 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.10/total)
 
 ### Added
   1. Release for Linux and Mac - _finally!_ 😁
@@ -26,6 +27,7 @@
 ----
 ## Version [1.11.6](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.5...v1.11.6)
 ##### Mar, 03 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.6/total)
 
 ### Added
   1. Error monitoring with Sentry.io
@@ -40,6 +42,7 @@
 ----
 ## Version [1.11.5](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.4...v1.11.5)
 #### Dez, 31 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.5/total)
 
 ### Added
   1. Save File Log - Improvement request _[#85](https://github.com/heliomarpm/udemy-downloader-gui/issues/85)_
@@ -62,6 +65,7 @@
 ----
 ## Version [1.11.4](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.3...v1.11.4)
 ##### Aug 12, 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.4/total)
 
 ### Added
   1. Add Floating Save Button in Config Section
@@ -74,6 +78,8 @@
 ----
 ## Version [1.11.3](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.2...v1.11.3)
 ##### Jul 9, 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.3/total)
+
 ### Fixed
   1. Contributed by @freddygarcia [PR #56](https://github.com/heliomarpm/udemy-downloader-gui/pull/56) 
      - _[#49](https://github.com/heliomarpm/udemy-downloader-gui/issues/49) Stuck on "Building Course Data"_ 
@@ -83,6 +89,7 @@
 ----
 ## Version [1.11.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.1...v1.11.2)
 ##### Apr 27, 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.2/total)
 
 ### Added
   1. Section Logger (Initial version)
@@ -97,6 +104,7 @@
 ----
 ## Version [1.11.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.0...v1.11.1)
 ##### Mar 11, 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.1/total)
 
 ### Fixed
   1. Freezing when Building course data
@@ -105,6 +113,7 @@
 ----
 ## Version [1.11.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.3...v1.11.0)
 ##### Feb 27, 2022
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.0/total)
 
 ### Changed
   1. Interface adjustments - Alert DRM Protected
@@ -119,6 +128,7 @@
 ----
 ## Version [1.10.3](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.2...v1.10.3)
 ##### Dec 20, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.10.3/total)
 
 ### Changed
   1. Include version number in titleBar
@@ -130,12 +140,15 @@
 ----
 ## Version [1.10.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.1...v1.10.2)
 ##### Dec 18, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.10.2/total)
+
 ### Changed
   1. Login with Credentials
 ----
 
 ## Version [1.10.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.10.0...v1.10.1)
 ##### Dec 18, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.10.1/total)
 
 ### Fixed
   1. Hotfix - Login with access token
@@ -147,6 +160,7 @@
 
 ## Version [1.10.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.9.0...v1.10.0)
 ##### Dec 4, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.10.0/total)
 
 ### Added
   1. Option for open downloading folder
@@ -160,6 +174,7 @@
 
 ## Version [1.9.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.7...v1.9.0)
 ##### Sep 9, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.9.0/total)
 
 ### Fixed 
   1. Improved error messages
@@ -172,6 +187,7 @@
 
 ## Version [1.8.7](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.6...v1.8.7)
 ##### Jul 17, 2021
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.8.7/total)
 
 ### Added
   1.  New option: Check for a new version on startup
@@ -196,7 +212,8 @@
 
 
 ## Version [1.8.6](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.8.3...v1.8.6)
-##### Jul 11, 2021
+##### Jul 11, 2021 
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.8.6/total)
 
 ### Added
   1. Course indicator with DRM-encrypted lectures (video does not download)
