@@ -20,14 +20,10 @@
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder",
-    "build:mac": "electron-builder -m",
-    "build:linux": "electron-builder -l",
-    "build:win": "electron-builder -w",
     "build:w32": "electron-builder -w \"--ia32\"",
-    "build:all": "electron-builder -wml && electron-builder -w --ia32",
     "make:release": "node ./cmd/modules/release/index.js",
     "prebuild:local": "node ./cmd/prebuild.js",
-    "build:local": "npm run build"
+    "build:local": "npm run build && npm run build:w32"
   },
   "dependencies": {
     "@sentry/electron": "^4.3.0",
