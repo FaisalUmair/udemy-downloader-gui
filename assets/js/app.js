@@ -11,6 +11,7 @@ const Downloader = require("mt-files-downloader");
 const https = require("https");
 const cookie = require("cookie");
 
+// var awaitingLogin = false;
 // const server = require("http").createServer();
 // const socketIO = require("socket.io")(server);
 // const $loginAuthenticator = $(".ui.login.authenticator");
@@ -22,7 +23,6 @@ const ajaxTimeout = 60000;  // 60 segundos
 var loggers = [];
 var headersAuth;
 var repoAccount = 'heliomarpm';
-var awaitingLogin = false;
 
 var $divSubDomain = $(".ui.login #divsubdomain");
 var $subDomain = $(".ui.login #subdomain");
@@ -64,6 +64,10 @@ const downloadFiles = {
   OnlyAttachments: 2
 }
 
+if (process.env.IS_PACKAGE) {
+  const Sentry = require('@sentry/electron');
+  Sentry.init({ dsn: process.env.SENTRY_DSN });
+}
 
 // external browser
 // $(document).on('click', 'a[href^="http"]', (event) => {
@@ -112,7 +116,6 @@ ipcRenderer.on("saveDownloads", function () {
 $(".ui.dropdown").dropdown();
 
 $(document).ajaxError(function (event, request) {
-  // appendLog(`ajaxError`, request.statusText);
   $(".dimmer").removeClass("active");
 });
 
@@ -319,7 +322,6 @@ $(".ui.dashboard .content").on("click", ".load-more.button", function () {
       }
     })
     .fail(function (resp) {
-      console.log("falha ao carregar mais cursos");
       appendLog(`loadMore_Error: ${resp.status}`, resp.statusText);
     });
 
@@ -638,7 +640,6 @@ function downloadButtonClick($course, subtitle) {
                         }
                       })
                       .fail(function (response) {
-                        console.error("falha ao carregar anexos");
                         appendLog(`getLectureAndAttachments_Error: ${response.status}`, response.statusText);
                         resetCourse($course, $course.find(".download-error"), false, coursedata);
                       });
@@ -659,7 +660,6 @@ function downloadButtonClick($course, subtitle) {
                 }
               })
               .fail(function (resp) {
-                console.error("falha ao carregar aula");
                 appendLog(`getLecture_Error: ${resp.status}`, resp.statusText);
                 resetCourse($course, $course.find(".download-error"), false, coursedata);
               });
@@ -720,7 +720,6 @@ function downloadButtonClick($course, subtitle) {
       }
 
       appendLog(`download_Error: ${resp.status}`, msgError);
-      prompt.alert(msgError);
     });
 
 }
@@ -875,6 +874,8 @@ function initDownload($course, coursedata, subTitle = "") {
 
     } catch (err) {
       appendLog('downloadChapter_Error:', err.message);
+      Sentry.captureException(err);
+
       resetCourse($course, $course.find(".download-error"), false, coursedata);
     }
   }
@@ -964,7 +965,6 @@ function initDownload($course, coursedata, subTitle = "") {
                     resetCourse($course, $course.find(".download-error"), settingsCached.download.autoRetry, coursedata, subtitle);
                   })
                   .fail(function (resp) {
-                    console.error("falha ao baixar aula");
                     appendLog(`downloadLeacture_Error:${resp.status}`, resp.statusText);
 
                     if (resp.status == 401 || resp.status == 403) {
@@ -988,6 +988,7 @@ function initDownload($course, coursedata, subTitle = "") {
 
         dl.on("error", function (dl) {
           appendLog('errorDownload', dl.error.message);
+          Sentry.captureException(dl.error);
         });
 
         dl.on("start", function () {
@@ -1006,7 +1007,8 @@ function initDownload($course, coursedata, subTitle = "") {
           // if (typeVideo && dl.meta.size < corruptedMP4Size) {
           if (typeVideo && !dl.meta.headers["content-type"].includes("video")) {
             $course.find('input[name="encryptedvideos"]').val(++coursedata.encryptedVideos);
-            appendLog(`DRM Protected::${coursedata.name}`, dl.filePath)
+
+            appendLog(`DRM Protected::${coursedata.name}`, dl.filePath, false)
 
             dl.destroy();
             if (!settingsCached.download.continueDonwloadingEncrypted) {
@@ -1215,11 +1217,11 @@ function initDownload($course, coursedata, subTitle = "") {
               return await i.text();
             }
             else
-              appendLog('getFile_Error', i.statusText);
+              console.log('getFile_Buffer', i.statusText);
           }
           catch (err) {
-            appendLog('getFile_Error', err);
-            console.error(err);
+            appendLog('getFile_Error', err.message);
+            Sentry.captureException(err);
           }
 
           count++;
@@ -1266,8 +1268,8 @@ function initDownload($course, coursedata, subTitle = "") {
                 }
               }
               catch (err) {
-                console.error(err)
                 appendLog("getPlaylist_Error", err.message);
+                Sentry.captureException(err);
               }
             }
           }
@@ -1405,6 +1407,8 @@ function initDownload($course, coursedata, subTitle = "") {
 
     } catch (err) {
       appendLog('downloadLecture_Error:', err.message);
+      Sentry.captureException(err);
+
       resetCourse($course, $course.find(".download-error"), false, coursedata);
     }
   }
@@ -1610,6 +1614,9 @@ function selectDownloadPath() {
 }
 
 function rendererCourse(response, keyword = "") {
+
+  console.log("rendererCourse", response);
+
   $(".ui.dashboard .courses.dimmer").removeClass("active");
   $(".ui.dashboard .ui.courses.section .disposable").remove();
   $(".ui.dashboard .ui.courses.section .ui.courses.items").empty();
@@ -1627,13 +1634,15 @@ function rendererCourse(response, keyword = "") {
       );
     }
   } else {
+    appendLog(translate("No Courses Found"), response.results, false);
+
     $(".ui.dashboard .ui.courses.section .ui.courses.items").append(
       `<div class="ui yellow message disposable">
-        ${translate("No Courses Found")}
+        ${translate("No Courses Found")} <br/>
+        ${translate("Remember, you will only be able to see the courses you are enrolled in")}
       </div>`
     );
   }
-
 }
 
 function rendererDownloads() {
@@ -1763,7 +1772,7 @@ function clearLogArea() {
   loggers = [];
   $(".ui.logger.section .ui.list").html("");
 }
-function appendLog(title, description) {
+function appendLog(title, description, isError = true) {
   const log = {
     datetime: new Date().toLocaleString(),
     title,
@@ -1781,7 +1790,12 @@ function appendLog(title, description) {
     </div>`
   );
 
-  console.warn(`[${title}] ${description}`);
+  if (isError) {
+    console.error(`[${title}] ${description}`);
+  }
+  else {
+    console.warn(`[${title}] ${description}`);
+  }
 }
 
 function rendererLogger() {
@@ -1800,10 +1814,17 @@ function rendererLogger() {
 }
 
 function search(keyword) {
+  const subscriber = settings.get("subscriber") ?? false;
+  const url = !subscriber
+    ? `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`
+    : `https://${subDomain}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`;
+
+  console.log(url);
+
   $.ajax({
     timeout: ajaxTimeout,  // timeout to 5 seconds
     type: "GET",
-    url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}&page=1&fields[user]=job_title&search=${keyword}`,
+    url,
     headers: headersAuth,
     beforeSend: function () {
       $(".ui.dashboard .courses.dimmer").addClass("active");
@@ -1886,7 +1907,9 @@ function askForSubtitle(availableSubs, initDownload, $course, coursedata, defaul
 }
 
 function loginWithUdemy() {
-  if ($(".ui.login .form").find('input[name="business"]').is(":checked")) {
+  const $formLogin = $(".ui.login .form");
+
+  if ($formLogin.find('input[name="business"]').is(":checked")) {
     if (!$subDomain.val()) {
       prompt.alert("Type Business Name");
       return;
@@ -1895,6 +1918,7 @@ function loginWithUdemy() {
   else {
     $subDomain.val(null);
   }
+
   var parent = remote.getCurrentWindow();
   var dimensions = parent.getSize();
   var session = remote.session;
@@ -1913,10 +1937,13 @@ function loginWithUdemy() {
         ? request.requestHeaders.Authorization.split(" ")[1]
         : cookie.parse(request.requestHeaders.Cookie || '').access_token;
 
-      console.log('token', token);
-      if (token) {
+      if (token) {        
+        const subscriber = $formLogin.find('input[name="subscriber"]').is(":checked");
+        
         settings.set("access_token", token);
         settings.set("subdomain", new URL(request.url).hostname.split(".")[0]);
+        settings.set("subscriber", subscriber);
+
         udemyLoginWindow.destroy();
         session.defaultSession.clearStorageData();
         session.defaultSession.webRequest.onBeforeSendHeaders(
@@ -1947,10 +1974,16 @@ function checkLogin() {
 
     headersAuth = { Authorization: `Bearer ${settings.get("access_token")}` };
 
+    const subscriber = settings.get("subscriber") ?? false;
+    const url = !subscriber
+      ? `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}`
+      : `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page_size=${pageSize}`;
+
+    console.log(url);
     $.ajax({
       timeout: ajaxTimeout,
       type: "GET",
-      url: `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}`,
+      url,
       headers: headersAuth,
       beforeSend: function () {
         $(".ui.dashboard .courses.dimmer").addClass("active");
@@ -1958,14 +1991,17 @@ function checkLogin() {
     })
       .done(function (resp) {
         console.log("checkLogin done");
-        
+
         if (settingsCached.download.checkNewVersion) {
           checkUpdate(repoAccount, true);
         }
+
         rendererCourse(resp);
+
         if (settings.get("downloadedCourses")) {
           rendererDownloads()
         }
+
       })
       .fail(function (resp) {
         console.error("falha ao fazer login");
@@ -2002,7 +2038,9 @@ function loginWithPassword() {
 }
 
 function loginWithAccessToken() {
-  if ($(".ui.login .form").find('input[name="business"]').is(":checked")) {
+  const $formLogin = $(".ui.login .form");
+
+  if ($formLogin.find('input[name="business"]').is(":checked")) {
     if (!$subDomain.val()) {
       prompt.alert("Type Business Name");
       return;
@@ -2010,11 +2048,14 @@ function loginWithAccessToken() {
   } else {
     $subDomain.val("www");
   }
+
   prompt.prompt("Access Token", function (access_token) {
     if (access_token) {
+      const subscriber = $formLogin.find('input[name="subscriber"]').is(":checked");
       const submain = $subDomain.val();
       settings.set("access_token", access_token);
       settings.set("subdomain", submain.length == 0 ? "www" : submain);
+      settings.set("subscriber", subscriber);
       checkLogin();
     }
   });
@@ -2142,7 +2183,8 @@ function saveLogFile() {
 
       fs.writeFile(filePath, content, (err) => {
         if (err) {
-          console.error("saveLogFile_Error", err.message);
+          appendLog("saveLogFile_Error", err.message);
+          Sentry.captureException(err);
           return;
         }
         console.log("File successfully create!");

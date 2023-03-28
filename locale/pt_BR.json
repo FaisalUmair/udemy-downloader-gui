@@ -10,6 +10,7 @@
 	"Loading Courses": "Carregando cursos",
 	"Load More": "Carregar mais",
 	"No Courses Found": "Não foi encontrado nenhum curso",
+	"Remember, you will only be able to see the courses you are enrolled in": "Lembre-se, você só poderá ver os cursos em que está matriculado",
 	"You have not enrolled in any course": "Você não se matriculou em nenhum curso",
 	"Getting Info": "Obtendo informações",
 	"Courses": "Cursos",
@@ -89,5 +90,6 @@
 	"Using Password": "Use a senha",
 	"Get Credentials": "Obter credenciais",
 	"Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": "Nota: Quando a opção selecionada não está disponível na API da Udemy, a qualidade mais alta disponível será baixada.",
-	"How to get an Access Token": "Como obter o Access Token"
+	"How to get an Access Token": "Como obter o Access Token",
+	"Subscriber Account": "Conta de Assinante"
 }

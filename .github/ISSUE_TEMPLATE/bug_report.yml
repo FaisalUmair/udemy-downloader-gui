@@ -11,54 +11,31 @@ body:
 - type: input
   attributes:
     label: Udeler | Udemy Course Downloader 
-    placeholder: |
-      1.11.2
+    # placeholder: |
+    #   1.11.2
     description: |
       Check the version informed in the window title
   validations:
     required: true
 
-- type: checkboxes
-  attributes:
-    label: Running as Business Account
-    description: Are you running Udemy Business Account?
-    options:
-      - label: "Yes"
-
-# - type: dropdown
+# - type: checkboxes
 #   attributes:
-#     label: Area(s) with issue?
-#     description: What things had an issue?  Check all that apply.
-#     multiple: true
+#     label: Running as Business Account
+#     description: Are you running Udemy Business Account?
 #     options:
-#       - General
-#       - Always on Top
-#       - Awake
-#       - ColorPicker
-#       - Developer file preview
-#       - FancyZones
-#       - FancyZones Editor 
-#       - Image Resizer
-#       - Keyboard Manager
-#       - MD Preview
-#       - Mouse Utilities
-#       - PDF Preview
-#       - PDF Thumbnail
-#       - G-code Preview
-#       - G-code Thumbnail
-#       - PowerRename
-#       - PowerToys Run
-#       - Shortcut Guide
-#       - STL Thumbnail
-#       - SVG Preview
-#       - SVG Thumbnail
-#       - Settings
-#       - Video Conference Mute
-#       - Welcome / PowerToys Tour window
-#       - System tray interaction
-#       - Installer
-#   validations:
-#     required: true
+#       - label: "Yes"
+
+- type: dropdown
+  attributes:
+    label: Account Type?
+    description: Are you running Udemy account type?
+    multiple: false
+    options:
+      - Business
+      - Personal
+      - Subscriber
+    validations:
+      required: true
 
 - type: textarea
   attributes:

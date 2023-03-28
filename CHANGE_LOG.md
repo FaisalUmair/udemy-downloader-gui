@@ -1,7 +1,16 @@
 # Change Log
 
-## Unreleased
-  - Update the electron pack to the latest
+----
+## Version [1.12.0](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.10...v1.12.0)
+##### Mar, 26 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.0/total)
+
+### Change
+  * Added support for Subscriber Account _[#100](https://github.com/heliomarpm/udemy-downloader-gui/issues/100) | [#105](https://github.com/heliomarpm/udemy-downloader-gui/issues/105)_
+  * Messaging enhancement
+  
+### Fixed
+  * Failed to load preload.js file, impacting error monitoring
 
 ----
 ## Version [1.11.10](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.6...v1.11.10)

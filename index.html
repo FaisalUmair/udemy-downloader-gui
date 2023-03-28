@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
-    
+
   <!-- TITULO ADICIONADO VIA INDEX.JS -->
   <!-- <title>Udeler | Udemy Course Downloader</title> -->
   <link rel="stylesheet" href="assets/css/semantic.min.css" />
@@ -92,10 +92,21 @@
                       <input type="password" name="userpass" id="userpass" placeholder="${translate("Password")}">
                     </div>
                   </div> -->
+                  
+                  <div class="field">                   
+                    <div class="ui fluid label toggle checkbox">
+                      <input type="checkbox" name="subscriber" id="subscriber">
+                      <label for="subscriber">${translate("Subscriber Account")}</label>
+                    </div>
+                  </div>
+                
+                  <div class="ui horizontal divider">
+                    ${translate("Choose Login Method")}
+                  </div>
                   <div class="field">                   
                     <div class="ui fluid label toggle checkbox">
                       <input type="checkbox" name="business" id="business">
-                      <label for="business">${translate("Udemy Business")} ?</label>
+                      <label for="business">${translate("Udemy Business")}</label>
                     </div>
                   </div>
                   <div class="field">
@@ -105,9 +116,6 @@
                       </div>
                   </div>
                 </form>
-                <div class="ui horizontal divider">
-                  ${translate("Choose Login Method")}
-                </div>
                 <div class="ui fluid icon buttons">
                   <!-- <button class="ui purple button" onclick="loginWithPassword()" style="margin-right: 1px">
                     <i class="key icon"></i> ${translate("Using Password")}

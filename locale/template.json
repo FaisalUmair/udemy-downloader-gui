@@ -12,6 +12,7 @@
   "You do not have permission to access this course": "",
   "Load More": "",
   "No Courses Found": "",
+  "Remember, you will only be able to see the courses you are enrolled in": "",
   "Getting Info": "",
   "Courses": "",
   "Building Course Data": "",
@@ -88,5 +89,6 @@
   "Using Password": "",
   "Get Credentials": "",
   "Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.": "",
-  "How to get an Access Token": ""
+  "How to get an Access Token": "",
+  "Subscriber Account":""
 }
