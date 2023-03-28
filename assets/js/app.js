@@ -11,11 +11,6 @@ const Downloader = require("mt-files-downloader");
 const https = require("https");
 const cookie = require("cookie");
 
-// var awaitingLogin = false;
-// const server = require("http").createServer();
-// const socketIO = require("socket.io")(server);
-// const $loginAuthenticator = $(".ui.login.authenticator");
-
 const pageSize = 25;
 const msgDRMProtected = translate("Contains DRM protection and cannot be downloaded");
 const ajaxTimeout = 60000;  // 60 segundos
@@ -29,34 +24,7 @@ var $subDomain = $(".ui.login #subdomain");
 var subDomain = settings.get("subdomain") || "www";
 var settingsCached = settings.getAll();
 
-
-// server.listen(50490);
-// socketIO.on("connect", function (socket) {
-//   console.log('io.onConnect');
-//   $loginAuthenticator.removeClass("disabled");
-
-//   socket.on("disconnect", function () {
-//     console.log('socket.onDisconnect');
-//     $loginAuthenticator.addClass("disabled");
-//     $(".ui.authenticator.dimmer").removeClass("active");
-//     awaitingLogin = false;
-//   });
-
-//   $loginAuthenticator.click(function () {
-//     $(".ui.authenticator.dimmer").addClass("active");
-//     awaitingLogin = true;
-//     socket.emit("awaitingLogin");
-//   });
-
-//   socket.on("newLogin", function (data) {
-//     console.log('socket.onNewLogin');
-//     if (awaitingLogin) {
-//       settings.set("access_token", data.access_token);
-//       settings.set("subdomain", data.subdomain);
-//       checkLogin();
-//     }
-//   });
-// });
+// require('auto_authenticator.js');
 
 const downloadFiles = {
   LecturesAndAttachments: 0,
@@ -288,7 +256,7 @@ $(".ui.dashboard .content").on("click", ".open-in-browser", function () {
 
 $(".ui.dashboard .content").on("click", ".open-dir", function () {
   const pathDownloaded = $(this).parents(".course.item").find('input[name="path-downloaded"]').val();
-  shell.openItem(pathDownloaded);
+  shell.openPath(pathDownloaded);
 });
 
 $(".ui.dashboard .content").on("click", ".dismiss-download", function () {
@@ -2016,27 +1984,6 @@ function checkLogin() {
   }
 }
 
-function loginWithPassword() {
-  if ($(".ui.login .form").find('input[name="business"]').is(":checked")) {
-    if (!$subDomain.val()) {
-      prompt.alert("Type Business Name");
-      return;
-    }
-  } else {
-    $subDomain.val("www");
-  }
-
-
-  // prompt.prompt("Access Token", function (access_token) {
-  //   if (access_token) {
-  //     const submain = $subDomain.val();
-  //     settings.set("access_token", access_token);
-  //     settings.set("subdomain", submain.length == 0 ? "www" : submain);
-  //     checkLogin();
-  //   }
-  // });
-}
-
 function loginWithAccessToken() {
   const $formLogin = $(".ui.login .form");
 
@@ -2082,7 +2029,7 @@ function sendNotification(pathCourse, course_name, urlImage = null) {
   });
 
   notification.onclick = function () {
-    shell.openItem(pathCourse);
+    shell.openPath(pathCourse);
   }
 }
 
@@ -2193,5 +2140,15 @@ function saveLogFile() {
   });
 
 }
+
+process.on('uncaughtException', (error) => {
+  appendLog("uncaughtException", error.stack);
+  Sentry.captureException(error);
+})
+
+process.on('unhandledRejection', (error) => {
+  appendLog("unhandledRejection", error.stack);
+  Sentry.captureException(error);
+})
 
 console.table(getAllDownloadsHistory());

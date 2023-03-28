@@ -29,18 +29,18 @@ function createWindow() {
   const size = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   let win = new BrowserWindow({
-    title: `Udeler | Udemy Course Downloader - v${appVersion} ${process.env.SENTRY_DSN==undefined ? "": " 🚴‍♂️"}`,
+    title: `Udeler | Udemy Course Downloader - v${appVersion} ${process.env.SENTRY_DSN == undefined ? "" : " 🕘"}`,
     minWidth: 650,
     minHeight: 550,
     width: 650,
     height: size.height - 150,
-    icon: __dirname + "/assets/images/build/icon.png",
+    icon: path.join(__dirname, "/assets/images/build/icon.png"),
     resizable: true,
     maximizable: true,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      // contextIsolation: true,
+      contextIsolation: false,
       preload: path.join(__dirname, "/preload.js")
     }
   });
