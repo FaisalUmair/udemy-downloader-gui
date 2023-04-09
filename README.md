@@ -86,6 +86,12 @@ From your command line:
 git clone https://github.com/heliomarpm/udemy-downloader-gui
 # Go into the repository
 cd udemy-downloader-gui
+
+# Rename file environments
+ren .env.example .env
+-- or if linux --
+mv .env.example .env
+
 # Install dependencies
 npm install
 # Run the app
