@@ -1,5 +1,18 @@
 # Change Log
+----
+## Version [1.12.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.1...v1.12.2)
+##### Apr, 10 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.2/total)
 
+### Added
+  * Badge for New Logger Count
+  * Dialog Error for _EACCES: permission denied_
+### Fixed
+  * Bug fixes pointed out by Sentry.io
+
+### Other Changes
+  * Messaging improvement
+  
 ----
 ## Version [1.12.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.10...v1.12.1)
 ##### Mar, 26 2023

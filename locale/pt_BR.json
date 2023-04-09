@@ -1,5 +1,5 @@
 {
-	"The great creator of this project": "O grande criador deste projeto",
+	"The creator of this project": "Criador deste projeto",
 	"Udemy Login": "Acessar Udemy",
   	"Email": "E-mail",
 	"Password": "Senha",
@@ -82,7 +82,7 @@
 	"Contains DRM protection and cannot be downloaded": "Contém proteção DRM e não pode ser baixado",	
 	"Check for a new version on startup": "Verifique se há uma nova versão na inicialização",
 	"Start pending downloads at startup": "Comece as transferências pendentes na inicialização",
-	"Skip downloading DRM-protected courses": "Pule o download de cursos protegidos por DRM",
+	"Skip DRM encrypted lessons while downloading": "Pular aulas criptografadas por DRM durante o download",
 	"Collaborate": "Colaborar",
 	"Confirm Log Out?": "Deseja desconectar?",
   	"Enumerate download with zero left": "Enumerar download com zero à esquerda",

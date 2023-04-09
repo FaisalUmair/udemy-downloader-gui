@@ -32,10 +32,8 @@ const downloadFiles = {
   OnlyAttachments: 2
 }
 
-if (process.env.IS_PACKAGE) {
-  const Sentry = require('@sentry/electron');
-  Sentry.init({ dsn: process.env.SENTRY_DSN });
-}
+const Sentry = require('@sentry/electron');
+Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 // external browser
 // $(document).on('click', 'a[href^="http"]', (event) => {
@@ -251,6 +249,7 @@ checkLogin();
 
 $(".ui.dashboard .content").on("click", ".open-in-browser", function () {
   const link = `https://${subDomain}.udemy.com${$(this).parents(".course.item").attr('course-url')}`;
+  console.log('open', link);
   shell.openExternal(link);
 });
 
@@ -386,10 +385,13 @@ function downloadButtonClick($course, subtitle) {
   let defaultSubtitle = subtitle ? subtitle : settingsCached.download.defaultSubtitle;
 
   // clique do botao iniciar download
+  const url = `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=10000`;
+  console.log('downloadButtonClick', url);
+
   $.ajax({
     timeout: ajaxTimeout,
     type: "GET",
-    url: `https://${subDomain}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=10000`,
+    url,
     headers: headersAuth,
     beforeSend: function () {
       $(".ui.dashboard .course.dimmer").addClass("active");
@@ -456,10 +458,13 @@ function downloadButtonClick($course, subtitle) {
           }
 
           function getLecture(lecturename, chapterindex, lectureindex) {
+            const url = `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=asset,supplementary_assets&fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token`;
+            console.log('getLecture', url);
+
             $.ajax({
               timeout: ajaxTimeout,
               type: "GET",
-              url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}?fields[lecture]=asset,supplementary_assets&fields[asset]=stream_urls,download_urls,captions,title,filename,data,body,media_sources,media_license_token`,
+              url,
               headers: headersAuth
             })
               .done(function (resp) {
@@ -507,11 +512,11 @@ function downloadButtonClick($course, subtitle) {
                   // if (qualities.length == 0 && settingsCached.download.videoQuality == "Highest")
                   //   qualities.push("highest");
 
-                  videoQuality = qualities.length == 0 ? "Auto" : settingsCached.download.videoQuality;
+                  videoQuality = qualities.length == 0 ? "Auto" : settingsCached.download.videoQuality ?? "Auto";
                   type = "Video";
                   src = medias[0].src ?? medias[0].file;
 
-                  switch (videoQuality?.toLowerCase()) {
+                  switch (videoQuality.toLowerCase()) {
                     case "auto":
                       videoQuality = medias[0].label;
                       break;
@@ -568,10 +573,13 @@ function downloadButtonClick($course, subtitle) {
                   var supplementary_assets_remaining = resp.supplementary_assets.length;
 
                   $.each(resp.supplementary_assets, function (a, b) {
+                    const url = `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`;
+                    console.log('getLecture&Attachments', url);
+
                     $.ajax({
                       timeout: ajaxTimeout,
                       type: "GET",
-                      url: `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses/${courseid}/lectures/${v.id}/supplementary-assets/${b.id}?fields[asset]=download_urls,external_url,asset_type`,
+                      url,
                       headers: headersAuth
                     })
                       .done(function (response) {
@@ -637,9 +645,11 @@ function downloadButtonClick($course, subtitle) {
           lectureindex++;
         }
         else if (downFiles != downloadFiles.OnlyLectures) { //(!skipAttachments) {
+          const srcUrl = `https://${subDomain}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}`;
+          console.log('downFiles != downloadFiles.OnlyLectures', srcUrl);
           coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
             src: `<script type="text/javascript">
-                    window.location = "https://${subDomain}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}";
+                    window.location = "${srcUrl}";
                   </script>`,
             name: v.title,
             quality: "Attachment",
@@ -842,7 +852,8 @@ function initDownload($course, coursedata, subTitle = "") {
 
     } catch (err) {
       appendLog('downloadChapter_Error:', err.message);
-      Sentry.captureException(err);
+      //captureException(err);
+      dialog.showErrorBox("downloadChapter_Error", err.message);
 
       resetCourse($course, $course.find(".download-error"), false, coursedata);
     }
@@ -956,7 +967,7 @@ function initDownload($course, coursedata, subTitle = "") {
 
         dl.on("error", function (dl) {
           appendLog('errorDownload', dl.error.message);
-          Sentry.captureException(dl.error);
+          captureException(dl.error);
         });
 
         dl.on("start", function () {
@@ -1189,7 +1200,7 @@ function initDownload($course, coursedata, subTitle = "") {
           }
           catch (err) {
             appendLog('getFile_Error', err.message);
-            Sentry.captureException(err);
+            // captureException(err);
           }
 
           count++;
@@ -1237,7 +1248,7 @@ function initDownload($course, coursedata, subTitle = "") {
               }
               catch (err) {
                 appendLog("getPlaylist_Error", err.message);
-                Sentry.captureException(err);
+                captureException(err);
               }
             }
           }
@@ -1375,7 +1386,7 @@ function initDownload($course, coursedata, subTitle = "") {
 
     } catch (err) {
       appendLog('downloadLecture_Error:', err.message);
-      Sentry.captureException(err);
+      captureException(err);
 
       resetCourse($course, $course.find(".download-error"), false, coursedata);
     }
@@ -1443,6 +1454,8 @@ $(".logger-sidebar").click(function () {
   $(".content .ui.logger.section").show();
   $(this).parent(".sidebar").find(".active").removeClass("active purple");
   $(this).addClass("active purple");
+  
+  clearBagdeLoggers();
 
   // rendererLogger();
 });
@@ -1570,7 +1583,7 @@ function selectDownloadPath() {
     properties: ["openDirectory"]
   });
 
-  if (path[0]) {
+  if (path && path[0]) {
     fs.access(path[0], fs.R_OK && fs.W_OK, function (err) {
       if (err) {
         prompt.alert(translate("Cannot select this folder"));
@@ -1703,8 +1716,8 @@ function saveDownloads(quit) {
         url: $elem.attr("course-url"),
         title: $elem.find(".coursename").text(),
         image: $elem.find(".image img").attr("src"),
-        individualProgress: individualProgress,
-        combinedProgress: combinedProgress,
+        individualProgress: individualProgress > 100 ? 100 : individualProgress,
+        combinedProgress: combinedProgress > 100 ? 100 : combinedProgress,
         completed,
         progressStatus: $elem.find(".download-status .label").text(),
         encryptedVideos: $elem.find('input[name="encryptedvideos"]').val(),
@@ -1739,6 +1752,7 @@ function removeCurseDownloads(courseId) {
 function clearLogArea() {
   loggers = [];
   $(".ui.logger.section .ui.list").html("");
+  clearBagdeLoggers();
 }
 function appendLog(title, description, isError = true) {
   const log = {
@@ -1754,9 +1768,11 @@ function appendLog(title, description, isError = true) {
       <div class="header">
         ${title}
       </div>
-      ${description}
+      <samp>${description}</samp>
     </div>`
   );
+
+  incrementBadgeLoggers();
 
   if (isError) {
     console.error(`[${title}] ${description}`);
@@ -1764,6 +1780,18 @@ function appendLog(title, description, isError = true) {
   else {
     console.warn(`[${title}] ${description}`);
   }
+}
+
+function clearBagdeLoggers() {
+  $("#badge-logger").text("0");
+  $("#badge-logger").hide();
+}
+function incrementBadgeLoggers() {
+  let qtd = $("#badge-logger").text();
+  qtd = qtd.trim().length > 0 ? parseInt(qtd, 0) + 1 : 1;
+
+  $("#badge-logger").text(qtd > 99 ? "99+" : qtd);
+  $("#badge-logger").show();
 }
 
 function rendererLogger() {
@@ -1787,7 +1815,7 @@ function search(keyword) {
     ? `https://${subDomain}.udemy.com/api-2.0/users/me/subscribed-courses?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`
     : `https://${subDomain}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`;
 
-  console.log(url);
+  console.log('search', url);
 
   $.ajax({
     timeout: ajaxTimeout,  // timeout to 5 seconds
@@ -1905,9 +1933,9 @@ function loginWithUdemy() {
         ? request.requestHeaders.Authorization.split(" ")[1]
         : cookie.parse(request.requestHeaders.Cookie || '').access_token;
 
-      if (token) {        
+      if (token) {
         const subscriber = $formLogin.find('input[name="subscriber"]').is(":checked");
-        
+
         settings.set("access_token", token);
         settings.set("subdomain", new URL(request.url).hostname.split(".")[0]);
         settings.set("subscriber", subscriber);
@@ -1947,7 +1975,7 @@ function checkLogin() {
       ? `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}`
       : `https://${settings.get("subdomain")}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page_size=${pageSize}`;
 
-    console.log(url);
+    console.log('checkLogin', url);
     $.ajax({
       timeout: ajaxTimeout,
       type: "GET",
@@ -2131,7 +2159,7 @@ function saveLogFile() {
       fs.writeFile(filePath, content, (err) => {
         if (err) {
           appendLog("saveLogFile_Error", err.message);
-          Sentry.captureException(err);
+          // captureException(err);
           return;
         }
         console.log("File successfully create!");
@@ -2143,12 +2171,15 @@ function saveLogFile() {
 
 process.on('uncaughtException', (error) => {
   appendLog("uncaughtException", error.stack);
-  Sentry.captureException(error);
+  captureException(error);
 })
 
 process.on('unhandledRejection', (error) => {
   appendLog("unhandledRejection", error.stack);
-  Sentry.captureException(error);
+  captureException(error);
 })
 
+function captureException(exception) {
+  Sentry?.captureException(exception);
+}
 console.table(getAllDownloadsHistory());

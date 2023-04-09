@@ -2,13 +2,13 @@
   "name": "udeler",
   "productName": "Udeler",
   "version": "1.12.1",
+  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
   "main": "index.js",
   "urlHelp": "https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497",
   "repository": {
     "type": "git",
     "url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
   },
-  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
   "license": "ISC",
   "author": {
     "name": "Faisal Umair",

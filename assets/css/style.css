@@ -236,3 +236,13 @@ body .dialog-widget.background {
 .floating-btn:active {
   background-color: #007d5a;
 }
+
+.badge {
+  background-color: red;
+  color: white;
+  padding: 3px 6px;
+  text-align: center;
+  border-radius: 25px;
+  font-size: 0.7rem;
+  float: right;
+}

@@ -22,6 +22,9 @@ if (app.isPackaged) {
   const Sentry = require('@sentry/electron');
   Sentry.init({ dsn: process.env.SENTRY_DSN });
 }
+else {
+  process.env.SENTRY_DSN = "" //não logar em modo desenvolvedor
+}
 
 let downloadsSaved = false;
 

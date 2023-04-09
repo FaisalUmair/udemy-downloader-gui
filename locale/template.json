@@ -1,5 +1,5 @@
 {
-  "The great creator for this project": "",
+  "The creator of this project": "",
   "Udemy Login": "",
   "Email": "",
   "Password": "",
@@ -80,7 +80,7 @@
   "Contains DRM protection and cannot be downloaded": "",
   "Check for a new version on startup": "",
 	"Start pending downloads at startup" : "",
-  "Skip downloading DRM-protected courses": "",
+  "Skip DRM encrypted lessons while downloading": "",
   "If course is encrypted, keep downloading attachments and videos not encrypted": "",
   "Collaborate": "",
   "Confirm Log Out?": "",
