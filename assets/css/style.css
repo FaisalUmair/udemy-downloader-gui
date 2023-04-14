@@ -238,11 +238,15 @@ body .dialog-widget.background {
 }
 
 .badge {
-  background-color: red;
+  background-color: rgb(223, 60, 20);
   color: white;
   padding: 3px 6px;
   text-align: center;
   border-radius: 25px;
   font-size: 0.7rem;
+  place-items: center;
+  position: absolute;
+  top: 8px;
+  right: 10px;
   float: right;
 }

@@ -141,7 +141,7 @@
                     <i class="key icon"></i> Access Token                  
                   </button>
                 <!-- </div> -->
-                <a class="how-get-token" href="${urlHelp}" target="_blank">${translate("How to get an Access Token")}</a>
+                <a class="how-get-token" href="${pkgVars.urlHelp}" target="_blank">${translate("How to get an Access Token")}</a>
                 
               </div>
             </div>
@@ -414,6 +414,12 @@
                   </h3>                
                   <div class="ui relaxed divided list">
                     <div class="item">
+                      <i class="large top aligned icon"><img src='./assets/images/navtome-brand.png' width='18' alt='navtome'/></i>                      
+                      <div class="content">
+                        <a class="header" href="https://navto.me/heliomarpm">navto.me/heliomarpm</a>
+                      </div>
+                    </div>
+                    <div class="item">
                       <i class="large github middle aligned icon"></i>
                       <div class="content">
                         <a class="header" href="https://github.com/heliomarpm/udemy-downloader-gui">heliomarpm/udemy-downloader-gui</a>
@@ -505,7 +511,7 @@
 
     $("body").prepend(template);
 
-    if (settings.get("general.language") == "Arabic") {
+    if (Settings.get("general.language") == "Arabic") {
       $(".ui.dashboard .content")
         .css("margin-left", "10px")
         .css("width", "80%");
@@ -528,6 +534,7 @@
         );
       });
     });
+
   </script>
   <script src="assets/js/app.js"></script>
 </body>

@@ -7,11 +7,17 @@
 ### Added
   * Badge for New Logger Count
   * Dialog Error for _EACCES: permission denied_
+  * Request with the Axios library
+  * Adding Amharic locale - Contributed by [@AlAswaad99](https://github.com/AlAswaad99) - [PR112](https://github.com/heliomarpm/udemy-downloader-gui/pull/112)
+  * Features Flags (online)
+  
+
 ### Fixed
   * Bug fixes pointed out by Sentry.io
 
 ### Other Changes
   * Messaging improvement
+  * Refactory Settings
   
 ----
 ## Version [1.12.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.10...v1.12.1)
