@@ -1,23 +1,23 @@
 # Change Log
 ----
-## Version [1.12.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.1...v1.12.2)
-##### Apr, 10 2023
-![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.2/total)
+## Version [1.12.2](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.1...v1.12.3)
+##### Apr, 14 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.3/total)
 
 ### Added
   * Badge for New Logger Count
   * Dialog Error for _EACCES: permission denied_
   * Request with the Axios library
-  * Adding Amharic locale - Contributed by [@AlAswaad99](https://github.com/AlAswaad99) - [PR112](https://github.com/heliomarpm/udemy-downloader-gui/pull/112)
-  * Features Flags (online)
+  * feat: Amharic Locale Added by @AlAswaad99 in https://github.com/heliomarpm/udemy-downloader-gui/pull/112
+  * Adding features flags (online)
   
-
 ### Fixed
   * Bug fixes pointed out by Sentry.io
 
 ### Other Changes
   * Messaging improvement
   * Refactory Settings
+  * Bump minimatch and electron-builder by @dependabot in https://github.com/heliomarpm/udemy-downloader-gui/pull/101
   
 ----
 ## Version [1.12.1](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.11.10...v1.12.1)
