@@ -1,18 +1,39 @@
 # Change Log
 ----
+## Version [1.12.4](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.3...v1.12.4)
+##### Apr, 23 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.4/total)
+
+### Feature
+  * Reorganization of the Project Structure
+  * Dialog Error for Login Failed
+  * Removed need to check if you are a subscriber 
+  
+### Fixed
+  * Bug fixes pointed out by Sentry.io
+  * Forces the inclusion of missing parameters in the configurations, to avoid undefined parameter reading errors
+  * Failed to calculate high download speed
+  * by Sentry - Cannot read property 'content-type' of undefined
+
+### Other Changes
+  * Messaging improvement
+  * Code Refactoring
+  
+----
 ## Version [1.12.3](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.1...v1.12.3)
 ##### Apr, 14 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.3/total)
 
-### Added
+### Feature
   * Badge for New Logger Count
   * Dialog Error for _EACCES: permission denied_
   * Request with the Axios library
-  * feat: Amharic Locale Added by @AlAswaad99 in https://github.com/heliomarpm/udemy-downloader-gui/pull/112
+  * feat: Amharic Locale Feature by @AlAswaad99 in https://github.com/heliomarpm/udemy-downloader-gui/pull/112
   * Adding features flags (online)
   
 ### Fixed
   * Bug fixes pointed out by Sentry.io
+  * Fix for issue [#104](https://github.com/heliomarpm/udemy-downloader-gui/issues/104)
 
 ### Other Changes
   * Messaging improvement
@@ -24,7 +45,7 @@
 ##### Mar, 26 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.1/total)
 
-### Added
+### Feature
   * Support for Subscriber Account _[#100](https://github.com/heliomarpm/udemy-downloader-gui/issues/100) | [#105](https://github.com/heliomarpm/udemy-downloader-gui/issues/105)_
   * Global Error Handling
   
@@ -41,7 +62,7 @@
 ##### Mar, 07 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.10/total)
 
-### Added
+### Feature
   1. Release for Linux and Mac - _finally!_ 😁
 
 ### Fixed
@@ -62,7 +83,7 @@
 ##### Mar, 03 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.6/total)
 
-### Added
+### Feature
   1. Error monitoring with Sentry.io
   2. Link for "How to Get Access Token"
   3. Get/Set default language for new users
@@ -77,7 +98,7 @@
 #### Dez, 31 2022
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.5/total)
 
-### Added
+### Feature
   1. Save File Log - Improvement request _[#85](https://github.com/heliomarpm/udemy-downloader-gui/issues/85)_
   2. Download only the attachments and subtitles - Improvement request _[#86](https://github.com/heliomarpm/udemy-downloader-gui/issues/86)_
   3. Allow downloading video streams (M3U8) - Contributed by @CetinOzdil [PR97](https://github.com/heliomarpm/udemy-downloader-gui/pull/87)
@@ -100,7 +121,7 @@
 ##### Aug 12, 2022
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.4/total)
 
-### Added
+### Feature
   1. Add Floating Save Button in Config Section
   2. Remove option Auto in video quality
 
@@ -124,7 +145,7 @@
 ##### Apr 27, 2022
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.11.2/total)
 
-### Added
+### Feature
   1. Section Logger (Initial version)
   2. Remove videos protecteds e corrupteds after download
 
@@ -195,7 +216,7 @@
 ##### Dec 4, 2021
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.10.0/total)
 
-### Added
+### Feature
   1. Option for open downloading folder
   2. New option config - Number download with zero left.
   3. New option to skip downloading attachments
@@ -222,11 +243,11 @@
 ##### Jul 17, 2021
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.8.7/total)
 
-### Added
+### Feature
   1.  New option: Check for a new version on startup
   2.  New option: Start downloads at startup
   3.  New option: If course is encrypted, keep downloading attachments and videos not encrypted
-  4.  Added description in flag for DRM-encrypted video.
+  4.  Feature description in flag for DRM-encrypted video.
   5.  Keeps track of which courses you have previously downloaded.
   6.  Manually hide courses already downloaded 
   7.  A button for open course in browser
@@ -248,7 +269,7 @@
 ##### Jul 11, 2021 
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.8.6/total)
 
-### Added
+### Feature
   1. Course indicator with DRM-encrypted lectures (video does not download)
   2. A new feature for dispensing items in the downloads section.
   3. A new feature for setting default Subtitle.
