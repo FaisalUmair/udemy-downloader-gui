@@ -25,17 +25,6 @@ body:
 #     options:
 #       - label: "Yes"
 
-- type: dropdown
-  attributes:
-    label: Account Type?
-    description: Are you running Udemy account type?
-    multiple: false
-    options:
-      - Business
-      - Personal
-      - Subscriber
-    validations:
-      required: true
 
 - type: textarea
   attributes:
