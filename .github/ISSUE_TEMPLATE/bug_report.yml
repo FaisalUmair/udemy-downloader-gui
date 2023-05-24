@@ -34,8 +34,8 @@ body:
       - Business
       - Personal
       - Subscriber
-    validations:
-      required: true
+  validations:
+    required: true
 
 - type: textarea
   attributes:
