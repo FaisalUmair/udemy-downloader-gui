@@ -29,8 +29,6 @@ const Settings = {};
     seqZeroLeft: false,
   }
 
-  let definedLanguage;
-
   /**
    * Ensures all keys are set
    * @interna
