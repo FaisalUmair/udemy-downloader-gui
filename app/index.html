@@ -67,13 +67,13 @@
             <div class="ui login dimmer inverted">
               <div class="ui big text loader">${translate("Logging in")}</div>
             </div>
-  
+
             <div class="ui authenticator dimmer inverted">
               <div class="ui big text loader">
                 ${translate("Awaiting Login Request")}
               </div>
             </div>
-      
+
             <div class="row">
               <div class="ten wide column">
                 <h2 class="ui icon grey login header">
@@ -82,18 +82,18 @@
                 </h2>
               </div>
             </div>
-  
+
             <div class="row">
               <div class="ten wide column">
                 <form class="ui form">
-                  <!-- <div class="field">                   
+                  <!-- <div class="field">
                     <div class="ui fluid label input">
                       <input type="text" name="username" id="username" placeholder="{translate("Username")}">
                       <input type="password" name="userpass" id="userpass" placeholder="{translate("Password")}">
                     </div>
                   </div> -->
                   <!--
-                  <div class="field">                   
+                  <div class="field">
                     <div class="ui fluid label toggle checkbox">
                       <input type="checkbox" name="subscriber" id="subscriber">
                       <label for="subscriber">{translate("Subscriber Account")}</label>
@@ -103,7 +103,7 @@
                   <div class="ui horizontal divider">
                     ${translate("Choose Login Method")}
                   </div>
-                  <div class="field">                   
+                  <div class="field">
                     <div class="ui fluid label toggle checkbox">
                       <input type="checkbox" name="business" id="business">
                       <label for="business">${translate("Udemy Business")}</label>
@@ -125,33 +125,33 @@
                     ${translate("Get Credentials")}
                   </button>
                 </div>
-                
+
                 <div class="ui horizontal divider">
                   <i class="exchange icon"></i>
                 </div>
 
                 <!--
-                <div class="ui fluid icon buttons"> 
+                <div class="ui fluid icon buttons">
                   <button class="ui blue login disabled authenticator button" style="margin-right: 1px">
                     <i class="user secret icon"></i> Authenticator
                   </button>
-                  <div class="or"></div> 
-                --> 
+                  <div class="or"></div>
+                -->
                   <button class="ui fluid violet button" onclick="loginWithAccessToken()" style="margin-left: 1px">
-                    <i class="key icon"></i> ${translate("Access Token")}                  
+                    <i class="key icon"></i> ${translate("Access Token")}
                   </button>
                 <!-- </div> -->
                 <a class="how-get-token" href="${pkgVars.urlHelp}" target="_blank">${translate("How to get an Access Token")}</a>
-                
+
               </div>
             </div>
-  
+
           </div>
-  
-          <div class="ui dashboard">    
+
+          <div class="ui dashboard">
             <div class="ui logout dimmer inverted">
               <div class="ui big text loader">${translate("Logging Out")}</div>
-            </div>  
+            </div>
             <div class="ui courses dimmer inverted">
               <div class="ui big text loader">${translate("Loading Courses")}</div>
             </div>
@@ -191,7 +191,7 @@
                 </a>
               </div>
             </div>
-  
+
             <div class="content">
               <div class="ui courses section">
                 <form class="ui search form">
@@ -204,15 +204,15 @@
                 </form>
                 <div class="ui divided unstackable courses items attached segment" style="margin-top: 5px !important;"></div>
               </div>
-  
+
               <div class="ui downloads section">
                 <h5 class="ui top attached header">
                   <i class="ui download icon"></i> ${translate("Downloads")}
                 </h5>
                 <div class="ui divided unstackable courses items attached segment" style="margin-top: 0px !important;"></div>
               </div>
-  
-              <div class="ui settings section"> 
+
+              <div class="ui settings section">
                 <form class="ui form">
                   <h5 class="ui top attached  header">
                     <i class="ui setting icon"></i> ${translate("Application Settings")}
@@ -224,7 +224,7 @@
                         <label>${translate("Check for a new version on startup")}</label>
                       </div>
                     </div>
-  
+
                     <div class="field">
                       <label>${translate("Language (Requires App Restart)")}</label>
                       <div class="ui fluid search selection language dropdown">
@@ -236,7 +236,7 @@
                         </div>
                       </div>
                     </div>
-                  
+
                     <div class="field">
                       <label>${translate("Default Subtitle for download")}</label>
                       <div class="ui fluid search selection defaultSubtitle dropdown">
@@ -250,11 +250,11 @@
                       </div>
                     </div>
                   </div>
-  
+
                   <h5 class="ui top attached header">
                     <i class="ui download icon"></i> ${translate("Download Settings")}
                   </h5>
-                  <div class="ui attached segment">                  
+                  <div class="ui attached segment">
                     <div class="field">
                       <label>${translate("Download Path")}</label>
                       <div class="ui action input">
@@ -263,19 +263,19 @@
                           <i class="folder icon"></i>
                         </label>
                       </div>
-                    </div>  
+                    </div>
                     <div class="field">
                       <div class="ui toggle checkbox">
                         <input type="checkbox" name="auto-start-download">
                         <label>${translate("Start pending downloads at startup")}</label>
                       </div>
-                    </div>   
+                    </div>
                     <div class="field">
                       <div class="ui toggle checkbox">
                         <input type="checkbox" name="continue-downloading-encrypted">
-                        <label>${translate("Skip DRM encrypted lessons while downloading")}</label>
+                        <label>${translate("Skip lessons Blocked by DRM encryption while downloading")}</label>
                       </div>
-                    </div> 
+                    </div>
                     <div class="field">
                       <div class="ui toggle checkbox">
                         <input type="checkbox" name="enabledownloadstartend">
@@ -292,9 +292,9 @@
                         <input placeholder="${translate("End Download at")}" type="number" min="1" name="downloadend">
                       </div>
                     </div>
-  
+
                     <div class="ui  divider"></div>
-                    
+
                     <div class="field">
                       <label>${translate("Video Quality")}</label>
                       <small style="color:#444;">${translate("Note: When the selected option is not available in the Udemy API, the highest quality available will be downloaded.")} </small>
@@ -312,25 +312,25 @@
                         </div>
                       </div>
                     </div>
-                    
+
                     <div class="field">
                       <div class="ui slider checkbox">
                         <input type="radio" name="downloadFiles" value="0">
                         <label>${translate("Download Lectures and Attachments")}</label>
                       </div>
-                    </div>                  
+                    </div>
                     <div class="field">
                       <div class="ui slider checkbox">
                         <input type="radio" name="downloadFiles" value="1">
                         <label>${translate("Download Only Lectures")}</label>
                       </div>
-                    </div>                    
+                    </div>
                     <div class="field">
                       <div class="ui slider checkbox">
                         <input type="radio" name="downloadFiles" value="2">
                         <label>${translate("Download Only Attachments")}</label>
                       </div>
-                    </div> 
+                    </div>
 
                     <div class="field">
                       <div class="ui toggle checkbox">
@@ -350,45 +350,45 @@
                         <label>${translate("Auto Retry on Error (Experimental)")}</label>
                       </div>
                     </div>
-  
-                  </div>                
-  
+
+                  </div>
+
                   <div class="ui horizontal divider"></div>
                   <button class="floating-btn" type="submit">
                     <i class="save outline icon"></i>
                   </button>
                 </form>
-  
+
               </div>
-  
-              <div class="ui about section">   
+
+              <div class="ui about section">
                 <div class="ui segment">
                   <h4 class="ui center aligned icon header">
                     <!-- <i class="grey file code outline icon"></i> -->
-                    <!-- <i class="grey download icon"></i> -->                  
+                    <!-- <i class="grey download icon"></i> -->
                     <img src="./assets/images/logo64.png" style="height: 64px; width: 64px"/>
                     <br>
                     v${appVersion}
                   </h4>
-  
-                  <!-- <div class="ui clearing divider"></div> -->              
+
+                  <!-- <div class="ui clearing divider"></div> -->
                   <div class="ui fluid buttons">
                     <button class="ui primary button check-updates" style="margin-right: 1px">
                       ${translate("Check for updates")}
                     </button>
                   </div>
-  
+
                   <!--
                   <h4 class="ui header">
                     <i class="cloud download icon"></i></i>${translate("Old version")}&nbsp;1.8.2
-                  </h4>                
+                  </h4>
                   <div class="ui fluid buttons">
                     <button class="ui secondary button old-version-linux" style="margin-left: 1px">Linux</button>
                     <div class="or"></div>
                     <button class="ui button old-version-mac" style="margin-right: 1px">Mac x64</button>
-                  </div> 
+                  </div>
                   -->
-  
+
                   <div class="ui horizontal divider"></div>
                   <div class="ui clearing divider"></div>
                   <h4 class="ui header">
@@ -398,19 +398,19 @@
                     ${translate("Udeler is free and without any ads. If you appreciate that, please consider donating to the Developer.")}
                   </p>
                   <br>
-                  
+
                   <a href="${urlDonate()}" class="ui centered donate grid">
                     <img src="./assets/images/donate-qrcode.png" alt="${translate("Donate")} (for maintainer)"/>
                   </a>
-  
-                  <div class="ui horizontal divider"></div>                
+
+                  <div class="ui horizontal divider"></div>
                   <div class="ui clearing divider"></div>
                   <h3 class="ui header">
                     <i class="linkify icon"></i>${translate("Links")}
-                  </h3>                
+                  </h3>
                   <div class="ui relaxed divided list">
                     <div class="item">
-                      <i class="large top aligned icon"><img src='./assets/images/navtome-brand.png' width='18' alt='navtome'/></i>                      
+                      <i class="large top aligned icon"><img src='./assets/images/navtome-brand.png' width='18' alt='navtome'/></i>
                       <div class="content">
                         <a class="header" href="https://navto.me/heliomarpm">navto.me/heliomarpm</a>
                       </div>
@@ -429,12 +429,12 @@
                         <div class="description">${translate("Icon Designer")}</div>
                       </div>
                     </div>
-                    
+
                     <div class="ui horizontal divider"></div>
                     <!-- <div class="ui clearing divider"></div> -->
                     <h3 class="ui header">
                       <i class="connectdevelop icon"></i>${translate("Collaborate")}
-                    </h3>                
+                    </h3>
                     <div class="item">
                       <i class="large github middle aligned icon"></i>
                       <div class="content">
@@ -450,7 +450,7 @@
                       </div>
                     </div>
                   </div>
-  
+
                   <div class="ui horizontal divider"></div>
                   <div class="ui clearing divider"></div>
                   <h3 class="ui header">
@@ -478,8 +478,8 @@
                         <a class="header" href="http://thewebartisans.net/">thewebartisans.net</a>
                         <div class="description">${translate("Website")}</div>
                       </div>
-                    </div>                
-                  
+                    </div>
+
                     <h4 class="ui header">
                       <i class="heart icon"></i>${translate("Donate")}
                     </h4>
@@ -492,14 +492,14 @@
                 </div>
               </div>
               <div class="ui logger section">
-                <div class="ui top attached header">                             
+                <div class="ui top attached header">
                   <h5>
                     <i class="ui code icon"></i> ${translate("Udeler Logger")}
                   </h5>
-                  <i id="clear_logger" class="recycle icon"></i> <i id="save_logger" class="save icon"></i> 
+                  <i id="clear_logger" class="recycle icon"></i> <i id="save_logger" class="save icon"></i>
                 </div>
                 <div class="ui list divided unstackable attached segment" style="margin-top: 0px !important;">
-                </div>          
+                </div>
               </div>
             </div>
           </div>
