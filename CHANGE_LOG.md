@@ -8,14 +8,15 @@
   * Added 20s timeout for https requests
   
 ### Fixed
-  * Force timeout for "Building Course Data", issue [heliomarpm/udemy-downloader-gui#121](https://github.com/heliomarpm/udemy-downloader-gui/issues/121)
-  * General failure to find encrypted files, issues [heliomarpm/udemy-downloader-gui#127](https://github.com/heliomarpm/udemy-downloader-gui/issues/127) [heliomarpm/udemy-downloader-gui#128](https://github.com/heliomarpm/udemy-downloader-gui/issues/128)
+  * Force timeout for "Building Course Data", issue _[#121](https://github.com/heliomarpm/udemy-downloader-gui/issues/121)_
+  * General failure to find encrypted files, issues _[#127](https://github.com/heliomarpm/udemy-downloader-gui/issues/127) [#128](https://github.com/heliomarpm/udemy-downloader-gui/issues/128)_
   * ReferenceError fix for statusCode of https requests.
   
 ### Other Changes
   * Messaging improvement
   * Code Refactoring
-  
+
+----  
 ## Version [1.12.4](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.3...v1.12.4)
 ##### Apr, 23 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.4/total)
@@ -62,7 +63,7 @@
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.1/total)
 
 ### Feature
-  * Support for Subscriber Account _[#100](https://github.com/heliomarpm/udemy-downloader-gui/issues/100) | [#105](https://github.com/heliomarpm/udemy-downloader-gui/issues/105)_
+  * Support for Subscriber Account _[#100](https://github.com/heliomarpm/udemy-downloader-gui/issues/100) [#105](https://github.com/heliomarpm/udemy-downloader-gui/issues/105)_
   * Global Error Handling
   
 ### Fixed
