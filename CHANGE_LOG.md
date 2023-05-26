@@ -2,7 +2,7 @@
 ----
 ## Version [1.12.5](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.4...v1.12.5)
 ##### May, 26 2023
-![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.4/total)
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.5/total)
 
 ### Feature
   * Added 20s timeout for https requests
