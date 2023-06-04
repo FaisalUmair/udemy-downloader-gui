@@ -16,7 +16,7 @@ const cookie = require("cookie");
 
 const pageSize = 25;
 const msgDRMProtected = translate("Contains DRM protection and cannot be downloaded");
-const ajaxTimeout = 20000; // 20 segundos
+const ajaxTimeout = 40000; // 40 segundos
 
 var loggers = [];
 var headersAuth;
@@ -25,23 +25,6 @@ var repoAccount = "heliomarpm";
 var $divSubDomain = $(".ui.login #divsubdomain");
 var $subDomain = $(".ui.login #subdomain");
 // require('auto_authenticator.js');
-
-// external browser
-// $(document).on('click', 'a[href^="http"]', (event) => {
-$(document).on("click", ".how-get-token", (event) => {
-	event.preventDefault();
-	shell.openExternal(event.target.href);
-});
-
-ipcRenderer.on("saveDownloads", function () {
-	saveDownloads(true);
-});
-
-$(".ui.dropdown").dropdown();
-
-$(document).ajaxError(function (event, request) {
-	$(".dimmer").removeClass("active");
-});
 
 const downloadTemplate = `
 <div class="ui tiny icon action buttons">
@@ -67,6 +50,143 @@ const downloadTemplate = `
   <div class="label">${translate("Building Course Data")}</div>
 </div>
 <div class="info-downloaded"></div>`;
+
+ipcRenderer.on("saveDownloads", function () {
+	saveDownloads(true);
+});
+
+// external browser
+// $(document).on('click', 'a[href^="http"]', (event) => {
+$(document).on("click", ".how-get-token", (event) => {
+	event.preventDefault();
+	shell.openExternal(event.target.href);
+});
+
+$(".ui.dropdown").dropdown();
+
+$(document).ajaxError(function (event, request) {
+	$(".dimmer").removeClass("active");
+});
+
+$(".ui.login #business").change(function () {
+	if ($(this).is(":checked")) {
+		$subDomain.val(Settings.subDomain());
+		$divSubDomain.show();
+	} else {
+		$subDomain.val(null);
+		$divSubDomain.hide();
+	}
+});
+
+$(".ui.dashboard .content").on("click", ".open-in-browser", function () {
+	const link = `https://${Settings.subDomain()}.udemy.com${$(this).parents(".course.item").attr("course-url")}`;
+	console.log("open", link);
+	shell.openExternal(link);
+});
+
+$(".ui.dashboard .content").on("click", ".open-dir", function () {
+	const pathDownloaded = $(this).parents(".course.item").find('input[name="path-downloaded"]').val();
+	shell.openPath(pathDownloaded);
+});
+
+$(".ui.dashboard .content").on("click", ".dismiss-download", function () {
+	const courseId = $(this).parents(".course.item").attr("course-id");
+	removeCurseDownloads(courseId);
+});
+
+$(".ui.dashboard .content").on("click", ".load-more.button", function () {
+	var $this = $(this);
+	var $courses = $this.prev(".courses.items");
+	const url = $this.data("url");
+	console.log("loadMore", url);
+
+	activateBusy(true);
+	axios({
+		timeout: ajaxTimeout,
+		type: "GET",
+		url,
+		headers: headersAuth,
+	})
+		.then((response) => {
+			const resp = response.data;
+			// console.log("loadMore done", response);
+
+			$.each(resp.results, function (index, course) {
+				htmlCourseCard(course).appendTo($courses);
+			});
+			if (!resp.next) {
+				$this.remove();
+			} else {
+				$this.data("url", resp.next);
+			}
+		})
+		.catch((error) => {
+			const statusCode = error.response ? error.response.status : 0;
+			appendLog(`loadMore_Error: ${error.code}(${statusCode})`, error.message);
+		})
+		.finally(() => {
+			activateBusy(false);
+		});
+});
+
+$(".ui.dashboard .content").on("click", ".check-updates", function () {
+	checkUpdate("heliomarpm");
+});
+
+$(".ui.dashboard .content").on("click", ".check-updates-original", function () {
+	checkUpdate("FaisalUmair");
+});
+
+$(".ui.dashboard .content").on("click", ".old-version-mac", function () {
+	shell.openExternal("https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg");
+});
+
+$(".ui.dashboard .content").on("click", ".old-version-linux", function () {
+	shell.openExternal("https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage");
+});
+
+$(".download-update.button").click(function () {
+	shell.openExternal(`https://github.com/${repoAccount}/udemy-downloader-gui/releases/latest`);
+});
+
+$(".ui.dashboard .content .courses.section .search.form").submit(function (e) {
+	e.preventDefault();
+	var keyword = $(e.target).find("input").val();
+	search(keyword);
+});
+
+$(".ui.dashboard .content").on("click", ".download-success, .course-encrypted", function () {
+	$(this).hide();
+	$(this).parents(".course").find(".download-status").show();
+});
+
+$(".ui.dashboard .content").on("click", ".download.button, .download-error", function (e) {
+	e.stopImmediatePropagation();
+	var $course = $(this).parents(".course");
+	downloadButtonClick($course);
+});
+
+$(".ui.dashboard .content").on("click", "#clear_logger", function (e) {
+	clearLogArea();
+});
+$(".ui.dashboard .content").on("click", "#save_logger", function (e) {
+	saveLogFile();
+});
+
+function checkUpdate(account, noAlert = false) {
+	$(".ui.dashboard .about.dimmer").addClass("active");
+	$.getJSON(`https://api.github.com/repos/${account}/udemy-downloader-gui/releases/latest`, function (response) {
+		$(".ui.dashboard .about.dimmer").removeClass("active");
+		if (response.tag_name != `v${appVersion}`) {
+			repoAccount = account;
+			$(".ui.update-available.modal").modal("show");
+		} else {
+			if (noAlert == false) {
+				prompt.alert(translate("No updates available"));
+			}
+		}
+	});
+}
 
 function activateBusy(active) {
 	if (active) {
@@ -198,128 +318,6 @@ function htmlCourseCard(course, downloadSection = false) {
 	return $course;
 }
 
-$(".ui.login #business").change(function () {
-	if ($(this).is(":checked")) {
-		$subDomain.val(Settings.subDomain());
-		$divSubDomain.show();
-	} else {
-		$subDomain.val(null);
-		$divSubDomain.hide();
-	}
-});
-
-checkLogin();
-
-$(".ui.dashboard .content").on("click", ".open-in-browser", function () {
-	const link = `https://${Settings.subDomain()}.udemy.com${$(this).parents(".course.item").attr("course-url")}`;
-	console.log("open", link);
-	shell.openExternal(link);
-});
-
-$(".ui.dashboard .content").on("click", ".open-dir", function () {
-	const pathDownloaded = $(this).parents(".course.item").find('input[name="path-downloaded"]').val();
-	shell.openPath(pathDownloaded);
-});
-
-$(".ui.dashboard .content").on("click", ".dismiss-download", function () {
-	const courseId = $(this).parents(".course.item").attr("course-id");
-	removeCurseDownloads(courseId);
-});
-
-$(".ui.dashboard .content").on("click", ".load-more.button", function () {
-	var $this = $(this);
-	var $courses = $this.prev(".courses.items");
-	const url = $this.data("url");
-	console.log("loadMore", url);
-
-	activateBusy(true);
-	axios({
-		timeout: ajaxTimeout,
-		type: "GET",
-		url,
-		headers: headersAuth,
-	})
-		.then((response) => {
-			const resp = response.data;
-			// console.log("loadMore done", response);
-
-			$.each(resp.results, function (index, course) {
-				htmlCourseCard(course).appendTo($courses);
-			});
-			if (!resp.next) {
-				$this.remove();
-			} else {
-				$this.data("url", resp.next);
-			}
-		})
-		.catch((error) => {
-			const statusCode = error.response ? error.response.status : 0;
-			appendLog(`loadMore_Error: ${error.code}(${statusCode})`, error.message);
-		})
-		.finally(() => {
-			activateBusy(false);
-		});
-});
-
-$(".ui.dashboard .content").on("click", ".check-updates", function () {
-	checkUpdate("heliomarpm");
-});
-
-$(".ui.dashboard .content").on("click", ".check-updates-original", function () {
-	checkUpdate("FaisalUmair");
-});
-
-$(".ui.dashboard .content").on("click", ".old-version-mac", function () {
-	shell.openExternal("https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-mac.dmg");
-});
-
-$(".ui.dashboard .content").on("click", ".old-version-linux", function () {
-	shell.openExternal("https://github.com/FaisalUmair/udemy-downloader-gui/releases/download/v1.8.2/Udeler-1.8.2-linux-x86_x64.AppImage");
-});
-
-$(".download-update.button").click(function () {
-	shell.openExternal(`https://github.com/${repoAccount}/udemy-downloader-gui/releases/latest`);
-});
-
-function checkUpdate(account, noAlert = false) {
-	$(".ui.dashboard .about.dimmer").addClass("active");
-	$.getJSON(`https://api.github.com/repos/${account}/udemy-downloader-gui/releases/latest`, function (response) {
-		$(".ui.dashboard .about.dimmer").removeClass("active");
-		if (response.tag_name != `v${appVersion}`) {
-			repoAccount = account;
-			$(".ui.update-available.modal").modal("show");
-		} else {
-			if (noAlert == false) {
-				prompt.alert(translate("No updates available"));
-			}
-		}
-	});
-}
-
-$(".ui.dashboard .content .courses.section .search.form").submit(function (e) {
-	e.preventDefault();
-	var keyword = $(e.target).find("input").val();
-	search(keyword);
-});
-
-$(".ui.dashboard .content").on("click", ".download-success, .course-encrypted", function () {
-	$(this).hide();
-	$(this).parents(".course").find(".download-status").show();
-});
-
-$(".ui.dashboard .content").on("click", ".download.button, .download-error", function (e) {
-	e.stopImmediatePropagation();
-	var $course = $(this).parents(".course");
-	downloadButtonClick($course);
-});
-
-$(".ui.dashboard .content").on("click", "#clear_logger", function (e) {
-	clearLogArea();
-});
-$(".ui.dashboard .content").on("click", "#save_logger", function (e) {
-	saveLogFile();
-});
-
 function downloadButtonClick($course, subtitle) {
 	var courseid = $course.attr("course-id");
 	$course.find(".download-error").hide();
@@ -340,21 +338,22 @@ function downloadButtonClick($course, subtitle) {
 	const url = `https://${Settings.subDomain()}.udemy.com/api-2.0/courses/${courseid}/cached-subscriber-curriculum-items?page_size=10000`;
 	console.log("downloadButtonClick", url);
 
+	$(".ui.dashboard .course.dimmer").addClass("active");
 	axios({
 		timeout: ajaxTimeout,
 		type: "GET",
 		url,
 		headers: headersAuth,
-		beforeSend: function () {
-			$(".ui.dashboard .course.dimmer").addClass("active");
-		},
+		// beforeSend: function () {
+		// 	$(".ui.dashboard .course.dimmer").addClass("active");
+		// },
 	})
 		.then((response) => {
 			const resp = response.data;
 
 			console.log("carregando curso p/ download");
 
-			$(".ui.dashboard .course.dimmer").removeClass("active");
+			// $(".ui.dashboard .course.dimmer").removeClass("active");
 			$course.find(".download.button").addClass("disabled");
 			$course.css("padding-bottom", "25px");
 			$course.find(".ui.progress").show();
@@ -425,9 +424,9 @@ function downloadButtonClick($course, subtitle) {
 								const resp = response.data;
 								console.log("carregando aula");
 
-								var src;
-								var videoQuality;
-								var type;
+								var src="";
+                                var videoQuality = "";
+								var type="";
 
 								if (v.asset.asset_type.toLowerCase() == "article") {
 									if (resp.asset.data) {
@@ -460,8 +459,7 @@ function downloadButtonClick($course, subtitle) {
 
 									// if (qualities.length == 0 && Settings.download().videoQuality == "Highest")
 									//   qualities.push("highest");
-
-									videoQuality = qualities.length == 0 ? "Auto" : Settings.download().videoQuality ?? "Auto";
+									videoQuality = (qualities.length == 0 ? "Auto" : Settings.download().videoQuality ?? "Auto").toString();
 									type = "Video";
 									src = medias[0].src ?? medias[0].file;
 
@@ -609,10 +607,17 @@ function downloadButtonClick($course, subtitle) {
 					//(!skipAttachments) {
 					const srcUrl = `https://${Settings.subDomain()}.udemy.com${$course.attr("course-url")}t/${v._class}/${v.id}`;
 
+                    // Adiciona um chapter default, para cursos que tem apenas quiz
+					if (coursedata["chapters"].length === 0) {
+						chapterindex++;
+						lectureindex = 0;
+						coursedata["chapters"][chapterindex] = [];
+						coursedata["chapters"][chapterindex]["name"] = "Chapter 0";
+						coursedata["chapters"][chapterindex]["lectures"] = [];
+                    }
+
 					coursedata["chapters"][chapterindex]["lectures"][lectureindex] = {
-						src: `<script type="text/javascript">
-                    window.location = "${srcUrl}";
-                  </script>`,
+						src: `<script type="text/javascript">window.location = "${srcUrl}";</script>`,
 						name: v.title,
 						quality: "Attachment",
 						type: "Url",
@@ -659,6 +664,11 @@ function downloadButtonClick($course, subtitle) {
 			}
 
 			appendLog(`download_Error: ${error.code}(${statusCode})`, msgError);
+			$course.find(".download.button").removeClass("disabled");
+			$course.find(".ui.progress").hide();
+		})
+		.finally(() => {
+			$(".ui.dashboard .course.dimmer").removeClass("active");
 		});
 }
 
@@ -887,7 +897,6 @@ function initDownload($course, coursedata, subTitle = "") {
 									url: dl.url,
 								})
 									.then(() => {
-										console.log("concluíndo download da aula");
 										resetCourse(
 											$course,
 											$course.find(".download-error"),
@@ -919,10 +928,9 @@ function initDownload($course, coursedata, subTitle = "") {
 							}
 							break;
 
-						// case 2:
-						// case -2:
-						// case -3:
-						//     break;
+						case 2:
+						case -3:
+							break;
 						default:
 							$download_speed_value.html(0);
 					}
@@ -1158,7 +1166,6 @@ function initDownload($course, coursedata, subTitle = "") {
 						} else console.log("getFile_Buffer", i.statusText);
 					} catch (err) {
 						appendLog("getFile_Error", err.message);
-						// captureException(err);
 					}
 
 					count++;
@@ -1752,6 +1759,7 @@ function clearLogArea() {
 	$(".ui.logger.section .ui.list").html("");
 	clearBagdeLoggers();
 }
+
 function appendLog(title, description, isError = true) {
 	const log = {
 		datetime: new Date().toLocaleString(),
@@ -1783,6 +1791,7 @@ function clearBagdeLoggers() {
 	$("#badge-logger").text("0");
 	$("#badge-logger").hide();
 }
+
 function incrementBadgeLoggers() {
 	let qtd = $("#badge-logger").text();
 	qtd = qtd.trim().length > 0 ? parseInt(qtd, 0) + 1 : 1;
@@ -2144,5 +2153,8 @@ process.on("unhandledRejection", (error) => {
 function captureException(exception) {
 	if (Sentry) Sentry.captureException(exception);
 }
+
 // console.table(getAllDownloadsHistory());
 console.log("access-token", Settings.accessToken());
+
+checkLogin();
