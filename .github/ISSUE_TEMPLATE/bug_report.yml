@@ -1,6 +1,6 @@
 name: "🐛 Bug report"
 description: Report errors or unexpected behavior
-labels: 
+labels:
 - bug
 - needs-triage
 body:
@@ -10,7 +10,7 @@ body:
       Please make sure to [search for existing issues](https://github.com/heliomarpm/udemy-downloader-gui/issues) before filing a new one!
 - type: input
   attributes:
-    label: Udeler | Udemy Course Downloader 
+    label: Udeler | Udemy Course Downloader
     # placeholder: |
     #   1.11.2
     description: |
@@ -41,26 +41,29 @@ body:
   attributes:
     label: Steps to reproduce
     description: We highly suggest including a screenshots and a bug report log.
-    placeholder: Tell us the steps required to trigger your bug.
+    placeholder: |
+      Tell us the steps required to trigger your bug.
+      1. Go to '...'
+      2. Click on '....'
+      3. Scroll down to '....'
+      4. See error
+
   validations:
     required: true
 
 - type: textarea
   attributes:
     label: ✔️ Expected Behavior
-    placeholder: What were you expecting?
+    placeholder: A clear and concise description of what you expected to happen.
   validations:
     required: true
 
 - type: textarea
   attributes:
-    label: ❌ Actual Behavior / Steps to Reproduce 
-    description: What happened instead, steps to reproduce the behavior?
+    label: 🔍 Additional context
+    description: Add any other context about the problem here.
     placeholder: |
-      1. Go to ...
-      2. Click on ...
-      3. ...
-    
-  validations:
-    required: true
+      OS: [e.g. iOS]
 
+  validations:
+    required: false
