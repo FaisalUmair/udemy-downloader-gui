@@ -1817,8 +1817,8 @@ function rendererLogger() {
 function search(keyword) {
 	const subscriber = Settings.subscriber();
 	const url = !subscriber
-		? `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscribed-courses?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`
-		: `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page=1&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`;
+		? `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscribed-courses?page=1&page_size=30&ordering=title&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`
+		: `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page=1&page_size=30&ordering=title&fields[user]=job_title&page_size=${pageSize}&search=${keyword}`;
 
 	console.log("search", url);
 
@@ -1983,8 +1983,8 @@ function checkLogin() {
 				const subscriber = toBoolean(resp.header.user.enableLabsInPersonalPlan);
 				Settings.subscriber(subscriber);
 				url = !subscriber
-					? `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}`
-					: `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page_size=${pageSize}`;
+					? `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscribed-courses?page_size=${pageSize}&page_size=30&ordering=-last_accessed`
+					: `https://${Settings.subDomain()}.udemy.com/api-2.0/users/me/subscription-course-enrollments?page_size=${pageSize}&page_size=30&ordering=-last_accessed`;
 
 				activateBusy(true);
 				axios({

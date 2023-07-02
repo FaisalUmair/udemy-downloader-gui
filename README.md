@@ -1,8 +1,9 @@
 <span id="top"></span>
 <h1 align="center">
   <img src="https://user-images.githubusercontent.com/13087389/126053559-d4c7d080-0ad3-4deb-83dd-2a52b209e5f2.png" width="128" />
-  <br> Udeler | Course Downloader (GUI)
+  <br> Udeler | Course Downloader
 
+  [![DeepScan](https://deepscan.io/api/teams/19612/projects/23071/branches/688725/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19612&pid=23071&bid=688725)
   [![CodeFactor](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui/badge)](https://www.codefactor.io/repository/github/heliomarpm/udemy-downloader-gui) ![CodeQL](https://github.com/heliomarpm/udemy-downloader-gui/actions/workflows/codeql-analysis.yml/badge.svg) ![Publish](https://github.com/heliomarpm/udemy-downloader-gui/actions/workflows/publish.yml/badge.svg) <a href="https://navto.me/heliomarpm" target="_blank"><img src="https://navto.me/assets/navigatetome-brand.png" width="32"/></a>
 
 </h1>

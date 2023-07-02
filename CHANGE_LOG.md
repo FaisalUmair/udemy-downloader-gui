@@ -1,5 +1,14 @@
 # Change Log
 ----
+## Version [1.12.7](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.6...v1.12.7)
+##### Jul, 02 2023
+![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.7/total)
+
+### Feature
+  * Sort list for last access, _[#74](https://github.com/heliomarpm/udemy-downloader-gui/issues/74)_
+  
+
+----
 ## Version [1.12.6](https://github.com/heliomarpm/udemy-downloader-gui/compare/v1.12.5...v1.12.6)
 ##### Jun, 4 2023
 ![](https://img.shields.io/github/downloads/heliomarpm/udemy-downloader-gui/v1.12.6/total)
@@ -8,7 +17,8 @@
   * Changed 40s timeout for https requests
   
 ### Fixed
-  * Issues _[#129](https://github.com/heliomarpm/udemy-downloader-gui/issues/129)_ _[#130](https://github.com/heliomarpm/udemy-downloader-gui/issues/130)_
+  * Issue _[Error 429 (too many requests](https://github.com/heliomarpm/udemy-downloader-gui/issues/129)_ 
+  * Issue _[videoQuality.toLowerCase is not a function](https://github.com/heliomarpm/udemy-downloader-gui/issues/130)_
   
 
 ----
