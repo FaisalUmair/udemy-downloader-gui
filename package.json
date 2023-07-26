@@ -30,23 +30,23 @@
     "build:local": "npm run build && npm run build:w32"
   },
   "dependencies": {
-    "@sentry/electron": "^4.3.0",
-    "axios": "^1.3.5",
+    "@sentry/electron": "^4.8.0",
+    "axios": "^1.4.0",
     "cookie": "^0.5.0",
     "dialogs": "^2.0.1",
     "electron-settings": "^3.2.0",
-    "jquery": "^3.6.3",
+    "jquery": "^3.7.0",
     "mkdirp": "^1.0.4",
     "mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
     "node-vtt-to-srt": "^1.0.1",
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "electron": "^11.5.0",
-    "electron-builder": "^24.1.1",
+    "electron": "11.5.0",
+    "electron-builder": "^24.6.3",
     "electron-reload": "^2.0.0-alpha.1",
-    "open": "^8.4.2",
-    "semver": "^7.3.8"
+    "open": "^9.1.0",
+    "semver": "^7.5.4"
   },
   "build": {
     "appId": "com.faisalumair.udeler",
