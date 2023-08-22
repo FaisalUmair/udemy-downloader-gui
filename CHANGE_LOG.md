@@ -6,6 +6,7 @@
 
 ### Fixed
   * download speed information
+  
 ### Updates
 	* GitHub Issues Templates
   * Version Packages
