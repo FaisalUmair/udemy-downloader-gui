@@ -4,14 +4,14 @@ root = true
 [*]
 charset = utf-8
 indent_style = space
-indent_size = 4
+indent_size = 2
 end_of_line = lf
 insert_final_newline = false
 trim_trailing_whitespace = true
 max_line_length = 140
 
-[*.{json,scss,css}]
-indent_size = 2
+[*.{js,ts,html,htm}]
+indent_size = 4
 
 [*.ts]
 quote_type = single

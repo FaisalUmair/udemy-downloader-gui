@@ -1,9 +1,9 @@
 function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function toBoolean(value) {
-  return isNumeric(value) ? !/^0$/i.test(value) : /^true$/i.test(value);
+	return isNumeric(value) ? !/^0$/i.test(value) : /^true$/i.test(value);
 }
 
 /**
@@ -28,20 +28,20 @@ function toBoolean(value) {
  * ```
  */
 function dynamicSort(property) {
-  var sortOrder = 1;
+	var sortOrder = 1;
 
-  if (property[0] === "-") {
-    sortOrder = -1;
-    property = property.substr(1);
-  }
+	if (property[0] === "-") {
+		sortOrder = -1;
+		property = property.substr(1);
+	}
 
-  return function (a, b) {
-    if (sortOrder == -1) {
-      return b[property].localeCompare(a[property]);
-    } else {
-      return a[property].localeCompare(b[property]);
-    }
-  }
+	return function (a, b) {
+		if (sortOrder == -1) {
+			return b[property].localeCompare(a[property]);
+		} else {
+			return a[property].localeCompare(b[property]);
+		}
+	};
 }
 
 /**
@@ -59,27 +59,32 @@ function dynamicSort(property) {
  * ```
  */
 function zeroPad(num, max) {
-  return num.toString().padStart(Math.floor(Math.log10(max) + 1), '0');
+	return num.toString().padStart(Math.floor(Math.log10(max) + 1), "0");
 }
 
+/**
+ * Calculates the download speed given the input speed in kilobytes per second.
+ *
+ * @param {number} speedInKB - The download speed in kilobytes per second.
+ * @return {Object} The download speed value and unit.
+ */
 function getDownloadSpeed(speedInKB) {
-  const BYTES_PER_KB = 1024;
-  const UNITS = ['KB/s', 'MB/s', 'GB/s']
+	const BYTES_PER_KB = 1024;
+	const UNITS = ["B/s", "KB/s", "MB/s", "GB/s"];
 
-  let speed = parseInt(speedInKB) || 0;
-  let unitIndex = 0;
+	let bytes = parseInt(speedInKB) || 0;
+	let unitIndex = 0;
 
-  if (speed >= BYTES_PER_KB) {
+    if (bytes >= BYTES_PER_KB) {
+        if (bytes >= BYTES_PER_KB ** 3) unitIndex = 3;  //Gb
+        else if (bytes >= BYTES_PER_KB ** 2) unitIndex = 2; //Mb
+        else unitIndex = 1; //kb
+        
+		bytes /=  BYTES_PER_KB ** (unitIndex);
+	}
 
-    // 1Gb = 1024 ** 2
-    if (speed >= BYTES_PER_KB ** 2) unitIndex = 2;
-    else unitIndex = 1; //mb
-
-    speed = (speed / BYTES_PER_KB ** unitIndex);
-  }
-
-  return {
-    value: parseFloat(speed.toFixed(2)),
-    unit: UNITS[unitIndex]
-  }
+	return {
+		value: parseFloat(bytes.toFixed(2)),
+		unit: UNITS[unitIndex],
+	};
 }
