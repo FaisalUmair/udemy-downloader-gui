@@ -1,7 +1,7 @@
 name: "🌐 Localization/Translation issue"
 description: Report incorrect translations.
-labels: 
-- bug
+labels:
+- possible-bug
 - issue-translation
 - needs-triage 
 body:
@@ -41,7 +41,7 @@ body:
       # - Türkçe
       # - Ελληνικά
       # - Русский
-      # - العربية 
+      # - العربية
       # - فارسی
       # - हिंदी
       # - தமிழ்
@@ -58,13 +58,13 @@ body:
   validations:
     required: true
 - type: textarea
-  attributes: 
+  attributes:
     label: ❌ Actual phrase(s)
-    placeholder: What is there?  Please include a screenshot as that is extremely helpful. 
+    placeholder: What is there?  Please include a screenshot as that is extremely helpful.
   validations:
     required: true
 - type: textarea
-  attributes: 
+  attributes:
     label: ✔️ Expected phrase(s)
     placeholder: What was expected?
   validations:
