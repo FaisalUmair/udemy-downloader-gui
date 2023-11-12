@@ -30,7 +30,7 @@
     "build:local": "npm run build && npm run build:w32"
   },
   "dependencies": {
-    "@sentry/electron": "^4.13.0",
+    "@sentry/electron": "^4.14.0",
     "axios": "^1.5.1",
     "cookie": "^0.5.0",
     "dialogs": "^2.0.1",
