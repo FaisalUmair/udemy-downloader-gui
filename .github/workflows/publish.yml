@@ -1,0 +1,76 @@
+name: Publish
+on:
+  push:
+    tags: ["*"]
+
+jobs:   
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: create env file
+        run: |
+          touch .env
+          echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
+
+      # - name: Install Node.js, NPM and Yarn
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '>=16.8.0'
+
+      - name: apt-update
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt-get update
+
+      - name: autoremove
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt autoremove
+
+      - name: Install libarchive rpm on Linux
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: sudo apt-get install libarchive-tools rpm
+
+      - name: Install dmg-license fo MacOS
+        if: startsWith(matrix.os, 'macos-latest')
+        run: npm install dmg-license
+
+      - name: Build Electron App
+        uses: coparse-inc/action-electron-builder@v1.0.0
+        with:
+          max_attempts: 3
+          github_token: ${{ secrets.github_token }}
+          release: true
+      
+      - name: Build Electron App Win32
+        if: startsWith(matrix.os, 'windows-latest')
+        uses: coparse-inc/action-electron-builder@v1.0.0
+        with:
+          args: --ia32
+          max_attempts: 3
+          github_token: ${{ secrets.github_token }}
+          release: true
+
+      - name: see directory
+        if: startsWith(matrix.os, 'windows-latest') == false
+        run: ls ./dist
+
+      - name: see directory
+        if: startsWith(matrix.os, 'windows-latest')
+        run: dir dist

@@ -1,0 +1,31 @@
+https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497
+
+PESQUISA SOBRE O SHAKA PARA TRATAR A CRIPTOGRAFIA DRM
+
+https://github.com/shaka-project/shaka-packager/issues/981
+
+https://benborgers.com/posts/node-spawn-callback#:~:text=The%20built-in%20child_process%20Node.js%20package%20has%20a%20spawn,a%20%E2%80%9Cdone%E2%80%9D%20event%20when%20the%20command%20finishes%20executing.
+const { spawn } = require('child_process')
+
+// Reusable function:
+const executeCommand = textToExecute => new Promise(resolve => {
+  const command = spawn(textToExecute, { shell: true })
+  command.on('close', () => resolve())
+
+  command.stderr.setEncoding('utf8');
+
+  command.stderr.on('data', data => {
+    console.log(data);
+  });
+
+  command.stdin.on('error', err => {
+    console.log(err);
+  });
+
+  command.on('close', code => {
+    console.log('packager close', code);
+  });
+})
+
+'shaka-packager --enable_raw_key_decryption --keys key_id={kid}:key={key} input="{in_filepath}",stream_selector="0",output="{out_filepath}"'
+await executeCommand('git clone https://github.com/benborgers/potion')

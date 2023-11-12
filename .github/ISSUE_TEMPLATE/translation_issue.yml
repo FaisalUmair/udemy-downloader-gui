@@ -1,0 +1,77 @@
+name: "🌐 Localization/Translation issue"
+description: Report incorrect translations.
+labels:
+- possible-bug
+- issue-translation
+- needs-triage 
+body:
+- type: markdown
+  attributes:
+    value: |
+      Please make sure to [search for existing issues](https://github.com/heliomarpm/udemy-downloader-gui/issues) before filing a new one!
+- type: input
+  attributes:
+    label: Udeler | Udemy Course Downloader
+    placeholder: "1.11.2"
+    description: |
+      Hover over system tray icon or look at Settings
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Section with translation issue
+    options:
+      - General
+      - Login
+      - Courses
+      - Downloads
+      - Settings
+      - About
+      # - Bahasa Malaysia
+      # - Deutsch
+      # - Español
+      # - Français
+      # - Indonesia
+      # - Italian
+      # - Magyar
+      # - Polski
+      # - Português
+      # - Punjabi
+      # - Tiếng Việt
+      # - Türkçe
+      # - Ελληνικά
+      # - Русский
+      # - العربية
+      # - فارسی
+      # - हिंदी
+      # - தமிழ்
+      # - မြန်မာ
+      # - 한국어
+      # - 日本語
+      # - 简体中文
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: 🌐 Language affected
+    placeholder: "German"
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: ❌ Actual phrase(s)
+    placeholder: What is there?  Please include a screenshot as that is extremely helpful.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: ✔️ Expected phrase(s)
+    placeholder: What was expected?
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: ℹ Why is the current translation wrong
+    placeholder: Why do you feel this is incorrect?
+  validations:
+    required: true

@@ -1,47 +1,82 @@
 {
-  "name": "Udeler",
-  "version": "1.8.2",
+  "name": "udeler",
+  "productName": "Udeler",
+  "version": "1.12.7",
+  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
+  "main": "main.js",
+  "vars": {
+    "urlHelp": "https://heliomarpm.notion.site/heliomarpm/How-to-get-an-Access-Token-b0ce5f89073c4965b47721197dcb2497",
+    "urlToggles": "https://raw.githubusercontent.com/heliomarpm/feature_toggles/main/udemy-downloader-gui.json",
+    "urlDonate": "https://www.paypal.com/donate?business=KBVHLR7Z9V7B2&no_recurring=0&currency_code=USD"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FaisalUmair/udemy-downloader-gui.git"
+    "url": "https://github.com/heliomarpm/udemy-downloader-gui.git"
   },
-  "description": "A cross platform (Windows, Mac, Linux) desktop application for downloading Udemy Courses.",
-  "scripts": {
-    "start": "electron .",
-    "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder -wml",
-    "build-win": "electron-builder -w",
-    "build-mac": "electron-builder -m",
-    "build-linux": "electron-builder -l",
-    "dist": "build"
-  },
-  "build": {
-    "directories": {
-      "buildResources": "assets/images/build"
-    },
-    "linux": {
-      "category": "Utility"
-    }
-  },
+  "license": "ISC",
   "author": {
     "name": "Faisal Umair",
     "email": "eff.umair@gmail.com",
     "url": "https://github.com/FaisalUmair"
   },
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^8.2.4",
-    "electron-builder": "^22.3.2",
-    "electron-download-tf": "^4.3.4"
+  "scripts": {
+    "dev": "electron . --developer",
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder",
+    "build:w32": "electron-builder -w \"--ia32\"",
+    "make:release": "node ./cmd/modules/release/index.js",
+    "prebuild:local": "node ./cmd/prebuild.js",
+    "build:local": "npm run build && npm run build:w32"
   },
   "dependencies": {
+    "@sentry/electron": "^4.14.0",
+    "axios": "^1.5.1",
+    "cookie": "^0.5.0",
     "dialogs": "^2.0.1",
     "electron-settings": "^3.2.0",
-    "jquery": "^3.5.0",
-    "mkdirp": "^0.5.1",
-    "mt-files-downloader": "git+https://github.com/FaisalUmair/mt-files-downloader-wrapper.git",
-    "node-vtt-to-srt": "git+https://github.com/riazXrazor/vtt-to-srt.git",
-    "sanitize-filename": "^1.6.1",
-    "socket.io": "^2.2.0"
+    "jquery": "^3.7.1",
+    "mkdirp": "^1.0.4",
+    "mt-files-downloader": "github:FaisalUmair/mt-files-downloader-wrapper",
+    "node-vtt-to-srt": "^1.0.1",
+    "sanitize-filename": "^1.6.3"
+  },
+  "devDependencies": {
+    "electron": "11.5.0",
+    "electron-builder": "^24.6.3",
+    "electron-reload": "^2.0.0-alpha.1",
+    "open": "^9.1.0",
+    "semver": "^7.5.4"
+  },
+  "build": {
+    "appId": "com.faisalumair.udeler",
+    "productName": "Udeler",
+    "copyright": "Copyright © 2017 - 2023 | ${author}",
+    "artifactName": "${productName}_Setup-v${version}_${os}-${arch}.${ext}",
+    "portable": {
+      "artifactName": "${productName}_Portable-v${version}_${os}-${arch}.${ext}"
+    },
+    "directories": {
+      "buildResources": "app/assets/images/build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb",
+        "freebsd",
+        "rpm"
+      ]
+    }
   }
 }
